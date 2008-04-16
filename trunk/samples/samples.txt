@@ -1,3 +1,12 @@
+Format we are trying to glean:
+POLICY: ENTITY can / cannot use DATA for the PURPOSE only when CONDITION 
+
+------------------------------
+
+
+MIT Proximity Card Data Policy:
+Committee on Discipline (CoD)Ê can use proximity card data from the card reader logs for the purpose of criminal investigations only.
+
 Access Control Policy:
 A person can access a document on the private MIT domain for any purpose only if that person has access for it.
 
