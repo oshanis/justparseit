@@ -1,5 +1,5 @@
 Format we are trying to glean:
-POLICY: ENTITY can / cannot use DATA for the PURPOSE only when CONDITION 
+POLICY: ENTITY [can|cannot] [use|transfer|access] DATA for the PURPOSE only when CONDITION 
 
 ------------------------------
 
