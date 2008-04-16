@@ -1,0 +1,11 @@
+S -> EP AP CP
+EP -> E
+AP -> PERM AP PP
+AP -> A OBJ
+PP -> P
+P -> criminal investigation
+CP -> C
+C -> null | ...
+A -> use | ...
+OBJ -> prox card data | ...
+PERM -> can | can not | may | may not
