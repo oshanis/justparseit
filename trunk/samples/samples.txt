@@ -1,7 +1,7 @@
 Access Control Policy:
 A person can access a document on the private MIT domain for any purpose only if that person has access for it.
 
-Card Non-refundable Policy:
+Card Non-transferable Policy:
 MIT students cannot transfer their cards to other students for any purpose.
 
 MA Disability Discrimination Policy:
