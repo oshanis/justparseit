@@ -1,0 +1,14 @@
+In this project we close the gap between authoring and execution of policies used by the "Accountability In RDF" (AIR) reasoning engine. At the moment, there is a human intermediary to do the translation from the actual policies to the RDF. Since these policies can follow a common syntactic structure, we hope that full machine text translation is attainable. In essence, a user such asÊ a lawyer should be able to write rules in constrained natural language, transform that into RDF and visualize the result.
+
+An example rule is as follows:
+
+"MIT Proximity Card Data Policy: Committee on Discipline (CoD)Ê can use proximity card data from the card reader logs for the purpose of criminal investigations only."
+
+The parsed input should be able to identify the following components in the sentence to compose the rule in RDF:
+POLICY => MIT Proximity Card Data Policy
+ENTITY => Committee on Discipline (CoD)
+DATA => proximity card data from the card reader logsÊ Ê
+PURPOSE => criminal investigation
+CONDITION => (not specified) 
+
+We hope to use NLTK for the language parsing and develop our own software to convert the identified components into a machine parseable RDF.
