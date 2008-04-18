@@ -14,4 +14,4 @@ Card Non-transferable Policy:
 MIT students cannot transfer their cards to other students for any purpose.
 
 MA Disability Discrimination Policy:
-A service provider cannot use phone records for the purpose of denying service requests. 
+A service provider cannot use phone records for the purpose of denying service requests if the customer resides in MA. 

@@ -1,0 +1,29 @@
+The Policy Editor Architecture:
+---------------------------------
+
+The Workflow
+
+Policy Template Editor
+	|
+	V
+Policy Editor
+	|
+	V
+Policy Parser
+	|
+	V
+RDF Generator
+
+There are 2 levels of policy authoring as shown in the workflow above.
+
+1. Top level abstract policy definition, which defines the structure of the policy
+Example template:
+POLICY: ENTITY [can|cannot] [use|transfer|access] DATA for the PURPOSE only when CONDITION 
+
+2. Actual policy which follows one of those formats already defined
+Example:
+Committee on Discipline (CoD)Ê can use proximity card data from the card reader logs for the purpose of criminal investigations only.
+
+When the language model identifies the corresponding parts of the sentence the RDF Generator should create the AIR rules as follows:
+
+
