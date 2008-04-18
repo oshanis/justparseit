@@ -43,6 +43,11 @@ TBD
 
 RDF Generator
 -------------
-When the language model identifies the corresponding parts of the sentence the RDF Generator should create the AIR rules as follows:
+When the language model implemented by the policy parser identifies the corresponding parts of the sentence the RDF Generator should create the AIR rules as follows:
 
+By default the air policy language[1] should be prefixed.
+In addition the user should be able to browse through and select the relevant ontologies in which this policy will be applied in.
+If the domain is not available, it should be possible for the user to define the domain ontology.
+(may be this step is not required for this project? for the moment, let's assume that everything is pre-defined)
 
+[1] http://dig.csail.mit.edu/TAMI/2007/amord/air
