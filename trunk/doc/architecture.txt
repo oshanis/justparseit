@@ -24,6 +24,25 @@ POLICY: ENTITY [can|cannot] [use|transfer|access] DATA for the PURPOSE only when
 Example:
 Committee on Discipline (CoD)Ê can use proximity card data from the card reader logs for the purpose of criminal investigations only.
 
+
+
+Policy Template Editor
+----------------------
+TBD
+
+
+Policy Editor
+-------------
+TBD
+
+
+Policy Parser
+-------------
+TBD
+
+
+RDF Generator
+-------------
 When the language model identifies the corresponding parts of the sentence the RDF Generator should create the AIR rules as follows:
 
 
