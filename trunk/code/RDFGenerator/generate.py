@@ -31,14 +31,17 @@ def parseNL():
 #@@ TODO: Only return if the component is not null 
     components = {'POLICY':POLICY_TXT, 'ENTITY': ENTITY_TXT, 'DATA':DATA_TXT, 'PURPOSE':PURPOSE_TXT}
     return components
-
     
-def makeFragID():
-    components = parseNL()
+def fragIDs(components):
     new_components = {}
     for x in components:
         new_components[x] = "#" + components[x].replace(" ","_") 
     return new_components
+
+def getMatch(term):
+    g = Graph()
+    g.parse("university.n3")
+    return g
 
 store = Graph()
 
@@ -54,8 +57,9 @@ PUR = Namespace("http://dig.csail.mit.edu/TAMI/2006/s4/purposes#")
 MIT = Namespace("http://dig.csail.mit.edu/TAMI/2007/s0/university#")
 OWL = Namespace("http://www.w3.org/2002/07/owl#")
 
+f = fragIDs(parseNL())
 # create the policy
-policy = URIRef("#MITProxCardPolicy")
+policy = URIRef(f['POLICY'])
 store.add((policy, RDF.type, AIR["Policy"]))
 
 #add the variables
@@ -84,5 +88,5 @@ store.serialize("policy.n3", format="n3")
 
 # Serialize as N3
 print store.serialize(format="n3")
-
-print makeFragID()
+a = "aa"
+getMatch(a)
