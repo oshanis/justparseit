@@ -1,17 +1,126 @@
-Format we are trying to glean:
-POLICY: ENTITY [can|cannot] [use|transfer|access] DATA for the PURPOSE only when CONDITION 
+
+------------------------------
+Format:
+------------------------------
+POLICY: ENTITY AUX ACTION DATA for the PURPOSE only when CONDITION 
+AUX = [can|cannot|may|may not]
+ACTION = [use|transfer|access:search]
+------------------------------
+
+------------------------------
+Examples:
+------------------------------
+
+"MIT Proximity Card Data Policy:
+Committee on Discipline (CoD)Ê can use proximity card data from the card reader logs for the purpose of criminal investigations only."
+
+POLICY = MIT Proximity Card Data Policy:
+ENTITY = Committee on Discipline (CoD)
+ACTION = use
+DATA = proximity card data from the card reader logs
+PURPOSE = criminal investigations
+CONDITION = NULL
 
 ------------------------------
 
+"Access Control Policy:
+A person can access a document on the private MIT domain for any purpose only if that person has access for it."
 
-MIT Proximity Card Data Policy:
-Committee on Discipline (CoD)Ê can use proximity card data from the card reader logs for the purpose of criminal investigations only.
+POLICY = 
+ENTITY = 
+ACTION = 
+DATA = 
+PURPOSE = 
+CONDITION =
 
-Access Control Policy:
-A person can access a document on the private MIT domain for any purpose only if that person has access for it.
+------------------------------
 
 Card Non-transferable Policy:
 MIT students cannot transfer their cards to other students for any purpose.
 
+POLICY = 
+ENTITY = 
+ACTION = 
+DATA = 
+PURPOSE = 
+CONDITION =
+
+------------------------------
+
 MA Disability Discrimination Policy:
 A service provider cannot use phone records for the purpose of denying service requests if the customer resides in MA. 
+
+POLICY = 
+ENTITY = 
+ACTION = 
+DATA = 
+PURPOSE = 
+CONDITION =
+
+------------------------------
+
+actor(TSA) action(disclose) actedupon(SecureFlightData) recipient(LawEnforcement AND counterterrorism) condition(data appears_related terrorism)
+
+POLICY = 
+ENTITY = 
+ACTION = 
+DATA = 
+PURPOSE = 
+CONDITION =
+
+------------------------------
+
+US Constitution, 4th Amendment:
+Police may not search people or their property without a warrant.
+Police may search people or their property with their consent.
+
+POLICY = US Constitution, 4th Amendment
+ENTITY = 
+ACTION = 
+DATA = 
+PURPOSE = 
+CONDITION =
+
+------------------------------
+
+Anyone may have access to public records in the possession of the state of Massachusetts.
+Not included within "public records" are medical files or information or any other materials or data relating to a specifically named individual, the disclosure of which may constitute an unwarranted invasion of personal privacy
+PII = Personally Idenitfiable Info
+PII = data includes name
+PII - data includes birthdate + address
+PII = data includes SSN
+
+actor(MA employee OR agent of MA) (action "not release") acted upon ((MA AND public record) AND (PII (which may invade privacy)) condition (request) 
+
+actor(MA) action(release) acted upon (MA public records) condition(request)
+actor(MA) (action "not release") acted upon (MA public record including PII medical data) condition (request)
+actor(MA employee or agent of MA) (action "not release") acted upon (MA public record including PII medical data) condition (request)
+actor(MA employee or agent of MA) (action "not release") acted upon (MA public record including PII which may invade privacy) condition (request)
+actor(MA employee or agent of MA) (action "not release") acted upon (MA public record including PII medical data) condition (request)
+actor(MA employee or agent of MA) (action "not release") acted upon (MA public record including PII which may invade privacy) condition (request)
+(MA public record including PII which may invade privacy) includes (PII medical data)
+Always assume (PII medical data) is (private)
+
+
+POLICY = 
+ENTITY = 
+ACTION = 
+DATA = 
+PURPOSE = 
+CONDITION =
+
+------------------------------
+
+A covered entity may not disclose or use protected health information without the authorization of the person who is the subject of the information or the person's representative.
+ 
+actor(covered entity) action(disclose) acted upon(protected health information) condition(subject authorized OR subject's representative authorized)
+actor(covered entity) action(disclose) actedupon(psychotherapy notes) condition(therapist note taker seeks payment)
+ 
+POLICY = 
+ENTITY = 
+ACTION = 
+DATA = 
+PURPOSE = 
+CONDITION =
+
+------------------------------
