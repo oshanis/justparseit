@@ -12,6 +12,34 @@ from rdflib.Graph import Graph
 from rdflib import URIRef, Literal, BNode, Namespace
 from rdflib import RDF
 
+def doCommand():
+        """Command line NLP AIR Policy Generator
+
+        --help        print this message
+        --entity "ENTITY NAME"    
+        <command> <options> <steps> [--with <more args> ]
+"""
+
+def parseNL():
+
+    POLICY_TXT = "MIT Proximity Card Data Policy"
+    ENTITY_TXT =" Committee on Discipline (CoD)"
+    DATA_TXT = "proximity card data from the card reader logs"
+    PURPOSE_TXT = "criminal investigation"
+    CONDITION_TXT = "NULL" 
+
+#@@ TODO: Only return if the component is not null 
+    components = {'POLICY':POLICY_TXT, 'ENTITY': ENTITY_TXT, 'DATA':DATA_TXT, 'PURPOSE':PURPOSE_TXT}
+    return components
+
+    
+def makeFragID():
+    components = parseNL()
+    new_components = {}
+    for x in components:
+        new_components[x] = "#" + components[x].replace(" ","_") 
+    return new_components
+
 store = Graph()
 
 # Bind a few prefix, namespace pairs.
@@ -51,9 +79,10 @@ store.add((policy, AIR["pattern"], outer_rule_pattern))
 store.add((outer_rule, AIR["label"], Literal("MIT prox-card policy")))
 store.add((outer_rule, AIR["pattern"], Literal("MIT prox-card policy")))
 
-# Serialize the store as RDF/XML to the file foaf.rdf.
-store.serialize("policy.n3", format="n3", max_depth=3)
+# Serialize and save the result
+store.serialize("policy.n3", format="n3")
 
 # Serialize as N3
 print store.serialize(format="n3")
 
+print makeFragID()
