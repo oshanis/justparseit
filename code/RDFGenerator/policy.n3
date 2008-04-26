@@ -3,7 +3,7 @@
 @prefix air: <http://dig.csail.mit.edu/TAMI/2007/amord/air#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 
- _7:MITProxCardPolicy a air:Policy;
+ _7:MIT_Proximity_Card_Data_Policy a air:Policy;
      air:pattern {
      _7:U a air:UseEvent;
              air:data _7:D;
