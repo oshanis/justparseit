@@ -11,6 +11,7 @@ _logger.addHandler(_hdlr)
 from rdflib.Graph import Graph
 from rdflib import URIRef, Literal, BNode, Namespace
 from rdflib import RDF
+from rdflib.syntax.parsers.N3Parser import N3Parser
 
 def doCommand():
         """Command line NLP AIR Policy Generator
@@ -39,8 +40,9 @@ def fragIDs(components):
     return new_components
 
 def getMatch(term):
-    g = Graph()
-    g.parse("university.n3")
+    graph = Graph()
+    g =N3Parser()
+    g.parse(URIRef("data/university.n3") ,graph)
     return g
 
 store = Graph()
