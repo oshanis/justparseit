@@ -74,6 +74,10 @@ US Constitution, 4th Amendment:
 Police may not search people or their property without a warrant.
 Police may search people or their property with their consent.
 
+Ask K: What is this same as the one above?
+Police may search people or their property with a warrant or with their consent.
+
+
 POLICY = US Constitution, 4th Amendment
 ENTITY = 
 ACTION = 
