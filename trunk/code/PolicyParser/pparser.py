@@ -16,7 +16,7 @@ def run():
     """
 
     grammar_file = 'simple.fcfg'
-    grammar = nltk.data.load('file:'+grammar_file)
+    grammar = nltk.data.load('file:../data/'+grammar_file)
     kimmo_file = None
     lexicon_func = None
     
