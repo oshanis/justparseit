@@ -3,6 +3,8 @@
 
 The RDF Generator
 """
+from pparser import *
+from Condition import *
 
 import sys
 import logging
@@ -17,7 +19,9 @@ _logger.addHandler(_hdlr)
 from rdflib.Graph import Graph
 from rdflib import URIRef, Literal, BNode, Namespace
 from rdflib import RDF
-from rdflib.syntax.parsers.N3Parser import N3Parser
+
+from pparser import *
+from Condition import *
 
 def doCommand():
 	"""Command line NLP AIR Policy Generator
@@ -28,22 +32,26 @@ def doCommand():
 	"""
 
 def parseNL():
-    
-    POLICY_TXT = "MIT Proximity Card Data Policy"
-    ENTITY_TXT =" Committee on Discipline (CoD)"
-    ACTION_TXT = "use"
-    DATA_TXT = "proximity card data from the card reader logs"
-    PURPOSE_TXT = "criminal investigation"
-    CONDITION_TXT = "NULL"
-    FLAG = "true"
-    components = {'POLICY':POLICY_TXT, 'ENTITY': ENTITY_TXT, 'ACTION': ACTION_TXT, 'DATA':DATA_TXT, 'PURPOSE':PURPOSE_TXT}
-    return components
-    
+	""""Eunsuk's Dictionary"""
+	#{'ENTITY': 'MIT', 'ACTION': 'use', 'Flag': True, 'PURPOSE': 'criminal', 'Policy': 'MIT prox card policy', 'DATA': 'proxy', 'Condition': <Condition.AndCond instance at 0x1e81120>}
+
+	POLICY_TXT = "MIT Proximity Card Data Policy"
+	ENTITY_TXT =" Committee on Discipline (CoD)"
+	ACTION_TXT = "use"
+	DATA_TXT = "proximity card data"
+	PURPOSE_TXT = "criminal investigation"
+	CONDITION_VAL = None
+	FLAG_VAL = True
+	components = {'ENTITY': ENTITY_TXT, 'ACTION': ACTION_TXT, 'Flag': FLAG_VAL, 'DATA':DATA_TXT, 'PURPOSE':PURPOSE_TXT, 'POLICY':POLICY_TXT, 'Condition': CONDITION_VAL }
+	
+	#components = run()
+	return components
+   
 def fragIDs(components):
-    new_components = {}
-    for x in components:
-        new_components[x] = "#" + components[x].replace(" ","_") 
-    return new_components
+	new_components = {}
+	for x in components:
+		new_components[x] = "#" + components[x].replace(" ","_") 
+	return new_components
 
 
 def getMatch(term):
@@ -60,14 +68,18 @@ def getMatch(term):
 		matches.append(row)
 	return matches[0] #TODO: what is there are more than 1 match?
     
+    
 def constructPolicy():
+	
 	store = Graph()
 	# Bind a few prefix, namespace pairs.
 	store.bind("air", "http://dig.csail.mit.edu/TAMI/2007/amord/air#")
 	store.bind("pur", "http://dig.csail.mit.edu/TAMI/2006/s4/purposes#")
-	store.bind("mit", "http://dig.csail.mit.edu/TAMI/2007/s0/university#")
 	store.bind("owl", "http://www.w3.org/2002/07/owl#")
 
+	"""This should come from the user"""
+	store.bind("mit", "http://dig.csail.mit.edu/TAMI/2007/s0/university#")
+	
 	# Create namespace objects.
 	AIR = Namespace("http://dig.csail.mit.edu/TAMI/2007/amord/air#")
 	PUR = Namespace("http://dig.csail.mit.edu/TAMI/2006/s4/purposes#")
