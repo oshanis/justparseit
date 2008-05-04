@@ -6,7 +6,7 @@ The Policy Parser
 
 from featureparse import *
 
-CFG2RDF_DICT = {'Actor':'ENTITY', 'Action':'EVENT',
+CFG2RDF_DICT = {'Policy':'POLICY', 'Actor':'ENTITY', 'Action':'ACTION',
                 'ActedOn':'DATA', 'Purpose':'PURPOSE', 'Condition':'CONDITION'}
 
 def run():
@@ -20,10 +20,11 @@ def run():
     lexicon_func = None
     
     parser = FeatureParser(grammar, lexicon_func, trace=0)
-    sentence = raw_input("Enter a policy: ")
+    policy_name = raw_input("Enter the name of a policy: ")
+    policy_sentence = raw_input("Enter the policy sentence: ")
     
     # parse the sentence into a tree(s)
-    trees = parser.parse_sentence(sentence)
+    trees = parser.parse_sentence(policy_sentence)
     num_parses = len(trees)
 
     if num_parses == 0:
@@ -38,7 +39,7 @@ def run():
     They are simply leaf nodes in the tree.
     """
     parts = trees[0].pos()
-    policy_dict = {}
+    policy_dict = {'Policy' : policy_name}
     
     # Create a dictionary entry for each of the four parts 
     for cur_part in parts:
