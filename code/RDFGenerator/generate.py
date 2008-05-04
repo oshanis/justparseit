@@ -12,6 +12,9 @@ from rdflib.Graph import Graph
 from rdflib import URIRef, Literal, BNode, Namespace
 from rdflib import RDF
 from rdflib.syntax.parsers.N3Parser import N3Parser
+from rdflib.sparql.bison import Parse
+from cStringIO import StringIO
+   
 
 def doCommand():
         """Command line NLP AIR Policy Generator
@@ -25,12 +28,14 @@ def parseNL():
 
     POLICY_TXT = "MIT Proximity Card Data Policy"
     ENTITY_TXT =" Committee on Discipline (CoD)"
+    ACTION_TXT = "use"
     DATA_TXT = "proximity card data from the card reader logs"
     PURPOSE_TXT = "criminal investigation"
-    CONDITION_TXT = "NULL" 
+    CONDITION_TXT = "NULL"
+    FLAG = "true"
 
 #@@ TODO: Only return if the component is not null 
-    components = {'POLICY':POLICY_TXT, 'ENTITY': ENTITY_TXT, 'DATA':DATA_TXT, 'PURPOSE':PURPOSE_TXT}
+    components = {'POLICY':POLICY_TXT, 'ENTITY': ENTITY_TXT, 'ACTION': ACTION_TXT, 'DATA':DATA_TXT, 'PURPOSE':PURPOSE_TXT}
     return components
     
 def fragIDs(components):
@@ -40,11 +45,12 @@ def fragIDs(components):
     return new_components
 
 def getMatch(term):
-    graph = Graph()
-    g =N3Parser()
-    g.parse(URIRef("data/university.n3") ,graph)
-    return g
-
+    store = Graph()
+    store.load("data/university.n3", format="n3")
+    p = Parse(StringIO('select ?a ?b ?c'))
+    print p
+ 
+    
 store = Graph()
 
 # Bind a few prefix, namespace pairs.
@@ -89,6 +95,6 @@ store.add((outer_rule, AIR["pattern"], Literal("MIT prox-card policy")))
 store.serialize("policy.n3", format="n3")
 
 # Serialize as N3
-print store.serialize(format="n3")
+#print store.serialize(format="n3")
 a = "aa"
 getMatch(a)
