@@ -1,0 +1,133 @@
+############################
+# Grammar Rules
+#############################
+
+## Top-level rules
+Start -> S
+Start -> Q
+
+## Noun phrases
+Nom[wh=?w] -> N[wh=?w]
+Nom[wh=?w] -> N[wh=?w] PP
+
+# Determiners attach to Noms to make NPs (or, really, determiner phrases).
+NP[wh=?w] -> Det[wh=?w] Nom
+NP[loc=?l, -wh] -> PropN[loc=?l]
+
+## Verb phrases
+
+# Intransitive verbs
+VP -> Aux V0
+VP/Aux -> V0
+VP -> V0
+
+# Transitive verbs
+VP -> Aux V1 NP
+VP -> V1 NP
+VP/Aux -> V1 NP
+VP/NP -> V1 NP/NP
+
+# Passive transitive verbs.
+VPpass -> V1 PPby
+
+# Doubly-transitive verbs, as in "John gave Mary Fido"
+VP -> Aux V2 NP NP
+VP -> V2 NP NP
+VP/Aux -> V2 NP NP
+VP/NP -> V2 NP/NP NP
+VP/NP -> V2 NP/NP NP
+
+# Passive doubly transitive verbs: "Mary was given Fido by John".
+VPpass -> V2 NP PPby
+
+# Doubly-transitive verbs expressed with dative "to", as in
+# "John gave Fido to Mary".
+VP -> Aux V2 NP PPto
+VP -> V2 NP PPto
+VP/PPto -> V2 NP PPto/PPto
+VP/Aux -> V2 NP PPto
+VP/NP -> V2 NP/NP PPto
+VP/NP -> V2 NP PPto/NP
+
+# Verb phrases can have prepositional phrases attached
+VP -> VP PP
+VP/PP -> VP PP/PP
+
+## Prepositional phrases
+PP[wh=?wh] -> P[loc=?l] NP[loc=?l,wh=?wh]
+PP[wh=?wh]/NP -> P[loc=?l] NP[loc=?l,wh=?wh]/NP
+PPto[wh=?wh] -> TO NP[wh=?wh]
+PPto[wh=?wh]/NP -> TO NP[wh=?wh]/NP
+PPby[wh=?wh] -> BY NP[wh=?wh]
+PPby[wh=?wh]/NP -> BY NP[wh=?wh]/NP
+
+# The empty PPby is allowed, because the subject is optional in passive
+# clauses.
+PPby -> 
+
+## Sentence rules
+S -> NP[-wh] VP
+S/NP -> NP VP/NP
+S/PP -> NP VP/PP
+S/PPto -> NP VP/PPto
+S/Aux -> NP VP/Aux
+S/NP -> NP/NP VP
+
+S -> NP[-wh] BE VPpass
+
+## Question rules
+Q -> NP[+wh] Aux S[sem=?s]/NP
+Q -> PP[+wh] Aux S[sem=?s]/PP
+Q -> PPto[+wh] Aux S[sem=?s]/PPto
+Q -> Aux S/Aux
+Q -> NP[+wh] VP
+Q -> NP[+wh] BE VPpass
+
+## Empty slash phrases
+NP/NP ->
+PP/PP ->
+PPto/PPto ->
+PPby/PPby ->
+
+#############################
+# Lexical Rules
+#############################
+
+PropN[-loc] -> 'john'
+PropN[-loc] -> 'mary'
+PropN[-loc] -> 'suzie'
+PropN[-loc] -> 'fido'
+PropN[+loc] -> 'boston'
+
+NP[+wh, -loc] -> 'who' | 'what' | 'whom'
+NP[-wh, -loc] -> 'someone' | 'somebody' | 'something' | 'anybody' | 'anything' | 'anyone'
+
+PP[+wh, +loc] -> 'where'
+
+Det[-wh] -> 'every'
+Det[-wh] -> 'all'
+Det[-wh] -> 'some'
+Det[-wh] -> 'a' | 'the'
+
+N -> 'boy' | 'boys'
+N -> 'girl' | 'girls'
+N -> 'dog' | 'dogs'
+N -> 'park' | 'parks'
+
+V0 -> 'bark' | 'barks' | 'barked'
+V0 -> 'walk' | 'walks' | 'walked'
+
+V1 -> 'chase' | 'chases' | 'chased'
+V1 -> 'see' | 'sees' | 'saw' | 'seen'
+V1 -> 'kiss' | 'kisses' | 'kissed'
+
+V2 -> 'give' | 'gives' | 'gave' | 'given'
+
+P[+loc] -> 'in'
+P[-loc] -> 'with'
+
+TO -> 'to'
+BY -> 'by'
+Aux -> 'does' | 'did' | 'do'
+BE -> 'is' | 'was' | 'are' | 'were'
+

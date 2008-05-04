@@ -1,0 +1,198 @@
+############################
+# Grammar Rules
+#############################
+
+## Top-level rules
+Start[sem=?s] -> S[sem=?s]
+Start[sem=?s] -> Q[sem=?s]
+
+## Noun phrases
+# A Nom is the inner part of a noun phrase. It ordinarily gets its semantics
+# directly from the noun, but could have a prepositional phrase applied.
+Nom[sem=?nom, wh=?w] -> N[sem=?nom, wh=?w]
+Nom[sem=<(?pp ?nom)>, wh=?w] -> N[sem=?nom, wh=?w] PP[sem=?pp]
+
+# Determiners attach to Noms to make NPs (or, really, determiner phrases).
+# The semantics are simply function application; the complicated part happens
+# in the lexical entries themselves, as it typically should.
+NP[sem=<(?det ?nom)>, wh=?w] -> Det[sem=?det, wh=?w] Nom[sem=?nom]
+NP[loc=?l,sem=?np,-wh] -> PropN[loc=?l,sem=?np]
+
+## Verb phrases
+# Verbs act as functions of their objects. The twist that shows up in these
+# rules is that we begin to implement slash rules. Slashes work by returning
+# a function of one argument, "slash"; when the function eventually receives
+# that argument, it will fill it in in the appropriate place in the structure.
+#
+# For /Aux phrases, we just ignore the slash argument, because in this system
+# Aux phrases have no meaningful semantics. For rules that pass on a slash,
+# such as VP/NP -> V NP/NP, we pass on the slash semantics in the same way.
+#
+# Ultimately, a verb phrase evaluates to an expression that a subject can
+# be applied to. (Not an expression that can be applied to a subject.)
+
+# Intransitive verbs
+VP[sem=?v] -> Aux V0[sem=?v]
+VP[sem=<\slash. ?v>]/Aux -> V0[sem=?v]
+VP[sem=?v] -> V0[sem=?v]
+
+# Transitive verbs
+VP[sem=<(?v ?obj)>] -> Aux V1[sem=?v] NP[sem=?obj]
+VP[sem=<(?v ?obj)>] -> V1[sem=?v] NP[sem=?obj]
+VP[sem=<\slash. (?v ?obj)>]/Aux -> V1[sem=?v] NP[sem=?obj]
+VP[sem=<\slash. (?v (?obj slash))>]/NP -> V1[sem=?v] NP[sem=?obj]/NP
+
+# Passive transitive verbs
+VPpass[sem=<\obj. (?subj (?v obj))>] -> V1[sem=?v] PPby[sem=?subj]
+
+# Doubly-transitive verbs, as in "John gave Mary Fido"
+VP[sem=<(?v ?obj1 ?obj2)>] -> Aux V2[sem=?v] NP[sem=?obj1] NP[sem=?obj2]
+VP[sem=<(?v ?obj1 ?obj2)>] -> V2[sem=?v] NP[sem=?obj1] NP[sem=?obj2]
+VP[sem=<\slash. (?v ?obj1 ?obj2)>]/Aux -> V2[sem=?v] NP[sem=?obj1] NP[sem=?obj2]
+VP[sem=<\slash. (?v ?obj2 (?obj1 slash))>]/NP -> V2[sem=?v] NP[sem=?obj1]/NP NP[sem=?obj2]
+VP[sem=<\slash. (?v (?obj2 slash) ?obj1)>]/NP -> V2[sem=?v] NP[sem=?obj1]/NP NP[sem=?obj2]
+
+# Passive doubly-transitive verbs: "Mary was given Fido by John"
+VPpass[sem=<\obj1. (?subj (?v obj1 ?obj2))>] -> V2[sem=?v] NP[sem=?obj2] PPby[sem=?subj]
+
+# Doubly-transitive verbs expressed with dative "to", as in
+# "John gave Fido to Mary". Although the "to" phrase is grammatically a
+# prepositional phrase, we treat it semantically as a noun phrase here.
+VP[sem=<(?v ?obj1 ?obj2)>] -> Aux V2[sem=?v] NP[sem=?obj2] PPto[sem=?obj1]
+VP[sem=<(?v ?obj1 ?obj2)>] -> V2[sem=?v] NP[sem=?obj2] PPto[sem=?obj1]
+VP[sem=<\slash. (?v ?obj1 (?obj2 slash))>]/PPto -> V2[sem=?v] NP[sem=?obj2] PPto[sem=?obj1]/PPto
+VP[sem=<\slash. (?v ?obj1 ?obj2)>]/Aux -> V2[sem=?v] NP[sem=?obj2] PPto[sem=?obj1]
+VP[sem=<\slash. (?v (?obj1 slash) ?obj2)>]/NP -> V2[sem=?v] NP[sem=?obj1]/NP PPto[sem=?obj2]
+VP[sem=<\slash. (?v ?obj1 (?obj2 slash))>]/NP -> V2[sem=?v] NP[sem=?obj1] PPto[sem=?obj2]/NP
+
+# Verb phrases can have prepositional phrases attached
+VP[sem=<(?pp ?vp)>] -> VP[sem=?vp] PP[sem=?pp]
+VP[sem=<\slash. ((?pp slash) ?vp)>]/PP -> VP[sem=?vp] PP[sem=?pp]/PP
+
+## Prepositional phrases
+# PPto phrases are inherent to the verb, and act the same as noun arguments.
+# Other PPs are functions that modify the the verb.
+
+PP[sem=<(?p ?np)>, wh=?wh] -> P[loc=?l,sem=?p] NP[loc=?l,sem=?np,wh=?wh]
+PP[sem=<\slash. (?p (?np slash))>, wh=?wh]/NP -> P[loc=?l,sem=?p] NP[loc=?l,sem=?np,wh=?wh]/NP
+PPto[sem=?np, wh=?wh] -> TO NP[sem=?np, wh=?wh]
+PPto[sem=?np, wh=?wh]/NP -> TO NP[sem=?np, wh=?wh]/NP
+PPby[sem=?np, wh=?wh] -> BY NP[sem=?np, wh=?wh]
+PPby[sem=?np, wh=?wh]/NP -> BY NP[sem=?np, wh=?wh]/NP
+# Note for the above: sem=?np is equivalent to sem=<\slash. (?np slash)>,
+# so we don't need to write it out
+
+
+# the empty PPby
+PPby[sem=<\P. (P ?any)>, -wh] -> 
+
+## Sentence rules
+# Although verbs are functions of their objects, this does not include the
+# subject. Instead, the _subject_ is a function of the _verb phrase_.
+# The semantics for noun phrases make this the right thing to happen at the
+# sentence level.
+S[sem = <(?subj ?vp)>] -> NP[-wh, sem=?subj] VP[sem=?vp]
+S[sem = <\slash. (?subj (?vp slash))>]/NP -> NP[sem=?subj] VP[sem=?vp]/NP
+S[sem = <\slash. (?subj (?vp slash))>]/PP -> NP[sem=?subj] VP[sem=?vp]/PP
+S[sem = <\slash. (?subj (?vp slash))>]/PPto -> NP[sem=?subj] VP[sem=?vp]/PPto
+S[sem = <\slash. (?subj (?vp slash))>]/Aux -> NP[sem=?subj] VP[sem=?vp]/Aux
+S[sem = <\slash. ((?subj slash) ?vp)>]/NP -> NP[sem=?subj]/NP VP[sem=?vp]
+
+S[sem = <(?vp ?obj)>] -> NP[-wh, sem=?obj] BE VPpass[sem=?vp]
+
+## Question rules
+# Most of these introduce a slash feature, so they provide the slash value
+# as an argument. For Aux, the value doesn't matter, so we use (\x.x), the
+# identity function.
+Q[sem = <(?s ?np)>] -> NP[+wh, sem=?np] Aux S[sem=?s]/NP
+Q[sem = <(?s ?pp)>] -> PP[+wh, sem=?pp] Aux S[sem=?s]/PP
+Q[sem = <(?s ?pp)>] -> PPto[+wh, sem=?pp] Aux S[sem=?s]/PPto
+Q[sem = <(?s \x.x)>] -> Aux S[sem=?s]/Aux
+Q[sem = <(?np ?vp)>] -> NP[+wh, sem=?np] VP[sem=?vp]
+Q[sem = <(?vp ?obj)>] -> NP[+wh, sem=?obj] BE VPpass[sem=?vp]
+
+## Empty slash phrases
+NP[sem=<\x. x>]/NP ->
+PP[sem=<\x. x>]/PP ->
+PPto[sem=<\x. x>]/PPto ->
+PPby[sem=<\x. x>]/PPby ->
+
+#############################
+# Lexical Rules
+#############################
+
+# The simplest noun phrases are proper names. The general form of the semantics
+# for a noun phrase is that they take in a function and apply that function to
+# their semantic content. For these, the semantic value is a constant, indicated
+# with a capital letter.
+PropN[-loc,sem=<\P.(P John)>] -> 'john'
+PropN[-loc,sem=<\P.(P Mary)>] -> 'mary'
+PropN[-loc,sem=<\P.(P Suzie)>] -> 'suzie'
+PropN[-loc,sem=<\P.(P Fido)>] -> 'fido'
+PropN[+loc,sem=<\P.(P Noosa)>] -> 'noosa'
+
+# Question and nonspecific noun phrases. These use feature variables -- which
+# look like ?wh and ?any -- instead of lambda variables. Feature variables
+# are filled in by unification, instead of by lambda arguments.
+NP[+wh, -loc, sem=<\P. (P ?wh)>] -> 'who' | 'what' | 'whom'
+NP[-wh, -loc, sem=<\P. (P ?any)>] -> 'someone' | 'somebody' | 'something' | 'anybody' | 'anything' | 'anyone'
+
+PP[+wh, +loc, sem=<\P x. (in ?wh (P x))>] -> 'where'
+
+# Determiners. These take in two functions -- the first one represents the
+# noun inside the determiner phrase, while the second will be filled in later
+# by the verb phrase saying what this noun does. This makes the most sense if
+# you think of this noun phrase being the subject. Both of them are applied
+# to an anonymous object, x, which is the thing actually being described, and
+# then quantified over that object.
+#
+# As an example, "a dog barks" becomes: some x. ((dog x) and (bark x)).
+Det[sem=<\P Q. all x. ((P x) implies (Q x))>, -wh] -> 'every'
+Det[sem=<\P Q. all x. ((P x) implies (Q x))>, -wh] -> 'all'
+Det[sem=<\P Q. some x. ((P x) and (Q x))>, -wh] -> 'some'
+Det[sem=<\P Q. some x. ((P x) and (Q x))>, -wh] -> 'a' | 'the'
+
+# Bare nouns. These semantic objects such as <dog> are not constants, they are
+# functions.
+N[sem=<boy>] -> 'boy' | 'boys'
+N[sem=<girl>] -> 'girl' | 'girls'
+N[sem=<dog>] -> 'dog' | 'dogs'
+N[sem=<park>] -> 'park' | 'parks'
+
+# Intransitive verbs work in a very straightforward way.
+V0[sem=<\x. (bark x)>] -> 'bark' | 'barks' | 'barked'
+V0[sem=<\x. (walk x)>] -> 'walk' | 'walks' | 'walked'
+
+# Transitive verbs use a funky argument called A. Remember that determiner
+# phrases return functions. These expressions take in one of those functions
+# representing the object -- call it A.
+#
+# We don't apply A right away; we delay it until we know the subject (called x).
+# Then we apply A to a lambda function which takes the thing described by the
+# object phrase and calls it y. That gives us enough information to construct
+# a predicate such as (chase x y).
+# 
+# This can be hard to get your head around. Note the huge difference between
+# \A x. and A \y.
+V1[sem=<\A x. (A \y. (chase x y))>] -> 'chase' | 'chases' | 'chased'
+V1[sem=<\A x. (A \y. (see x y))>] -> 'see' | 'sees' | 'saw' | 'seen'
+V1[sem=<\A x. (A \y. (kiss x y))>] -> 'kiss' | 'kisses' | 'kissed'
+
+# Doubly-transitive verbs are like transitive verbs, but they have to take in
+# _two_ functions and delay them.
+V2[sem=<\A B x. (A \y. (B \z. (give x z y)))>] -> 'give' | 'gives' | 'gave' | 'given'
+
+# Prepositional phrases wait until the semantics are applied far enough down
+# to return a predicate. In addition to keeping that predicate, they add
+# another clause describing how the prepositional phrase modifies the predicate.
+#
+# This doesn't return quite the right semantics for nouns with prepositions
+# attached, but it makes verbs with prepositions easy to handle.
+P[+loc,sem=<\X P x. (X \y. ((P x) and (in y (P x))))>] -> 'in'
+P[-loc,sem=<\X P x. (X \y. ((P x) and (with y (P x))))>] -> 'with'
+
+TO -> 'to'
+BY -> 'by'
+Aux -> 'does' | 'did' | 'do'
+BE -> 'is' | 'was' | 'are' | 'were'
+
