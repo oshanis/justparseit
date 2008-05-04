@@ -7,8 +7,8 @@ The Policy Parser
 from featureparse import *
 from Condition import *
 
-CFG2RDF_DICT = {'Policy':'POLICY', 'Actor':'ENTITY', 'Action':'ACTION',
-                'ActedOn':'DATA', 'Purpose':'PURPOSE', 'Condition':'CONDITION'}
+CFG2RDF_DICT = {'Policy':'POLICY', 'Actor':'ENTITY', 'Action':'ACTION', 
+                'ActedOn':'DATA', 'Purpose':'PURPOSE', 'Condition':'CONDITION', 'flag':'FLAG'}
 
 def run():
     """
@@ -44,7 +44,8 @@ def run():
     
     #TODO: remove the fake condition - for testing only
     cond = AndCond(AtomicCond('authorized'), AtomicCond('has_permission'))
-    policy_dict = {'Condition':cond}
+    policy_dict['Condition'] = cond
+    policy_dict['Flag'] = True
     
     # Create a dictionary entry for each of the four parts 
     for cur_part in parts:
