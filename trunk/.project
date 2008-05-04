@@ -14,16 +14,4 @@
 	<natures>
 		<nature>org.python.pydev.pythonNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>code/PolicyParser/pparser.py</name>
-			<type>1</type>
-			<location>/Users/eskang/unison_root/6.863/project/pparser.py</location>
-		</link>
-		<link>
-			<name>code/PolicyParser/simple.fcfg</name>
-			<type>1</type>
-			<location>/Users/eskang/unison_root/6.863/project/simple.fcfg</location>
-		</link>
-	</linkedResources>
 </projectDescription>
