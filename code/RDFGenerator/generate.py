@@ -92,9 +92,9 @@ store.add((outer_rule, AIR["label"], Literal("MIT prox-card policy")))
 store.add((outer_rule, AIR["pattern"], Literal("MIT prox-card policy")))
 
 # Serialize and save the result
-store.serialize("policy.n3", format="n3")
+print store.serialize("policy.n3", format="n3")
 
 # Serialize as N3
 #print store.serialize(format="n3")
-a = "aa"
-getMatch(a)
+#a = "aa"
+#getMatch(a)
