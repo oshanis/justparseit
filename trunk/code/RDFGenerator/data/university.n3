@@ -51,7 +51,7 @@
 	rdfs:comment "A TA helps a professor teache a course".
 
 :ProxCard a rdfs:Class;
-	rdfs:label "Prox card class";
+	rdfs:label "proximity card data";
 	rdfs:comment "Every MIT person has a prox card for entering and using the MIT premises".
 
 :hasCard a rdf:Property;
