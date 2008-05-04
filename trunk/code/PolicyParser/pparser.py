@@ -8,7 +8,7 @@ from featureparse import *
 from Condition import *
 
 CFG2RDF_DICT = {'Policy':'POLICY', 'Actor':'ENTITY', 'Action':'ACTION', 
-                'ActedOn':'DATA', 'Purpose':'PURPOSE', 'Condition':'CONDITION', 'flag':'FLAG'}
+                'ActedOn':'DATA', 'Purpose':'PURPOSE', 'Condition':'CONDITION'}
 
 def run():
     """
@@ -44,16 +44,22 @@ def run():
     
     #TODO: remove the fake condition - for testing only
     cond = AndCond(AtomicCond('authorized'), AtomicCond('has_permission'))
-    policy_dict['Condition'] = cond
-    policy_dict['Flag'] = True
+    policy_dict['CONDITION'] = cond
+    policy_dict['FLAG'] = True
     
     # Create a dictionary entry for each of the four parts 
     for cur_part in parts:
         value = cur_part[0]
         key = cur_part[1].values().pop()
-        policy_dict[CFG2RDF_DICT[key]] = value
+        if key == 'AuxNegative':
+            policy_dict['FLAG'] = False
+        elif key == 'AuxPositive':
+            policy_dict['FLAG'] = True
+        elif key != 'Prop':
+            policy_dict[CFG2RDF_DICT[key]] = value
         
     print policy_dict
+    view_trees(trees)
     
     return policy_dict
 
