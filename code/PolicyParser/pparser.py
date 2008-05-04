@@ -5,6 +5,7 @@ The Policy Parser
 """
 
 from featureparse import *
+from Condition import *
 
 CFG2RDF_DICT = {'Policy':'POLICY', 'Actor':'ENTITY', 'Action':'ACTION',
                 'ActedOn':'DATA', 'Purpose':'PURPOSE', 'Condition':'CONDITION'}
@@ -40,6 +41,10 @@ def run():
     """
     parts = trees[0].pos()
     policy_dict = {'Policy' : policy_name}
+    
+    #TODO: remove the fake condition - for testing only
+    cond = AndCond(AtomicCond('authorized'), AtomicCond('has_permission'))
+    policy_dict = {'Condition':cond}
     
     # Create a dictionary entry for each of the four parts 
     for cur_part in parts:
