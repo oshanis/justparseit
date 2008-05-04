@@ -6,6 +6,9 @@ The Policy Parser
 
 from featureparse import *
 
+CFG2RDF_DICT = {'Actor':'ENTITY', 'Action':'EVENT',
+                'ActedOn':'DATA', 'Purpose':'PURPOSE', 'Condition':'CONDITION'}
+
 def run():
     """
     The main method for the policy parser
@@ -35,10 +38,16 @@ def run():
     They are simply leaf nodes in the tree.
     """
     parts = trees[0].pos()
+    policy_dict = {}
     
+    # Create a dictionary entry for each of the four parts 
     for cur_part in parts:
-        print cur_part
-
-    return
+        value = cur_part[0]
+        key = cur_part[1].values().pop()
+        policy_dict[CFG2RDF_DICT[key]] = value
+        
+    print policy_dict
+    
+    return policy_dict
 
 run()
