@@ -12,52 +12,60 @@ Examples:
 ------------------------------
 
 "MIT Proximity Card Data Policy:
-Committee on Discipline (CoD)  can use proximity card data from the card reader logs for the purpose of criminal investigations only."
+Committee on Discipline  can use proximity card data for the purpose of criminal investigations only."
 
-POLICY = MIT Proximity Card Data Policy:
-ENTITY = Committee on Discipline (CoD)
+POLICY = MIT Proximity Card Data Policy
+ENTITY = Committee on Discipline
 ACTION = use
-DATA = proximity card data from the card reader logs
+DATA = proximity card data
 PURPOSE = criminal investigations
 CONDITION = NULL
+FLAG = true
 
 ------------------------------
 
 "Access Control Policy:
-A person can access a document on the private MIT domain for any purpose only if that person has access for it."
+A person can access a document on the private MIT domain for any purpose, if that person has permission for the data."
 
-POLICY = 
-ENTITY = 
-ACTION = 
-DATA = 
-PURPOSE = 
-CONDITION =
+POLICY = Access Control Policy
+ENTITY = Person
+ACTION = access
+DATA = document on the private MIT domain
+PURPOSE = NULL
+CONDITION = person : has permission : data 
+FLAG = true
 
 ------------------------------
 
 Card Non-transferable Policy:
-MIT students cannot transfer their cards to other students for any purpose.
+An MIT student cannot transfer card to another student for any purpose.
 
-POLICY = 
-ENTITY = 
-ACTION = 
-DATA = 
-PURPOSE = 
-CONDITION =
+POLICY = Card Non-transferable Policy:
+ENTITY = MIT student
+ACTION = transfer
+DATA = card
+PURPOSE = NULL
+CONDITION = NULL
+FLAG = false (non-compliant)
 
 ------------------------------
 
 MA Disability Discrimination Policy:
 A service provider cannot use phone records for the purpose of denying service requests if the customer resides in MA. 
+Phone records belongs to the customer.
+Customer requests service.
 
-POLICY = 
-ENTITY = 
-ACTION = 
-DATA = 
-PURPOSE = 
-CONDITION =
+POLICY = MA Disability Discrimination Policy: 
+ENTITY = service provider
+ACTION = USE
+DATA = phone records
+PURPOSE = denying service requests
+CONDITION = [[phone records: belongs to: customer],[customer: request: service],[customer: resides in: MA ]]
+FLAG = false (non-compliant)
 
 ------------------------------
+------------------------------
+
 
 actor(TSA) action(disclose) actedupon(SecureFlightData) recipient(LawEnforcement AND counterterrorism) condition(data appears_related terrorism)
 
@@ -71,7 +79,17 @@ CONDITION =
 ------------------------------
 
 US Constitution, 4th Amendment:
+
 Police may not search people or their property without a warrant.
+
+POLICY = US Constitution, 4th Amendment
+ENTITY = Police
+ACTION = search
+DATA = 
+PURPOSE = 
+CONDITION =
+
+
 Police may search people or their property with their consent.
 
 Ask K: What is this same as the one above?
