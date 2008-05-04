@@ -1,0 +1,20 @@
+Searching for rdflib
+Reading http://pypi.python.org/simple/rdflib/
+Reading http://rdflib.net/
+Best match: rdflib 3.0.0a6
+Processing rdflib-3.0.0a6-py2.5.egg
+rdflib 3.0.0a6 is already the active version in easy-install.pth
+Installing rdfpipe script to /usr/local/bin
+
+Using /Library/Python/2.5/site-packages/rdflib-3.0.0a6-py2.5.egg
+Processing dependencies for rdflib
+Searching for rdf>=0.9a4
+Reading http://pypi.python.org/simple/rdf/
+Best match: rdf 0.9a6
+Downloading http://pypi.python.org/packages/2.5/r/rdf/rdf-0.9a6-py2.5.egg#md5=6649c8a1d325b123f7b6f364bf4f5c89
+Processing rdf-0.9a6-py2.5.egg
+Moving rdf-0.9a6-py2.5.egg to /Library/Python/2.5/site-packages
+Adding rdf 0.9a6 to easy-install.pth file
+
+Installed /Library/Python/2.5/site-packages/rdf-0.9a6-py2.5.egg
+Finished processing dependencies for rdflib

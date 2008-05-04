@@ -1,0 +1,118 @@
+# Natural Language Toolkit: feat2.cfg
+#
+# Author: Ewan Klein <ewan@inf.ed.ac.uk> 
+# URL: <http://nltk.sourceforge.net>
+# For license information, see LICENSE.TXT
+#
+# $Id:$
+
+% start Start
+############################
+# Grammar Rules
+#############################
+
+Start[sem=?s] -> S[sem=?s]
+Start[sem=?s] -> Q[sem=?s]
+
+Q[sem = <(?s ?np)>] -> NP[+wh, sem=?np] Aux S[sem=?s]/NP
+Q[sem = <(?s ?pp)>] -> PP[+wh, sem=?pp] Aux S[sem=?s]/PP
+Q[sem = <(?s ?pp)>] -> PPto[+wh, sem=?pp] Aux S[sem=?s]/PPto
+Q[sem = <(?s \x.x)>] -> Aux S[sem=?s]/Aux
+Q[sem = <(?np ?vp)>] -> NP[+wh, sem=?np] VP[sem=?vp]
+
+S[sem = <(?subj ?vp)>] -> NP[-wh, sem=?subj] VP[sem=?vp]
+S[sem = <\slash. (?subj (?vp slash))>]/NP -> NP[sem=?subj] VP[sem=?vp]/NP
+S[sem = <\slash. (?subj (?vp slash))>]/PP -> NP[sem=?subj] VP[sem=?vp]/PP
+S[sem = <\slash. (?subj (?vp slash))>]/PPto -> NP[sem=?subj] VP[sem=?vp]/PPto
+S[sem = <\slash. (?subj (?vp slash))>]/Aux -> NP[sem=?subj] VP[sem=?vp]/Aux
+S[sem = <\slash. ((?subj slash) ?vp)>]/NP -> NP[sem=?subj]/NP VP[sem=?vp]
+
+NP[sem=<(?det ?nom)>, wh=?w] -> Det[sem=?det, wh=?w] Nom[sem=?nom]
+NP[loc=?l,sem=?np,-wh] -> PropN[loc=?l,sem=?np]
+
+Nom[sem=?nom, wh=?w] -> N[sem=?nom, wh=?w]
+Nom[sem=<(?pp ?nom)>, wh=?w] -> N[sem=?nom, wh=?w] PP[sem=?pp]
+
+# Intransitive verbs
+VP[sem=?v] -> Aux V0[sem=?v]
+VP[sem=<\slash. ?v>]/Aux -> V0[sem=?v]
+VP[sem=?v] -> V0[sem=?v]
+
+# Transitive verbs
+VP[sem=<(?v ?obj)>] -> Aux V1[sem=?v] NP[sem=?obj]
+VP[sem=<(?v ?obj)>] -> V1[sem=?v] NP[sem=?obj]
+VP[sem=<\slash. (?v ?obj)>]/Aux -> V1[sem=?v] NP[sem=?obj]
+VP[sem=<\slash. (?v (?obj slash))>]/NP -> V1[sem=?v] NP[sem=?obj]/NP
+
+# Doubly-transitive verbs, as in "John gave Mary Fido"
+VP[sem=<(?v ?obj1 ?obj2)>] -> Aux V2[sem=?v] NP[sem=?obj1] NP[sem=?obj2]
+VP[sem=<(?v ?obj1 ?obj2)>] -> V2[sem=?v] NP[sem=?obj1] NP[sem=?obj2]
+VP[sem=<\slash. (?v ?obj1 ?obj2)>]/Aux -> V2[sem=?v] NP[sem=?obj1] NP[sem=?obj2]
+VP[sem=<\slash. (?v ?obj2 (?obj1 slash))>]/NP -> V2[sem=?v] NP[sem=?obj1]/NP NP[sem=?obj2]
+VP[sem=<\slash. (?v (?obj2 slash) ?obj1)>]/NP -> V2[sem=?v] NP[sem=?obj1]/NP NP[sem=?obj2]
+
+# Doubly-transitive verbs expressed with "to", as in "John gave Fido to Mary"
+VP[sem=<(?v ?obj1 ?obj2)>] -> Aux V2[sem=?v] NP[sem=?obj2] PPto[sem=?obj1]
+VP[sem=<(?v ?obj1 ?obj2)>] -> V2[sem=?v] NP[sem=?obj2] PPto[sem=?obj1]
+VP[sem=<\slash. (?v ?obj1 (?obj2 slash))>]/PPto -> V2[sem=?v] NP[sem=?obj2] PPto[sem=?obj1]/PPto
+VP[sem=<\slash. (?v ?obj1 ?obj2)>]/Aux -> V2[sem=?v] NP[sem=?obj2] PPto[sem=?obj1]
+VP[sem=<\slash. (?v (?obj1 slash) ?obj2)>]/NP -> V2[sem=?v] NP[sem=?obj1]/NP PPto[sem=?obj2]
+VP[sem=<\slash. (?v ?obj1 (?obj2 slash))>]/NP -> V2[sem=?v] NP[sem=?obj1] PPto[sem=?obj2]/NP
+
+# Verb phrases can have prepositional phrases attached
+VP[sem=<(?pp ?vp)>] -> VP[sem=?vp] PP[sem=?pp]
+VP[sem=<\slash. ((?pp slash) ?vp)>]/PP -> VP[sem=?vp] PP[sem=?pp]/PP
+
+# Two kinds of prepositional phrases. PPto phrases are inherent to the verb,
+# and act the same as noun arguments. Other PPs are functions that modify the
+# the verb.
+PP[sem=<(?p ?np)>, wh=?wh] -> P[loc=?l,sem=?p] NP[loc=?l,sem=?np,wh=?wh]
+PP[sem=<\slash. (?p (?np slash))>, wh=?wh]/NP -> P[loc=?l,sem=?p] NP[loc=?l,sem=?np,wh=?wh]/NP
+PPto[sem=?np, wh=?wh] -> TO NP[sem=?np, wh=?wh]
+PPto[sem=?np, wh=?wh]/NP -> TO NP[sem=?np, wh=?wh]/NP
+# Note for the above: sem=?np is equivalent to sem=<\slash. (?np slash)>,
+# so we don't need to write it out
+
+NP[sem=<\x. x>]/NP ->
+PP[sem=<\x. x>]/PP ->
+PPto[sem=<\x. x>]/PPto ->
+
+#############################
+# Lexical Rules
+#############################
+
+PropN[-loc,sem=<\P.(P John)>] -> 'john'
+PropN[-loc,sem=<\P.(P Mary)>] -> 'mary'
+PropN[-loc,sem=<\P.(P Suzie)>] -> 'suzie'
+PropN[-loc,sem=<\P.(P Fido)>] -> 'fido'
+PropN[+loc,sem=<\P.(P Noosa)>] -> 'noosa'
+
+NP[+wh, -loc, sem=<\P. (P ?wh)>] -> 'who' | 'what'
+NP[+wh, -loc, sem=<\P. (P ?any)>] -> 'someone' | 'somebody' | 'something' | 'anybody' | 'anything' | 'anyone'
+
+PP[+wh, +loc, sem=<\P x. (in ?wh (P x))>] -> 'where'
+
+Det[sem=<\P Q. all x. ((P x) implies (Q x))>, -wh] -> 'every'
+Det[sem=<\P Q. all x. ((P x) implies (Q x))>, -wh] -> 'all'
+Det[sem=<\P Q. some x. ((P x) and (Q x))>, -wh] -> 'some'
+Det[sem=<\P Q. some x. ((P x) and (Q x))>, -wh] -> 'a' | 'the'
+
+N[sem=<boy>] -> 'boy' | 'boys'
+N[sem=<girl>] -> 'girl' | 'girls'
+N[sem=<dog>] -> 'dog' | 'dogs'
+N[sem=<park>] -> 'park' | 'parks'
+
+V0[sem=<\x. (bark x)>] -> 'bark' | 'barks' | 'barked'
+V0[sem=<\x. (walk x)>] -> 'walk' | 'walks' | 'walked'
+V1[sem=<\A x. (A \y. (chase x y))>] -> 'chase' | 'chases' | 'chased'
+V1[sem=<\A x. (A \y. (see x y))>] -> 'see' | 'sees' | 'saw'
+V1[sem=<\A x. (A \y. (kiss x y))>] -> 'kiss' | 'kisses' | 'kissed'
+#V1[sem=<\objF subj. (obj
+
+V2[sem=<\A B x. (A \y. (B \z. (give x z y)))>] -> 'give' | 'gives' | 'gave'
+
+P[+loc,sem=<\X P x. (X \y. ((P x) and (in y (P x))))>] -> 'in'
+P[-loc,sem=<\X P x. (X \y. ((P x) and (with y (P x))))>] -> 'with'
+
+TO -> 'to'
+Aux -> 'does' | 'did' | 'do'
