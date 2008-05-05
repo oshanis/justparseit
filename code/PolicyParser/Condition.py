@@ -18,6 +18,9 @@ class Cond:
 	def isAtomic(self): 
 		return False
 	
+	def size(self):
+		return 0
+	
 class AtomicCond(Cond):
 	
 	def __init__(self, atomicCond):
@@ -28,6 +31,9 @@ class AtomicCond(Cond):
 
 	def getAtomicCond(self):
 		 return self.atom
+	
+	def size(self):
+		return 1
 		
 class CompositeCond(Cond):
 	
@@ -40,6 +46,9 @@ class CompositeCond(Cond):
 	
 	def getRightCond(self):
 		return self.right
+	
+	def size(self):
+		return self.left.size() + self.right.size()
 	
 class AndCond(CompositeCond):
 	  
