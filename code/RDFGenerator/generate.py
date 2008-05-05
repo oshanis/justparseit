@@ -17,8 +17,8 @@ from rdflib.Graph import Graph
 from rdflib import URIRef, Literal, BNode, Namespace
 from rdflib import RDF
 
-#from pparser import *
-#from Condition import *
+from pparser import *
+from Condition import *
 
 def doCommand():
 	"""Command line NLP AIR Policy Generator
@@ -39,19 +39,12 @@ def parseNL():
 	PURPOSE_TXT = "criminal investigation"
 	CONDITION_VAL = None
 	FLAG_VAL = True
-	components = {'ENTITY': ENTITY_TXT, 'ACTION': ACTION_TXT, 'Flag': FLAG_VAL, 'DATA':DATA_TXT, 'PURPOSE':PURPOSE_TXT, 'POLICY':POLICY_TXT, 'Condition': CONDITION_VAL }
+	#components = {'ENTITY': ENTITY_TXT, 'ACTION': ACTION_TXT, 'FLAG': FLAG_VAL, 'DATA':DATA_TXT, 'PURPOSE':PURPOSE_TXT, 'POLICY':POLICY_TXT, 'CONDITION': CONDITION_VAL }
 	
-	#components = run()
+	components = run()
+	print components
 	return components
    
-def fragIDs(components):
-	for x in components:
-		if type(x) != bool:
-			print x
-			components[x] = "#" + components[x].replace(" ","_") 
-	return components
-
-
 def getMatch(term):
 
 	"""
@@ -70,7 +63,6 @@ def constructPolicy():
 	store = Graph()
 	
 	dict = parseNL()
-	frags = fragIDs(dict)
 	
 	# Bind a few prefix, namespace pairs.
 	store.bind("air", "http://dig.csail.mit.edu/TAMI/2007/amord/air#")
@@ -87,7 +79,8 @@ def constructPolicy():
 	MIT = Namespace("http://dig.csail.mit.edu/TAMI/2007/s0/university#")
 	
 	# create the policy
-	policy = URIRef(frags['POLICY'])
+	p = "#" + dict['POLICY'].replace(" ","_") 
+	policy = URIRef(p)
 	
 	store.add((policy, RDF.type, AIR["Policy"]))
 	store.add((policy, AIR["label"], Literal(dict['POLICY'])))
@@ -111,6 +104,14 @@ def constructPolicy():
 	pattern_1.add((URIRef("#U"), AIR["data"], URIRef("#D")))
 	pattern_1.add((URIRef("#U"), AIR["purpose"], URIRef("#P")))
 
+	assertion = Graph()
+	store.add((rule, AIR["assert"], assertion))
+	if dict['FLAG']:
+	   assertion.add((URIRef("#U"), AIR["compliant-with"], policy))
+	else:
+		assertion.add((URIRef("#U"), AIR["non-compliant-with"], policy))
+		
+	
 
 	"""
 		@todo: Get the condition count from Eunsuk
