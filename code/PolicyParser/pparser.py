@@ -59,8 +59,7 @@ def run():
             policy_dict[CFG2RDF_DICT[key]] = value
         
     print policy_dict
-    view_trees(trees)
-    
+
     return policy_dict
 
 run()
