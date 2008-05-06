@@ -10,20 +10,14 @@ from Condition import *
 CFG2RDF_DICT = {'Policy':'POLICY', 'Actor':'ENTITY', 'Action':'ACTION', 
                 'ActedOn':'DATA', 'Purpose':'PURPOSE', 'Condition':'CONDITION'}
 
-def run():
-    """
-    The main method for the policy parser
-    """
-
+def parsePolicy(policy_name, policy_sentence):
+ 
     grammar_file = 'simple.fcfg'
     grammar = nltk.data.load('file:../data/'+grammar_file)
     kimmo_file = None
     lexicon_func = None
-    
     parser = FeatureParser(grammar, lexicon_func, trace=0)
-    policy_name = raw_input("Enter the name of a policy: ")
-    policy_sentence = raw_input("Enter the policy sentence: ")
-    
+   
     # parse the sentence into a tree(s)
     trees = parser.parse_sentence(policy_sentence)
     num_parses = len(trees)
@@ -57,9 +51,18 @@ def run():
             policy_dict['FLAG'] = True
         elif key != 'Prop':
             policy_dict[CFG2RDF_DICT[key]] = value
-        
-    print policy_dict
-
+       
     return policy_dict
 
+def run():
+    """
+    The main method for the policy parser
+    """ 
+    policy_name = raw_input("Enter the name of a policy: ")
+    policy_sentence = raw_input("Enter the policy sentence: ")
+   
+    policy_dict = parsePolicy(policy_name, policy_sentence)
+    
+    print policy_dict
+   
 run()
