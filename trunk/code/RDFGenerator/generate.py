@@ -17,7 +17,7 @@ from rdflib.Graph import Graph
 from rdflib import URIRef, Literal, BNode, Namespace
 from rdflib import RDF
 
-from pparser import *
+from pparser import parsePolicy
 from Condition import *
 
 def doCommand():
@@ -41,8 +41,7 @@ def parseNL():
 	FLAG_VAL = True
 	#components = {'ENTITY': ENTITY_TXT, 'ACTION': ACTION_TXT, 'FLAG': FLAG_VAL, 'DATA':DATA_TXT, 'PURPOSE':PURPOSE_TXT, 'POLICY':POLICY_TXT, 'CONDITION': CONDITION_VAL }
 	
-	components = run()
-	print components
+	components = parsePolicy("MITProxCardDataPolicy", "MIT can use proxy for criminal")
 	return components
    
 def getMatch(term):

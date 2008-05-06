@@ -34,7 +34,7 @@ def parsePolicy(policy_name, policy_sentence):
     They are simply leaf nodes in the tree.
     """
     parts = trees[0].pos()
-    policy_dict = {'Policy' : policy_name}
+    policy_dict = {'POLICY' : policy_name}
     
     #TODO: remove the fake condition - for testing only
     cond = AndCond(AtomicCond('authorized'), AtomicCond('has_permission'))
@@ -64,5 +64,6 @@ def run():
     policy_dict = parsePolicy(policy_name, policy_sentence)
     
     print policy_dict
-   
-run()
+ 
+ #Commented by Oshani  
+#run()
