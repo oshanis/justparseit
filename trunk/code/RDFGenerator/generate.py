@@ -109,26 +109,25 @@ def constructPolicy():
 	   assertion.add((URIRef("#U"), AIR["compliant-with"], policy))
 	else:
 		assertion.add((URIRef("#U"), AIR["non-compliant-with"], policy))
-		
 	
-
-	"""
-		@todo: Get the condition count from Eunsuk
-		totalConditions = Condition.count()
-	"""
-	totalConditions = 1
+	totalConditions = dict['CONDITION'].size()
+	
+	print dict['CONDITION'].getLeftCond().getAtomicCond()
 	
 	while (conditionCount < totalConditions):
 		"""Handle the conditions here """
 		conditionCount = conditionCount + 1
 		rule = "rule_"+conditionCount.__str__()
 		rule = URIRef(rule)
+		""" Making the major assumption that the conditions are somehow bound to the user
+			@todo: Needs fixing!
+		"""
 	
 
 	# create the rule body
 
 	# Serialize and save the result
-	store.serialize("policy.n3", format="n3")
+	#store.serialize("policy.n3", format="n3")
 
 	# Serialize as N3
 	print store.serialize(format="n3")
