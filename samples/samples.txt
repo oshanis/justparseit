@@ -66,15 +66,17 @@ FLAG = false (non-compliant)
 ------------------------------
 ------------------------------
 
-
+Secure Flight SORN routine use rule:
+TSA can transfer data to the FBI if the specific data record is possibly associated with terrorism.
 actor(TSA) action(disclose) actedupon(SecureFlightData) recipient(LawEnforcement AND counterterrorism) condition(data appears_related terrorism)
 
 POLICY = 
 ENTITY = 
 ACTION = 
-DATA = 
-PURPOSE = 
+DATA = SORN_test 
+PURPOSE = securing_planes
 CONDITION =
+Use Permited = Transfer to FBI
 
 ------------------------------
 
