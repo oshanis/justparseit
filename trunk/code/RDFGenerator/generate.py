@@ -28,7 +28,7 @@ def doCommand():
         <command> <options> <steps> [--with <more args> ]
 	"""
 
-def parseNL():
+def parseNL(name, senetence):
 	""""Eunsuk's Dictionary"""
 	#{'ENTITY': 'MIT', 'ACTION': 'use', 'Flag': True, 'PURPOSE': 'criminal', 'Policy': 'MIT prox card policy', 'DATA': 'proxy', 'Condition': <Condition.AndCond instance at 0x1e81120>}
 
@@ -41,27 +41,28 @@ def parseNL():
 	FLAG_VAL = True
 	#components = {'ENTITY': ENTITY_TXT, 'ACTION': ACTION_TXT, 'FLAG': FLAG_VAL, 'DATA':DATA_TXT, 'PURPOSE':PURPOSE_TXT, 'POLICY':POLICY_TXT, 'CONDITION': CONDITION_VAL }
 	
-	components = parsePolicy("MITProxCardDataPolicy", "MIT can use proxy for criminal")
+	components = parsePolicy(name, sentence)
 	return components
    
-def getMatch(term):
+def getMatch(term, domain):
 
 	"""
 		This is a method for extracting the exact RDF term class for the string fragment from the Sentence parser
 	"""
 	g = Graph()
-	g.load("data/university.n3", format="n3")
+	g.load(domain, format="n3")
 	matches = []
 	for row in g.query('select ?a WHERE { ?a rdfs:label "'+ term +'"}',initNs=dict(rdfs=Namespace("http://www.w3.org/2000/01/rdf-schema#"))):
 		matches.append(row[0])
-	return matches[0] #TODO: what is there are more than 1 match?
+	if len(matches)>0:	
+		return matches[0] #TODO: what is there are more than 1 match?
+	else:
+		return None
     
     
-def constructPolicy():
+def constructPolicy(dict, domain):
 	
 	store = Graph()
-	
-	dict = parseNL()
 	
 	# Bind a few prefix, namespace pairs.
 	store.bind("air", "http://dig.csail.mit.edu/TAMI/2007/amord/air#")
@@ -74,8 +75,9 @@ def constructPolicy():
 	OWL = Namespace("http://www.w3.org/2002/07/owl#")
 	
 	"""This should come from the user"""
-	store.bind("mit", "http://dig.csail.mit.edu/TAMI/2007/s0/university#")
-	MIT = Namespace("http://dig.csail.mit.edu/TAMI/2007/s0/university#")
+	#domain = "http://dig.csail.mit.edu/TAMI/2007/s0/university#"
+	store.bind("mit", domain)
+	MIT = Namespace(domain)
 	
 	# create the policy
 	p = "#" + dict['POLICY'].replace(" ","_") 
@@ -85,6 +87,7 @@ def constructPolicy():
 	store.add((policy, AIR["label"], Literal(dict['POLICY'])))
 	# add the variables
 	store.add((policy, AIR["variable"], URIRef("#U")))
+	store.add((policy, AIR["variable"], URIRef("#A")))
 	store.add((policy, AIR["variable"], URIRef("#D")))
 	store.add((policy, AIR["variable"], URIRef("#P")))
 	conditionCount = 1
@@ -100,6 +103,7 @@ def constructPolicy():
 	pattern_1 = Graph()
 	store.add((rule, AIR["pattern"], pattern_1))
 	pattern_1.add((URIRef("#U"), RDF.type, AIR["UseEvent"]))
+	pattern_1.add((URIRef("#U"), AIR["actor"], URIRef("#A")))
 	pattern_1.add((URIRef("#U"), AIR["data"], URIRef("#D")))
 	pattern_1.add((URIRef("#U"), AIR["purpose"], URIRef("#P")))
 
@@ -111,28 +115,36 @@ def constructPolicy():
 		assertion.add((URIRef("#U"), AIR["non-compliant-with"], policy))
 	
 	totalConditions = dict['CONDITION'].size()
-	
-	print dict['CONDITION'].getLeftCond().getAtomicCond()
-	
+		
+	# create the rule body
 	while (conditionCount < totalConditions):
 		"""Handle the conditions here """
 		conditionCount = conditionCount + 1
-		rule = "rule_"+conditionCount.__str__()
-		rule = URIRef(rule)
-		""" Making the major assumption that the conditions are somehow bound to the user
-			@todo: Needs fixing!
-		"""
-	
-
-	# create the rule body
-
-	# Serialize and save the result
-	#store.serialize("policy.n3", format="n3")
-
+		cond = dict['CONDITION'].getLeftCond().getAtomicCond()
+		mathced_cond = getMatch(cond, domain)
+		if mathced_cond != None:
+			"""The term should exist in the ontology"""
+			new_rule = "rule_"+conditionCount.__str__()
+			new_rule = URIRef(rule)
+			store.add((rule, AIR["rule"], new_rule))
+			pattern = Graph()
+			store.add((new_rule, AIR["pattern"], pattern))
+			#pattern.add((URIRef("#A"), AIR[""]))
+		
+		
 	# Serialize as N3
-	print store.serialize(format="n3")
+	return store.serialize(format="n3")
 
+
+def main_m(name, sentence, domain):
+	dict = parseNL(name, sentence)
+	parsed = constructPolicy(dict,domain)
+	print parsed
+	
 	
 
 if __name__ == '__main__':
-    constructPolicy()
+	name = "MITProxCardDataPolicy"
+	sentence = "MIT can use proxy for criminal"
+	domain = "data/university.n3"
+	main_m(name, sentence, domain)
