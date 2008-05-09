@@ -41,7 +41,7 @@ def main():
     
     name = "MITProxCardDataPolicy"
     sentence = "MIT can use proxy for criminal"
-    domain = "data/university.n3"
+    domain = "../data/university.n3"
 
     dict = parseNL(name, sentence)
     returnString = constructPolicy(dict, domain)
@@ -73,9 +73,9 @@ if __name__ == '__main__': # What else would it be?
     
     import sys
     
-    sys.path.append("PolicyParser/")
-    sys.path.append("featureparse")
-    sys.path.append("RDFGenerator")
+    sys.path.append("../PolicyParser/")
+    sys.path.append("../featureparse")
+    sys.path.append("../RDFGenerator")
 
     from pparser import *
     from Condition import *
