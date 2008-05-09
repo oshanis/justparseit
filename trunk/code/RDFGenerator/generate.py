@@ -13,12 +13,14 @@ _hdlr = logging.StreamHandler()
 _hdlr.setFormatter(logging.Formatter('%(name)s %(levelname)s: %(message)s'))
 _logger.addHandler(_hdlr)
 
+sys.path.append("../PolicyParser/")
+sys.path.append("../featureparse")
+
+
 from rdflib.Graph import Graph
 from rdflib import URIRef, Literal, BNode, Namespace
 from rdflib import RDF
 
-from pparser import parsePolicy
-from Condition import *
 
 def doCommand():
 	"""Command line NLP AIR Policy Generator
@@ -28,7 +30,7 @@ def doCommand():
         <command> <options> <steps> [--with <more args> ]
 	"""
 
-def parseNL(name, senetence):
+def parseNL(name, sentence):
 	""""Eunsuk's Dictionary"""
 	#{'ENTITY': 'MIT', 'ACTION': 'use', 'Flag': True, 'PURPOSE': 'criminal', 'Policy': 'MIT prox card policy', 'DATA': 'proxy', 'Condition': <Condition.AndCond instance at 0x1e81120>}
 
@@ -41,6 +43,7 @@ def parseNL(name, senetence):
 	FLAG_VAL = True
 	#components = {'ENTITY': ENTITY_TXT, 'ACTION': ACTION_TXT, 'FLAG': FLAG_VAL, 'DATA':DATA_TXT, 'PURPOSE':PURPOSE_TXT, 'POLICY':POLICY_TXT, 'CONDITION': CONDITION_VAL }
 	
+	from pparser import parsePolicy
 	components = parsePolicy(name, sentence)
 	return components
    
@@ -136,7 +139,7 @@ def constructPolicy(dict, domain):
 	return store.serialize(format="n3")
 
 
-def main_m(name, sentence, domain):
+def gen_main(name, sentence, domain):
 	dict = parseNL(name, sentence)
 	parsed = constructPolicy(dict,domain)
 	print parsed
@@ -144,7 +147,13 @@ def main_m(name, sentence, domain):
 	
 
 if __name__ == '__main__':
+	
+	
+	from pparser import parsePolicy
+	from Condition import *
+
 	name = "MITProxCardDataPolicy"
 	sentence = "MIT can use proxy for criminal"
 	domain = "data/university.n3"
-	main_m(name, sentence, domain)
+	
+	gen_main(name, sentence, domain)
