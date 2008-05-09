@@ -49,6 +49,7 @@ def parseNL(name, sentence):
    
 def getMatch(term, domain):
 
+	print domain
 	"""
 		This is a method for extracting the exact RDF term class for the string fragment from the Sentence parser
 	"""
@@ -93,7 +94,7 @@ def constructPolicy(dict, domain):
 	store.add((policy, AIR["variable"], URIRef("#A")))
 	store.add((policy, AIR["variable"], URIRef("#D")))
 	store.add((policy, AIR["variable"], URIRef("#P")))
-	conditionCount = 1
+	conditionCount = 0
 	
 	rule = "rule_"+conditionCount.__str__()
 	rule = URIRef(rule)
@@ -117,14 +118,14 @@ def constructPolicy(dict, domain):
 	else:
 		assertion.add((URIRef("#U"), AIR["non-compliant-with"], policy))
 	
-	totalConditions = dict['CONDITION'].size()
-		
+	totalConditions = len(dict['CONDITION'])
+	print totalConditions
+	conditions = dict['CONDITION']
 	# create the rule body
 	while (conditionCount < totalConditions):
 		"""Handle the conditions here """
 		conditionCount = conditionCount + 1
-		cond = dict['CONDITION'].getLeftCond().getAtomicCond()
-		mathced_cond = getMatch(cond, domain)
+		mathced_cond = getMatch(conditions[conditionCount], domain)
 		if mathced_cond != None:
 			"""The term should exist in the ontology"""
 			new_rule = "rule_"+conditionCount.__str__()
@@ -133,7 +134,7 @@ def constructPolicy(dict, domain):
 			pattern = Graph()
 			store.add((new_rule, AIR["pattern"], pattern))
 			#pattern.add((URIRef("#A"), AIR[""]))
-		
+
 		
 	# Serialize as N3
 	return store.serialize(format="n3")
@@ -154,6 +155,6 @@ if __name__ == '__main__':
 
 	name = "MITProxCardDataPolicy"
 	sentence = "MIT can use proxy for criminal"
-	domain = "data/university.n3"
+	domain = "../data/university.n3"
 	
 	gen_main(name, sentence, domain)
