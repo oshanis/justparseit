@@ -9,7 +9,7 @@ Each Cond object is a triple <subject, predicate, object>
 class Cond:
 	def __init__(self, subject, predicate, object):
 		self.subject = subject
-		self.predicate = predicae
+		self.predicate = predicate
 		self.object = object
 		
 	def getSubject(self):
