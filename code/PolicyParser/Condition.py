@@ -3,60 +3,20 @@
 
 Definition for the Condition class
 
-Each Cond object is a boolean expression made out of
-atomic Conds, AND, and OR
+Each Cond object is a triple <subject, predicate, object>
 """
 
 class Cond:
-
-	def isAnd(self):
-		return False
-	
-	def isOr(self):
-		return False
+	def __init__(self, subject, predicate, object):
+		self.subject = subject
+		self.predicate = predicae
+		self.object = object
 		
-	def isAtomic(self): 
-		return False
+	def getSubject(self):
+		return self.subject
 	
-	def size(self):
-		return 0
+	def getPredicate(self):
+		return self.predicate
 	
-class AtomicCond(Cond):
-	
-	def __init__(self, atomicCond):
-		self.atom = atomicCond
-		
-	def isAtomic(self):
-		return True
-
-	def getAtomicCond(self):
-		 return self.atom
-	
-	def size(self):
-		return 1
-		
-class CompositeCond(Cond):
-	
-	def __init__(self, left, right):
-		self.left = left
-		self.right = right
-
-	def getLeftCond(self):
-		return self.left
-	
-	def getRightCond(self):
-		return self.right
-	
-	def size(self):
-		return self.left.size() + self.right.size()
-	
-class AndCond(CompositeCond):
-	  
-	def isAnd(self):
-		return True
-	
-class OrCond(CompositeCond):
-	  
-	def isOr(self):
-		return True
-
+	def getObject(self):
+		return self.object
