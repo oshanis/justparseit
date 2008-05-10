@@ -26,16 +26,19 @@ def processAppExpression(appExp):
     left = appExp.first
     right = appExp.second
 
+#    print 'left:' + left.__str__()
+#    print 'right:' + right.__str__()
+
     #exp = ((cat X) Y)
-    if isApplication(left) and isVariable(right):
+    if isApplication(left):
         
         left_left = left.first
         left_right = left.second 
         
-        if isVariable(left_left) and left_left.name() == CONCAT_OPERATOR:
+        if isVariable(left_left) and isVariable(left_right) and left_left.name() == CONCAT_OPERATOR:
             
-            right_value = right.name()  #Y
-            left_value = traverseExpression(left_right) #X
+            left_value = left_right.name()  #X
+            right_value = traverseExpression(right) #Y
             
             result = left_value + ' ' + right_value
             
@@ -47,6 +50,8 @@ def processAppExpression(appExp):
     return result
 
 def traverseExpression(exp):
+    
+#    print 'exp:' + exp.__str__()
           
     if isApplication(exp):  
         result = processAppExpression(exp)

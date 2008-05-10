@@ -8,8 +8,20 @@ MOD[sem = ?mod] -> PMOD[sem = ?mod]
 MOD[sem = ?mod] -> NMOD[sem = ?mod]
 MOD[sem = <no>] -> PMOD[sem = ?pmod] NEG[sem = ?neg]
 
-Purpose[purpose = ?n] -> P[sem = ?p] NP[sem = ?n]
+Purpose[purpose = ?n] -> FOR[sem = ?for] NP[sem = ?n]
+Purpose[purpose = ?n] -> FOR[sem = ?for] AP[sem = ?n]
+Purpose[purpose = ?vp] -> TO[sem = ?to] VP[sem = ?vp]
 
-NP[sem = <((cat ?n1) ?n2)>] -> N[sem = ?n1] NP[sem = ?n2]
 NP[sem = ?n] -> N[sem = ?n]
-NP[sem = <((cat ?adj) ?n)>] -> ADJ[sem = ?adj] N[sem = ?n]
+NP[sem = <(?det ?n)>] -> DET[sem = ?det] NP[sem = ?n]
+NP[sem = <((cat ?n1) ?n2)>] -> N[sem = ?n1] NP[sem = ?n2]
+NP[sem = <((cat ?np) ?pp)>] -> NP[sem = ?np] PP[sem = ?pp]
+
+PP[sem = <((cat ?p) ?np)>] -> P[sem = ?p] NP[sem = ?np]
+
+P[sem = ?for] -> FOR[sem = ?for]
+P[sem = ?to] -> TO[sem = ?to]
+
+AP[sem = <((cat ?adj) ?n)>] -> ADJ[sem = ?adj] NP[sem = ?n]
+
+VP[sem = <((cat ?v) ?np)>] -> V[sem = ?v] NP[sem = ?np]
