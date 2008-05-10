@@ -10,6 +10,6 @@ MOD[sem = <no>] -> PMOD[sem = ?pmod] NEG[sem = ?neg]
 
 Purpose[purpose = ?n] -> P[sem = ?p] NP[sem = ?n]
 
-NP[sem = <((cat ?n1) ?n2)>] -> NP[sem = ?n1] NP[sem = ?n2]
+NP[sem = <((cat ?n1) ?n2)>] -> N[sem = ?n1] NP[sem = ?n2]
 NP[sem = ?n] -> N[sem = ?n]
 NP[sem = <((cat ?adj) ?n)>] -> ADJ[sem = ?adj] N[sem = ?n]
