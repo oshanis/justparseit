@@ -11,10 +11,10 @@ class InvalidExpressionError(Exception):
     def __init__(self, value):
         self.value = value
 
-CFG2RDF_DICT = {'Policy':'POLICY', 'Actor':'ENTITY', 'Action':'ACTION', 
-                'ActedOn':'DATA', 'Purpose':'PURPOSE', 'Condition':'CONDITION'}
+CFG2RDF_DICT = {'actor':'ENTITY', 'action':'ACTION',
+                'actedOn':'DATA', 'purpose':'PURPOSE'}
 
-SEM_FEATURE_KEYWORD = 'sem'
+CONCAT_OPERATOR = 'cat'
 
 def isVariable(exp):
     return type(exp) == nltk.sem.logic.VariableExpression
@@ -22,38 +22,35 @@ def isVariable(exp):
 def isApplication(exp):
     return type(exp) == nltk.sem.logic.ApplicationExpression
 
-def isOperator(exp):
-    return type(exp) == nltk.sem.logic.Operator
-
 def processAppExpression(appExp):
     left = appExp.first
     right = appExp.second
 
-    if isVariable(left) and isVariable(right):
-        leftVar = left.name()
-        rightVar = right.name()
-
-        if leftVar in CFG2RDF_DICT:
-            result = {CFG2RDF_DICT[leftVar] : rightVar}
+    #exp = ((cat X) Y)
+    if isApplication(left) and isVariable(right):
+        
+        left_left = left.first
+        left_right = left.second 
+        
+        if isVariable(left_left) and left_left.name() == CONCAT_OPERATOR:
+            right_value = right.name()  #Y
+            left_value = traverseExpression(left_right) #X
+            
+            result = left_value + right_value
+            
         else:
-            result = {}
+            raise InvalidExpressionError(exp)
     else: 
-        #traverse the two sub-expressions and merge the resulting dictionaries
-        dict_left = traverseExpression(left)
-        dict_right = traverseExpression(right)
-        dict_left.update(dict_right)
-        result = dict_left
+        raise InvalidExpressionError(exp)
     
     return result
-    
+
 def traverseExpression(exp):
-   
-    result = {}
-   
+      
     if isApplication(exp):  
-        result = processAppExpression(exp)
-    elif isVariable(exp) or isOperator(exp):
-        result = {}
+        result = ''#processAppExpression(exp)
+    elif isVariable(exp):
+        result  = exp.name()
     else:
         raise InvalidExpressionError(exp)
        
@@ -61,21 +58,18 @@ def traverseExpression(exp):
     
 def parseSemantics(tree):
     
-    exp = tree.node[SEM_FEATURE_KEYWORD]
-    
+    node = tree.node
     policy_dict = {}
     
-    try:
-        policy_dict = traverseExpression(exp)
-    except InvalidExpressionError, e:
-        print 'Failed to interpret the semantics: ', e.value
-        ploicy_dict = {}
+    for key in CFG2RDF_DICT:
+        value = traverseExpression(node[key])
+        policy_dict[CFG2RDF_DICT[key]] = value
         
     return policy_dict
 
 def parsePolicy(policy_name, policy_sentence):
  
-    grammar_file = 'simple2.fcfg'
+    grammar_file = 'grammar.fcfg'
     grammar = nltk.data.load('file:../data/'+grammar_file)
     kimmofile = 'gazdar.kimmo.yaml'
    
@@ -105,7 +99,7 @@ def parsePolicy(policy_name, policy_sentence):
     They are simply leaf nodes in the tree.
     """
     tree = trees[0]
-
+    
     policy_dict = parseSemantics(tree)
     
     policy_dict['POLICY'] = policy_name
