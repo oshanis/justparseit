@@ -1,0 +1,15 @@
+S[actor = ?actor, mod = ?mod, action = ?action, actedOn = ?actedOn, purpose = ?purpose] -> Actor[actor = ?actor] Action[action = ?action, actedOn = ?actedOn, mod = ?mod] Purpose[purpose = ?purpose]
+
+Actor[actor = ?n] -> NP[sem = ?n]
+
+Action[action = ?v, actedOn = ?n, mod = ?mod] -> MOD[sem = ?mod] V[sem = ?v] NP[sem = ?n]
+
+MOD[sem = ?mod] -> PMOD[sem = ?mod]
+MOD[sem = ?mod] -> NMOD[sem = ?mod]
+MOD[sem = <no>] -> PMOD[sem = ?pmod] NEG[sem = ?neg]
+
+Purpose[purpose = ?n] -> P[sem = ?p] NP[sem = ?n]
+
+NP[sem = <((cat ?n1) ?n2)>] -> NP[sem = ?n1] NP[sem = ?n2]
+NP[sem = ?n] -> N[sem = ?n]
+NP[sem = <((cat ?adj) ?n)>] -> ADJ[sem = ?adj] N[sem = ?n]
