@@ -33,22 +33,23 @@ def processAppExpression(appExp):
         left_right = left.second 
         
         if isVariable(left_left) and left_left.name() == CONCAT_OPERATOR:
+            
             right_value = right.name()  #Y
             left_value = traverseExpression(left_right) #X
             
-            result = left_value + right_value
+            result = left_value + ' ' + right_value
             
         else:
-            raise InvalidExpressionError(exp)
+            raise InvalidExpressionError(appExp)
     else: 
-        raise InvalidExpressionError(exp)
+        raise InvalidExpressionError(appExp)
     
     return result
 
 def traverseExpression(exp):
-      
+          
     if isApplication(exp):  
-        result = ''#processAppExpression(exp)
+        result = processAppExpression(exp)
     elif isVariable(exp):
         result  = exp.name()
     else:
