@@ -12,15 +12,22 @@ class InvalidExpressionError(Exception):
         self.value = value
 
 CFG2RDF_DICT = {'actor':'ENTITY', 'action':'ACTION',
-                'actedOn':'DATA', 'purpose':'PURPOSE'}
+                'actedOn':'DATA', 'purpose':'PURPOSE', 
+                'condition' : 'CONDITION', 'mod' : 'FLAG'}
 
 CONCAT_OPERATOR = 'cat'
+AND_OPERATOR = 'and'
+TRUE_MOD = 'yes'
+FALSE_MOD = 'no'
 
 def isVariable(exp):
     return type(exp) == nltk.sem.logic.VariableExpression
     
 def isApplication(exp):
     return type(exp) == nltk.sem.logic.ApplicationExpression
+
+def isOperator(exp):
+    return type(exp) == nltk.sem.logic.Operator
 
 def processAppExpression(appExp):
     left = appExp.first
@@ -61,14 +68,75 @@ def traverseExpression(exp):
         raise InvalidExpressionError(exp)
        
     return result
+
+def parseSingleCondition(cond):
     
+    #cond = (action actor) (actedOn)
+    left = cond.first
+    right = cond.second
+    
+    if isVariable(right) and isApplication(left):
+        left_left = left.first
+        left_right = left.second
+        if isVariable(left_left) and isVariable(left_right):
+            result = Cond(left_right.name(), left_left.name(), right.name())
+        else:
+            raise InvalidExpressionError(exp)            
+    else:
+        raise InvalidExpressionError(exp)
+
+    return result
+
+def traverseConditions(exp):
+
+    if isApplication(exp):
+        # check whether it's a single condition or multiple conditions
+        left = exp.first
+        right = exp.second
+
+        #multiple conditions: cond = (and cond1) cond2
+        if isApplication(left):
+            left_left = left.first
+            left_right = left.second
+            if isOperator(left_left) and left_left.name() == AND_OPERATOR and isApplication(left_right):
+                result = [parseSingleCondition(left_right)] + traverseConditions(right)
+            else:
+                result = [parseSingleCondition(exp)]
+        else:
+            raise InvalidExpressionError(exp)     
+    else:
+        raise InvalidExpressionError(exp)
+    
+    return result
+
+def traverseMod(exp):
+    
+    if isVariable(exp):
+        val = exp.name()
+        if (val == TRUE_MOD):
+            result = True
+        elif (val == FALSE_MOD):
+            result = False
+        else:
+            raise InvalidExpressionError(exp)
+    else:
+        raise InvalidExpressionError(exp)
+    
+    return result
+
 def parseSemantics(tree):
     
     node = tree.node
     policy_dict = {}
     
     for key in CFG2RDF_DICT:
-        value = traverseExpression(node[key])
+        if (key == 'condition'):
+            value = traverseConditions(node[key])
+        elif (key == 'mod'):
+            value = traverseMod(node[key])
+        else:
+            value = traverseExpression(node[key])
+        
         policy_dict[CFG2RDF_DICT[key]] = value
         
     return policy_dict
@@ -105,19 +173,15 @@ def parsePolicy(policy_name, policy_sentence):
     They are simply leaf nodes in the tree.
     """
     tree = trees[0]
+
+    try:
+        policy_dict = parseSemantics(tree)
+        policy_dict['POLICY'] = policy_name
+        return policy_dict
+    except InvalidExpressionError, e:
+        print "Could not parse the expression:" + e.value.__str__()
     
-    policy_dict = parseSemantics(tree)
-    
-    policy_dict['POLICY'] = policy_name
-    
-    #TODO: remove the fake condition - for testing only
-    cond1 = Cond('mit', 'is', 'authorized')
-    cond2 = Cond('harshad', 'gives', 'treats')
-    cond3 = Cond('oshani', 'has', 'permission')
-    policy_dict['CONDITION'] = [cond1, cond2, cond3]
-    policy_dict['FLAG'] = True
-           
-    return policy_dict
+    return {}
 
 def run():
     """
