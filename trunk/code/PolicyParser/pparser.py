@@ -163,7 +163,7 @@ def parsePolicy(policy_name, policy_sentence):
 
     if num_parses == 0:
         print 'Error: Could not parse this policy!'
-        return
+        return None
     elif num_parses > 1:
         print 'Warning: More than one parses for this policy!'
     
@@ -181,7 +181,7 @@ def parsePolicy(policy_name, policy_sentence):
     except InvalidExpressionError, e:
         print "Could not parse the expression:" + e.value.__str__()
     
-    return {}
+    return None
 
 def run():
     """
