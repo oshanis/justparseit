@@ -19,6 +19,7 @@ CONCAT_OPERATOR = 'cat'
 AND_OPERATOR = 'and'
 TRUE_MOD = 'yes'
 FALSE_MOD = 'no'
+NULL_VALUE = 'null'
 
 def isVariable(exp):
     return type(exp) == nltk.sem.logic.VariableExpression
@@ -104,6 +105,9 @@ def traverseConditions(exp):
                 result = [parseSingleCondition(exp)]
         else:
             raise InvalidExpressionError(exp)     
+    elif isVariable(exp) and exp.name() == NULL_VALUE:
+        # condition is optional, so it can be null
+        result = None
     else:
         raise InvalidExpressionError(exp)
     
@@ -173,7 +177,7 @@ def parsePolicy(policy_name, policy_sentence):
     They are simply leaf nodes in the tree.
     """
     tree = trees[0]
-
+    
     try:
         policy_dict = parseSemantics(tree)
         policy_dict['POLICY'] = policy_name
