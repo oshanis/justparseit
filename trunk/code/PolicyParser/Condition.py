@@ -11,7 +11,7 @@ class Cond:
 		self.subject = subject
 		self.predicate = predicate
 		self.object = object
-		
+
 	def getSubject(self):
 		return self.subject
 	
