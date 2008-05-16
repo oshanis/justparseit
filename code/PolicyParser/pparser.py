@@ -65,12 +65,23 @@ def traverseExpression(exp):
         result = processAppExpression(exp)
     elif isVariable(exp):
         result  = exp.name()
+        if result == NULL_VALUE:
+            result = None
     else:
         raise InvalidExpressionError(exp)
        
     return result
 
-def parseSingleCondition(cond):
+def matchTokenInDict(token, policy_dict):
+    
+    for key in policy_dict:
+        val = policy_dict[key]
+        if val == token:
+            return '$' + key
+    
+    return token
+        
+def parseSingleCondition(cond, policy_dict):
     
     #cond = (action actor) (actedOn)
     left = cond.first
@@ -80,7 +91,10 @@ def parseSingleCondition(cond):
         left_left = left.first
         left_right = left.second
         if isVariable(left_left) and isVariable(left_right):
-            result = Cond(left_right.name(), left_left.name(), right.name())
+            subject = matchTokenInDict(left_right.name(), policy_dict)
+            predicate = matchTokenInDict(left_left.name(),policy_dict)
+            object = matchTokenInDict(right.name(), policy_dict)
+            result = Cond(subject, predicate, object)
         else:
             raise InvalidExpressionError(cond)            
     else:
@@ -88,7 +102,7 @@ def parseSingleCondition(cond):
 
     return result
 
-def traverseConditions(exp):
+def traverseConditions(exp, policy_dict):
 
     if isApplication(exp):
         # check whether it's a single condition or multiple conditions
@@ -100,14 +114,14 @@ def traverseConditions(exp):
             left_left = left.first
             left_right = left.second
             if isOperator(left_left) and left_left.name() == AND_OPERATOR and isApplication(left_right):
-                result = [parseSingleCondition(left_right)] + traverseConditions(right)
+                result = [parseSingleCondition(left_right, policy_dict)] + traverseConditions(right, policy_dict)
             else:
-                result = [parseSingleCondition(exp)]
+                result = [parseSingleCondition(exp, policy_dict)]
         else:
             raise InvalidExpressionError(exp)     
     elif isVariable(exp) and exp.name() == NULL_VALUE:
         # condition is optional, so it can be null
-        result = None
+        result = []
     else:
         raise InvalidExpressionError(exp)
     
@@ -135,14 +149,21 @@ def parseSemantics(tree):
     
     for key in CFG2RDF_DICT:
         if (key == 'condition'):
-            value = traverseConditions(node[key])
+            continue
         elif (key == 'mod'):
             value = traverseMod(node[key])
         else:
             value = traverseExpression(node[key])
         
         policy_dict[CFG2RDF_DICT[key]] = value
-        
+    
+    """    
+        Conditions should be parsed as the last,
+        because they depend on the previous entries in the dictionary
+    """
+    value = traverseConditions(node['condition'], policy_dict)
+    policy_dict[CFG2RDF_DICT['condition']] = value
+       
     return policy_dict
 
 def parsePolicy(policy_name, policy_sentence):
