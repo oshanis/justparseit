@@ -31,6 +31,8 @@ def doCommand():
 	"""
 
 def parseNL(name, sentence):
+	"""This method will call the Policy Parser and get the relevant components"""
+	
 	""""Eunsuk's Dictionary"""
 	#{'ENTITY': 'MIT', 'ACTION': 'use', 'Flag': True, 'PURPOSE': 'criminal', 'Policy': 'MIT prox card policy', 'DATA': 'proxy', 'Condition': <Condition.AndCond instance at 0x1e81120>}
 
@@ -41,21 +43,24 @@ def parseNL(name, sentence):
 	PURPOSE_TXT = "criminal investigation"
 	CONDITION_VAL = None
 	FLAG_VAL = True
+	TRANSFEREE_VAL = None
 	#components = {'ENTITY': ENTITY_TXT, 'ACTION': ACTION_TXT, 'FLAG': FLAG_VAL, 'DATA':DATA_TXT, 'PURPOSE':PURPOSE_TXT, 'POLICY':POLICY_TXT, 'CONDITION': CONDITION_VAL }
 	
 	from pparser import parsePolicy
 	components = parsePolicy(name, sentence)
 	return components
+
    
 def getMatch(term, domain):
-
-	print domain
 	"""
 		This is a method for extracting the exact RDF term class for the string fragment from the Sentence parser
 	"""
+
+	print domain
 	g = Graph()
 	g.load(domain, format="n3")
 	matches = []
+	"""SPARQL query to match the correct subject"""
 	for row in g.query('select ?a WHERE { ?a rdfs:label "'+ term +'"}',initNs=dict(rdfs=Namespace("http://www.w3.org/2000/01/rdf-schema#"))):
 		matches.append(row[0])
 	if len(matches)>0:	
@@ -84,6 +89,7 @@ def constructPolicy(dict, domain):
 	MIT = Namespace(domain)
 	
 	# create the policy
+	print dict['POLICY']
 	p = "#" + dict['POLICY'].replace(" ","_") 
 	policy = URIRef(p)
 	
@@ -120,20 +126,21 @@ def constructPolicy(dict, domain):
 	
 	totalConditions = len(dict['CONDITION'])
 	print totalConditions
-	conditions = dict['CONDITION']
-	# create the rule body
-	while (conditionCount < totalConditions):
-		"""Handle the conditions here """
-		conditionCount = conditionCount + 1
-		mathced_cond = getMatch(conditions[conditionCount], domain)
-		if mathced_cond != None:
-			"""The term should exist in the ontology"""
-			new_rule = "rule_"+conditionCount.__str__()
-			new_rule = URIRef(rule)
-			store.add((rule, AIR["rule"], new_rule))
-			pattern = Graph()
-			store.add((new_rule, AIR["pattern"], pattern))
-			#pattern.add((URIRef("#A"), AIR[""]))
+	if totalConditions != 0:
+		conditions = dict['CONDITION']
+		# create the rule body
+		while (conditionCount < totalConditions):
+			"""Handle the conditions here """
+			conditionCount = conditionCount + 1
+			mathced_cond = getMatch(conditions[conditionCount], domain)
+			if mathced_cond != None:
+				"""The term should exist in the ontology"""
+				new_rule = "rule_"+conditionCount.__str__()
+				new_rule = URIRef(rule)
+				store.add((rule, AIR["rule"], new_rule))
+				pattern = Graph()
+				store.add((new_rule, AIR["pattern"], pattern))
+				#pattern.add((URIRef("#A"), AIR[""]))
 
 		
 	# Serialize as N3
