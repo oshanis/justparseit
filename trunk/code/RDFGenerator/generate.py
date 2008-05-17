@@ -52,7 +52,6 @@ def getMatch(term, domain):
 	"""
 		This is a method for extracting the exact RDF term class for the string fragment from the Sentence parser
 	"""
-	print domain
 	g = Graph()
 	g.load(domain, format="n3")
 	matches = []
@@ -108,19 +107,19 @@ def constructPolicy(dict, domain, domain_name):
 	
 	# Bind a few prefix, namespace pairs.
 	store.bind("air", "http://dig.csail.mit.edu/TAMI/2007/amord/air#")
-	store.bind("pur", "http://dig.csail.mit.edu/TAMI/2006/s4/purposes#")
-	store.bind("owl", "http://www.w3.org/2002/07/owl#")
+	#store.bind("pur", "http://dig.csail.mit.edu/TAMI/2006/s4/purposes#")
+	#store.bind("owl", "http://www.w3.org/2002/07/owl#")
 
 	# Create namespace objects
 	AIR = Namespace("http://dig.csail.mit.edu/TAMI/2007/amord/air#")
-	PUR = Namespace("http://dig.csail.mit.edu/TAMI/2006/s4/purposes#")
-	OWL = Namespace("http://www.w3.org/2002/07/owl#")
+	#PUR = Namespace("http://dig.csail.mit.edu/TAMI/2006/s4/purposes#")
+	#OWL = Namespace("http://www.w3.org/2002/07/owl#")
 	
 	"""This should come from the user"""
 	#domain = "http://dig.csail.mit.edu/TAMI/2007/s0/university#"
-	store.bind("mit", domain)
-	MIT = Namespace(domain)
-	
+	#store.bind("mit", domain)
+	#MIT = Namespace(domain)
+
 	# create the policy
 	p = "#" + dict['POLICY'].replace(" ","_") 
 	policy = URIRef(p)
