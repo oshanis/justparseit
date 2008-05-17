@@ -13,10 +13,6 @@ _hdlr = logging.StreamHandler()
 _hdlr.setFormatter(logging.Formatter('%(name)s %(levelname)s: %(message)s'))
 _logger.addHandler(_hdlr)
 
-sys.path.append("../PolicyParser/")
-sys.path.append("../featureparse")
-
-
 from rdflib.Graph import Graph
 from rdflib import URIRef, Literal, BNode, Namespace
 from rdflib import RDF
@@ -89,7 +85,6 @@ def constructPolicy(dict, domain):
 	MIT = Namespace(domain)
 	
 	# create the policy
-	print dict['POLICY']
 	p = "#" + dict['POLICY'].replace(" ","_") 
 	policy = URIRef(p)
 	
@@ -112,10 +107,16 @@ def constructPolicy(dict, domain):
 	store.add((rule, RDF.type, AIR["BeliefRule"]))
 	pattern_1 = Graph()
 	store.add((rule, AIR["pattern"], pattern_1))
-	pattern_1.add((URIRef("#U"), RDF.type, AIR["UseEvent"]))
-	pattern_1.add((URIRef("#U"), AIR["actor"], URIRef("#A")))
-	pattern_1.add((URIRef("#U"), AIR["data"], URIRef("#D")))
-	pattern_1.add((URIRef("#U"), AIR["purpose"], URIRef("#P")))
+	
+	""" Add things to the pattern only if the sentence does not return null for each of the corresponding components"""
+	if dict['ACTION'] != None:
+		pattern_1.add((URIRef("#U"), RDF.type, AIR["UseEvent"]))
+	if dict['ENTITY'] != None:
+		pattern_1.add((URIRef("#U"), AIR["actor"], URIRef("#A")))
+	if dict['DATA'] != None:
+		pattern_1.add((URIRef("#U"), AIR["data"], URIRef("#D")))
+	if dict['PURPOSE'] != None:
+		pattern_1.add((URIRef("#U"), AIR["purpose"], URIRef("#P")))
 
 	assertion = Graph()
 	store.add((rule, AIR["assert"], assertion))
@@ -125,23 +126,29 @@ def constructPolicy(dict, domain):
 		assertion.add((URIRef("#U"), AIR["non-compliant-with"], policy))
 	
 	totalConditions = len(dict['CONDITION'])
-	print totalConditions
+	conditions = dict['CONDITION']
+	print conditions[0].subject
+	print conditions[0].predicate
+	print conditions[0].object
+
+
+	"""
 	if totalConditions != 0:
 		conditions = dict['CONDITION']
 		# create the rule body
 		while (conditionCount < totalConditions):
-			"""Handle the conditions here """
+			#Handle the conditions here
 			conditionCount = conditionCount + 1
 			mathced_cond = getMatch(conditions[conditionCount], domain)
 			if mathced_cond != None:
-				"""The term should exist in the ontology"""
+				#The term should exist in the ontology
 				new_rule = "rule_"+conditionCount.__str__()
 				new_rule = URIRef(rule)
 				store.add((rule, AIR["rule"], new_rule))
 				pattern = Graph()
 				store.add((new_rule, AIR["pattern"], pattern))
 				#pattern.add((URIRef("#A"), AIR[""]))
-
+				"""
 		
 	# Serialize as N3
 	return store.serialize(format="n3")
