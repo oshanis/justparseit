@@ -16,6 +16,7 @@ N_ROOT:
  document   AfterNoun   N[sem = <document>]
  domain  AfterNoun   N[sem = <domain>]
  student AfterNoun   N[sem = <student>]
+ authorization AfterNoun   N[sem = <authorization>]
  anyone  End   N[sem = <person>]
 
 PLURAL:
@@ -29,6 +30,7 @@ V_ROOT:
  investigate AfterVerb V[sem = <investigate>]
  access  AfterVerb   V[sem = <access>]
  transfer   AfterVerb   V[sem = <transfer>]
+ has  AfterVerb   V[sem = <yes>]
 
 V_SUFFIX:
  +ion End N[]
