@@ -17,41 +17,41 @@ from rdflib.Graph import Graph
 from rdflib import URIRef, Literal, BNode, Namespace
 from rdflib import RDF
 
-
-def doCommand():
-	"""Command line NLP AIR Policy Generator
-
-        --help        print this message
-        --entity "ENTITY NAME"    
-        <command> <options> <steps> [--with <more args> ]
-	"""
-
 def parseNL(name, sentence):
-	"""This method will call the Policy Parser and get the relevant components"""
-	
-	""""Eunsuk's Dictionary"""
-	#{'ENTITY': 'MIT', 'ACTION': 'use', 'Flag': True, 'PURPOSE': 'criminal', 'Policy': 'MIT prox card policy', 'DATA': 'proxy', 'Condition': <Condition.AndCond instance at 0x1e81120>}
-
-	POLICY_TXT = "MIT Proximity Card Data Policy"
-	ENTITY_TXT =" Committee on Discipline (CoD)"
-	ACTION_TXT = "use"
-	DATA_TXT = "proximity card data"
-	PURPOSE_TXT = "criminal investigation"
-	CONDITION_VAL = None
-	FLAG_VAL = True
-	TRANSFEREE_VAL = None
-	#components = {'ENTITY': ENTITY_TXT, 'ACTION': ACTION_TXT, 'FLAG': FLAG_VAL, 'DATA':DATA_TXT, 'PURPOSE':PURPOSE_TXT, 'POLICY':POLICY_TXT, 'CONDITION': CONDITION_VAL }
+	"""This method will call the Policy Parser and get the relevant components
+	components = {'ENTITY': ENTITY_TXT, 'ACTION': ACTION_TXT, 'FLAG': FLAG_VAL, 'DATA':DATA_TXT, 'PURPOSE':PURPOSE_TXT, 'POLICY':POLICY_TXT,
+		 'CONDITION': CONDITION_VAL, 'TRANSFEREE': TRANSFEREE_VAL }
+	"""
 	
 	from pparser import parsePolicy
 	components = parsePolicy(name, sentence)
 	return components
 
-   
+
+def getVariable(dictVal):
+	"""
+	Just a convenient method for returning which variable corresponds to which
+	"""
+	#Python doesn't support switch?
+	if dictVal == "ENTITY":
+		return "#A"
+	elif dictVal == "ACTION":
+		return "#U" #Will make the assumption that all the actions are air:useEvent type
+	elif dictVal == "DATA":
+		return "#D"
+	elif dictVal == "PURPOSE":
+		return "#P"
+	elif dictVal == "TRANSFEREE":
+		return "#T"
+	else:
+		return None
+
+	
+
 def getMatch(term, domain):
 	"""
 		This is a method for extracting the exact RDF term class for the string fragment from the Sentence parser
 	"""
-
 	print domain
 	g = Graph()
 	g.load(domain, format="n3")
@@ -63,10 +63,47 @@ def getMatch(term, domain):
 		return matches[0] #TODO: what is there are more than 1 match?
 	else:
 		return None
-    
-    
-def constructPolicy(dict, domain):
 	
+
+def constructPolicy(dict, domain, domain_name):
+	"""
+		Constructs the AIR policy
+		The AIR policy is of the following form where all the AIR rules are dereferenced from the previous AIR rule 
+		(this is NOT the most optimal way of expressing an AIR policy, but with the way we have to handle the 
+		'conditions' this is the best way of doing it):
+		
+		@prefix : <#>.
+		@prefix air: <http://dig.csail.mit.edu/TAMI/2007/amord/air#>.
+		@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+		#Any other prefixes
+		
+		 :POLICY_NAME a air:Policy;
+		     air:label "POLICY NAME";
+		     air:variable :A,
+		         :D,
+		         :P,
+		         :U. 
+			air:rule <rule_0>;
+		     
+		 <rule_0> a air:BeliefRule;
+		     air:pattern {
+		     :U a air:UseEvent;
+		             air:actor :A;
+		             air:data :D;
+		             air:purpose :P. 
+		 };
+		     air:rule <rule_1>. 
+		
+		 <rule_1> 
+		 	air:pattern {
+				...
+				...
+		 };
+		 air:assert {
+		     :U air:compliant-with :POLICY_NAME. 
+		 };
+.
+	"""
 	store = Graph()
 	
 	# Bind a few prefix, namespace pairs.
@@ -118,57 +155,60 @@ def constructPolicy(dict, domain):
 	if dict['PURPOSE'] != None:
 		pattern_1.add((URIRef("#U"), AIR["purpose"], URIRef("#P")))
 
-	assertion = Graph()
-	store.add((rule, AIR["assert"], assertion))
-	if dict['FLAG']:
-	   assertion.add((URIRef("#U"), AIR["compliant-with"], policy))
-	else:
-		assertion.add((URIRef("#U"), AIR["non-compliant-with"], policy))
-	
 	totalConditions = len(dict['CONDITION'])
-	conditions = dict['CONDITION']
-	print conditions[0].subject
-	print conditions[0].predicate
-	print conditions[0].object
-
-
-	"""
 	if totalConditions != 0:
 		conditions = dict['CONDITION']
 		# create the rule body
 		while (conditionCount < totalConditions):
 			#Handle the conditions here
+			if (conditions[conditionCount].subject[0] != '$'):
+				matched_subject = getMatch(conditions[conditionCount].subject, domain)
+			else:
+				matched_subject = getVariable(conditions[conditionCount].subject[1:])
+			
+			if (conditions[conditionCount].predicate[0] != '$'):
+				matched_predicate = getMatch(conditions[conditionCount].predicate, domain)
+			else:
+				matched_predicate = getVariable(conditions[conditionCount].predicate[1:])
+			
+			if (conditions[conditionCount].object[0] != '$'):
+				matched_object = getMatch(conditions[conditionCount].object, domain)
+			else:
+				matched_object = getVariable(conditions[conditionCount].object[1:])
+
 			conditionCount = conditionCount + 1
-			mathced_cond = getMatch(conditions[conditionCount], domain)
-			if mathced_cond != None:
-				#The term should exist in the ontology
+				
+			if (matched_subject != None) and (matched_predicate != None) and (matched_object != None):
+				#The terms should exist in the ontology or should be identified variables
 				new_rule = "rule_"+conditionCount.__str__()
-				new_rule = URIRef(rule)
+				new_rule = URIRef(new_rule)
 				store.add((rule, AIR["rule"], new_rule))
 				pattern = Graph()
 				store.add((new_rule, AIR["pattern"], pattern))
-				#pattern.add((URIRef("#A"), AIR[""]))
-				"""
+				pattern.add((URIRef(matched_subject), URIRef(matched_predicate), URIRef(matched_object)))
+						    
+		
+		""" Adding the assertion to the last rule  that was added"""
+		assertion = Graph()
+		store.add((new_rule, AIR["assert"], assertion))
+		if dict['FLAG']:
+			assertion.add((URIRef("#U"), AIR["compliant-with"], policy))
+		else:
+			assertion.add((URIRef("#U"), AIR["non-compliant-with"], policy))
+	
+	
+	else:
+		""" Adding the assertion to the first rule we created """
+		assertion = Graph()
+		store.add((rule, AIR["assert"], assertion))
+		if dict['FLAG']:
+		   assertion.add((URIRef("#U"), AIR["compliant-with"], policy))
+		else:
+			assertion.add((URIRef("#U"), AIR["non-compliant-with"], policy))
+		
+			
 		
 	# Serialize as N3
 	return store.serialize(format="n3")
 
-
-def gen_main(name, sentence, domain):
-	dict = parseNL(name, sentence)
-	parsed = constructPolicy(dict,domain)
-	print parsed
 	
-	
-
-if __name__ == '__main__':
-	
-	
-	from pparser import parsePolicy
-	from Condition import *
-
-	name = "MITProxCardDataPolicy"
-	sentence = "MIT can use proxy for criminal"
-	domain = "../data/university.n3"
-	
-	gen_main(name, sentence, domain)
