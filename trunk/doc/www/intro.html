@@ -47,26 +47,74 @@
 		<!-- Begin Content-->
 
 		<div id="content">
-		    <h2> Welcome to the Policy Parser!</h2>
+		    <h2> What is the Policy Parser?</h2>
 			<br />
-			<p> Lawyers work with law-enforcement policies.  Given a scenario and a
-			set of policies, one of the laywer' main tasks is to determine
-			whether a particular sequence of events in this scenario
-			violates one or more policies.  Due to recent advancement
-			in knowledge-based reasoning, computer systems can now assist
-		      lawyers in this task.
-			The <a href="http://dig.csail.mit.edu/TAMI/2007/AIR/">
-                AIR system</a> is one of such
-			systems. However, the input language to AIR is in RDF
-			format, and laywers, who may not be familiar with this
-			special format,  
+			<p> Lawyers work with law-enforcement policies.  
+              Given a scenario and a set of policies, one of 
+              their main tasks is to determine whether a particular 
+              sequence of events in this scenario
+			  violates one or more give policies. 
+              This can prove to be a challenging and error-prone process, 
+              as the number of policies gets larger
+              or the scenario itself becomes more complex.  Fortunately,
+              some parts of
+              this task involve purely deductive reasoning, and therefore,
+              can be automated by a computer. Thanks to 
+              recent advancements in knowledge-based reasoning, 
+              there now exist systems that can assist lawyers in 
+              this process; 
+              the <a href="http://dig.csail.mit.edu/TAMI/2007/AIR/">
+                AIR ("Accountability in RDF") Reasoner</a> 
+              is one of such systems. 
+            </p><br />
+            <p>  One of the current barriers to a wide spread of
+              AIR is that it requires the user of the system to be
+              knowledgeable about a specialized computer language.
+              The input language to AIR is in
+              Resource Description Framework (RDF), a data model
+              proposed by the WWW consortium as a major mechanism of
+              information exchange throughout the web. Although RDF is
+              a well-known, portable language, many laywers are still not
+              familiar with it. When faced with the task of
+              learning RDF, many of them are likely to turn away and seek
+              for a tool that is easier to use. Even for someone who
+              is an expert in RDF, translating a natural language
+              policy into RDF can be tedious and time-consuming. 
+            </p><br />
+            <p>  In order to solve these challenges, we have built the
+              <b>Policy Parser</b>, which takes a policy, written in natural
+              language, and automatically translates it into an RDF
+              format. A high-level architecture of our system is shown
+              in the following: 
+            </p><br />
+            <p> Our user enters a policy sentence into our
+            system using a web interface (available 
+              <a href="try.html">here</a>). The sentence is then
+              parsed into a feature-based context-free grammar (CFG) using
+              the NLTK system [1]. In the next step,  
+              the Policy Interpreter extracts semantic information about the
+              policy (e.g. the actor who is responsible for a
+              particular action) from the CFG. This information is
+              passed to the RDF Generator, which then generates an RDF
+              file that corresponds to this policy and stores it in 
+              a persistent location (URI) on the web. 
+              The user can immediately (or at any
+              later convenient time) check the compliance/violation of 
+              the policy by providing the URI and a particular scenario to the
+              AIR reasoner, which is executible directly from the web. 
+            </p><br />
+            <p>
+              A more detailed description of each component can be found in
+              the <a href="implementation.html">Implementation
+              page</a>. If you want to experience the Policy Parser, click 
+              <a href="try.html">Try It Now!</a>
+            </p><br />
+           <p>
+             [1] Steve Bird and Edward Loper. NLTK: The Natural
+             Language Toolkit. <i>Proceedings of the ACL demonstration
+             session</i>. pp 214-217, Barcelona, Association for
+             Computational Lingusitics, July 2004.
             </p>
-            <br />
-			<p> Select <a style="text-decoration:none" href="#">Intro</a> on the left-hand menu to find more
-				about the project. If you feel adventurous, click 
-              <a style="text-decoration:none" href="#">Try It Now!</a> to play with the online
-              Policy Parser.
-	        </p>
 	    </div>
 		
 		<!-- End Content -->
