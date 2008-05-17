@@ -107,19 +107,18 @@ def constructPolicy(dict, domain, domain_name):
 	
 	# Bind a few prefix, namespace pairs.
 	store.bind("air", "http://dig.csail.mit.edu/TAMI/2007/amord/air#")
-	#store.bind("pur", "http://dig.csail.mit.edu/TAMI/2006/s4/purposes#")
-	#store.bind("owl", "http://www.w3.org/2002/07/owl#")
-
+	store.bind("pur", "http://dig.csail.mit.edu/TAMI/2006/s4/purposes#")
+	store.bind("owl", "http://www.w3.org/2002/07/owl#")
+	
+	d = "http://www.mit.edu/~oshani/data/university#"
+	store.bind("mit", d)
+	
 	# Create namespace objects
 	AIR = Namespace("http://dig.csail.mit.edu/TAMI/2007/amord/air#")
-	#PUR = Namespace("http://dig.csail.mit.edu/TAMI/2006/s4/purposes#")
+	USER_DEFINED = Namespace(d);
 	#OWL = Namespace("http://www.w3.org/2002/07/owl#")
 	
-	"""This should come from the user"""
-	#domain = "http://dig.csail.mit.edu/TAMI/2007/s0/university#"
-	#store.bind("mit", domain)
-	#MIT = Namespace(domain)
-
+	
 	# create the policy
 	p = "#" + dict['POLICY'].replace(" ","_") 
 	policy = URIRef(p)
@@ -145,15 +144,39 @@ def constructPolicy(dict, domain, domain_name):
 	store.add((rule, AIR["pattern"], pattern_1))
 	
 	""" Add things to the pattern only if the sentence does not return null for each of the corresponding components"""
-	if dict['ACTION'] != None:
+	if dict['ACTION'] == "use":
 		pattern_1.add((URIRef("#U"), RDF.type, AIR["UseEvent"]))
+	#elif: @todo: what else should be there?
+	
 	if dict['ENTITY'] != None:
+		entity_match = getMatch(dict['ENTITY'],domain)
 		pattern_1.add((URIRef("#U"), AIR["actor"], URIRef("#A")))
+		if entity_match != None:
+			pattern_1.add((URIRef("#A"), RDF.type, USER_DEFINED[entity_match]))
+			
 	if dict['DATA'] != None:
+		data_match = getMatch(dict['DATA'], domain)
 		pattern_1.add((URIRef("#U"), AIR["data"], URIRef("#D")))
-	if dict['PURPOSE'] != None:
-		pattern_1.add((URIRef("#U"), AIR["purpose"], URIRef("#P")))
+		if data_match != None:
+			pattern_1.add((URIRef("#D"), RDF.type, USER_DEFINED[data_match]))
 
+	if dict['PURPOSE'] != None:
+		purpose_match = getMatch(dict['PURPOSE'], domain)
+		pattern_1.add((URIRef("#U"), AIR["purpose"], URIRef("#P")))
+		if purpose_match != None:
+			pattern_1.add((URIRef("#P"), RDF.type, USER_DEFINED[purpose_match]))
+	
+	if (dict.has_key('TRANSFEREE')):	
+		if dict['TRANSFEREE'] != None:
+			""" I think this is not even in the AIR specification 
+			Therefore, @todo: Ask Lalana about this"""
+			transferee_match = getMatch(dict['TRANSFEREE'], domain)
+			pattern_1.add((URIRef("#A"), AIR["transfer"], URIRef("#D")))
+			pattern_1.add((URIRef("#D"), AIR["transferred-to"], URIRef("#R")))
+			if transferee_match != None:
+				pattern_1.add((URIRef("#R"), RDF.type, USER_DEFINED[transferee_match]))
+				
+			
 	totalConditions = len(dict['CONDITION'])
 	if totalConditions != 0:
 		conditions = dict['CONDITION']
@@ -161,20 +184,22 @@ def constructPolicy(dict, domain, domain_name):
 		while (conditionCount < totalConditions):
 			#Handle the conditions here
 			if (conditions[conditionCount].subject[0] != '$'):
-				matched_subject = getMatch(conditions[conditionCount].subject, domain)
+				matched_subject = USER_DEFINED[getMatch(conditions[conditionCount].subject, domain)]
 			else:
-				matched_subject = getVariable(conditions[conditionCount].subject[1:])
+				matched_subject = URIRef(getVariable(conditions[conditionCount].subject[1:]))
 			
 			if (conditions[conditionCount].predicate[0] != '$'):
-				matched_predicate = getMatch(conditions[conditionCount].predicate, domain)
+				matched_predicate = USER_DEFINED[getMatch(conditions[conditionCount].predicate, domain)]
 			else:
-				matched_predicate = getVariable(conditions[conditionCount].predicate[1:])
+				matched_predicate = URIRef(getVariable(conditions[conditionCount].predicate[1:]))
 			
 			if (conditions[conditionCount].object[0] != '$'):
-				matched_object = getMatch(conditions[conditionCount].object, domain)
+				matched_object = USER_DEFINED[getMatch(conditions[conditionCount].object, domain)]
 			else:
-				matched_object = getVariable(conditions[conditionCount].object[1:])
+				matched_object = URIRef(getVariable(conditions[conditionCount].object[1:]))
 
+			print matched_object
+			
 			conditionCount = conditionCount + 1
 				
 			if (matched_subject != None) and (matched_predicate != None) and (matched_object != None):
@@ -184,7 +209,7 @@ def constructPolicy(dict, domain, domain_name):
 				store.add((rule, AIR["rule"], new_rule))
 				pattern = Graph()
 				store.add((new_rule, AIR["pattern"], pattern))
-				pattern.add((URIRef(matched_subject), URIRef(matched_predicate), URIRef(matched_object)))
+				pattern.add((matched_subject, matched_predicate, matched_object))
 						    
 		
 		""" Adding the assertion to the last rule  that was added"""

@@ -5,8 +5,8 @@ def main():
     name = "MITProxCardDataPolicy"
     #sentence = "MIT can use prox card data for criminal investigation"
     sentence = "MIT can use prox card data for criminal investigation if MIT has authorization"
-    domain = "../data/university.n3"
-    domain_name = "mit"
+    domain = "http://www.mit.edu/~oshani/data/university.n3"
+    domain_name = "MIT"
     
     dict = parseNL(name, sentence)
 
