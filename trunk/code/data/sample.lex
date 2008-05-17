@@ -30,7 +30,7 @@ V_ROOT:
  investigate AfterVerb V[sem = <investigate>]
  access  AfterVerb   V[sem = <access>]
  transfer   AfterVerb   V[sem = <transfer>]
- has  AfterVerb   V[sem = <yes>]
+ has  AfterVerb   V[sem = <has>]
 
 V_SUFFIX:
  +ion End N[]

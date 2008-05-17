@@ -13,6 +13,18 @@
 
 <> rdfs:comment "Describes classes and properties used in scenario 0".
 
+:MIT a rdfs:Class;
+	rdfs:label "MIT";
+	rdfs:comment "This class should denote someone who has authority to carry out a disciplinary hearing" .
+	
+:has a rdfs:Property;
+	rdfs:label "has";
+	rdfs:comment "indicates the property of having something" .
+	
+:Authorization a rdfs:Class;
+	rdfs:label "authorization";
+	rdfs:comment "having authority" .
+	 
 :MITIndividual a rdfs:Class;
 	rdfs:label "MIT Individual class";
 	rdfs:comment "Anyone who works in/attends MIT".

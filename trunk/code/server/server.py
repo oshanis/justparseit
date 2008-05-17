@@ -6,13 +6,13 @@ def main():
     #sentence = "MIT can use prox card data for criminal investigation"
     sentence = "MIT can use prox card data for criminal investigation if MIT has authorization"
     domain = "../data/university.n3"
-
+    domain_name = "mit"
+    
     dict = parseNL(name, sentence)
 
-    returnString = constructPolicy(dict, domain)
-    #returnString = returnString.encode('utf_8')
-    print "Content-type:text/html\n"
-    print "<html>"+returnString+"</html>"
+    returnString = constructPolicy(dict, domain, domain_name)
+    
+    print returnString
     
 
 
@@ -28,8 +28,5 @@ if __name__ == '__main__': # What else would it be?
     from pparser import *
     from Condition import *
     
-    print "Content-type:text/html\n"
-    
-
     main()
     
