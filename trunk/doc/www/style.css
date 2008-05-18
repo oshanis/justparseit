@@ -16,6 +16,9 @@ a:hover {
  color: #fff;
  border-bottom: 1px #D0EB6A dashed;
 }
+#panel li {
+margin-left: 20px;
+}
 #wrapper { 
  margin: 0 auto;
  width: 922px;
