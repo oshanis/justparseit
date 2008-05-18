@@ -17,6 +17,7 @@ N_ROOT:
  domain  AfterNoun   N[sem = <domain>]
  student AfterNoun   N[sem = <student>]
  authorization AfterNoun   N[sem = <authorization>]
+ access AfterNoun N[sem = <access>]
  anyone  End   N[sem = <person>]
 
 PLURAL:
