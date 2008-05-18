@@ -219,6 +219,6 @@ def run():
     policy_dict = parsePolicy(policy_name, policy_sentence)
     
     print policy_dict
- 
-if __name__ == '__main__': # What else would it be?
-    run()
+
+#if __name__ == '__main__': # What else would it be?
+run()
