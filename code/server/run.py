@@ -32,7 +32,7 @@ def main():
         domain =  form["domain"].value
 
         dict = parseNL(name, sentence)
-        s = constructPolicy(dict, domain, domain_name)
+        s = constructPolicy(dict, domain)
 
         s = s.encode('utf_8')
         length = str(len(s))

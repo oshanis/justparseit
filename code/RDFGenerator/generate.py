@@ -9,7 +9,7 @@ import logging
 
 sys.path.append("../PolicyParser")
 sys.path.append("../featureparse")
-sys.path.append("../rdflib-2.4.0")
+sys.path.append("../rdflib")
 
 # Configure how we want rdflib logger to log messages
 _logger = logging.getLogger("rdflib")
@@ -106,143 +106,143 @@ def constructPolicy(dict, domain):
 		 air:assert {
 		     :U air:compliant-with :POLICY_NAME. 
 		 };
-.
-	"""
-	store = Graph()
-	
-	# Bind a few prefix, namespace pairs.
-	store.bind("air", "http://dig.csail.mit.edu/TAMI/2007/amord/air#")
-	store.bind("pur", "http://dig.csail.mit.edu/TAMI/2006/s4/purposes#")
-	store.bind("owl", "http://www.w3.org/2002/07/owl#")
-	
-	d = "http://www.mit.edu/~oshani/data/university#"
-	if domain[-3:] == ".n3": #remove the n3 part and add the #
-		domain_name = domain[:-3] 
-		domain_chopped = domain.split("/")
-		domain_prefix = domain_chopped[len(domain_chopped)-1]
-		domain_name = domain_name + "#"
-	
-	store.bind( domain_prefix , domain_name)
-	
-	# Create namespace objects
-	AIR = Namespace("http://dig.csail.mit.edu/TAMI/2007/amord/air#")
-	USER_DEFINED = Namespace(domain_name);
-	#OWL = Namespace("http://www.w3.org/2002/07/owl#")
-	
-	
-	# create the policy
-	p = "#" + dict['POLICY'].replace(" ","_") 
-	policy = URIRef(p)
-	
-	store.add((policy, RDF.type, AIR["Policy"]))
-	store.add((policy, AIR["label"], Literal(dict['POLICY'])))
-	# add the variables
-	store.add((policy, AIR["variable"], URIRef("#U")))
-	store.add((policy, AIR["variable"], URIRef("#A")))
-	store.add((policy, AIR["variable"], URIRef("#D")))
-	store.add((policy, AIR["variable"], URIRef("#P")))
-	conditionCount = 0
-	
-	rule = "rule_"+conditionCount.__str__()
-	rule = URIRef(rule)
-	store.add((policy, AIR["rule"], rule))
-	
-	"""
-		Construct the pattern for the data
-	"""
-	store.add((rule, RDF.type, AIR["BeliefRule"]))
-	pattern_1 = Graph()
-	store.add((rule, AIR["pattern"], pattern_1))
-	
-	""" Add things to the pattern only if the sentence does not return null for each of the corresponding components"""
-	if dict['ACTION'] == "use":
-		pattern_1.add((URIRef("#U"), RDF.type, AIR["UseEvent"]))
-	#elif: @todo: what else should be there?
-	
-	if dict['ENTITY'] != None:
-		entity_match = getMatch(dict['ENTITY'],domain)
-		pattern_1.add((URIRef("#U"), AIR["actor"], URIRef("#A")))
-		if entity_match != None:
-			pattern_1.add((URIRef("#A"), RDF.type, USER_DEFINED[entity_match]))
-			
-	if dict['DATA'] != None:
-		data_match = getMatch(dict['DATA'], domain)
-		pattern_1.add((URIRef("#U"), AIR["data"], URIRef("#D")))
-		if data_match != None:
-			pattern_1.add((URIRef("#D"), RDF.type, USER_DEFINED[data_match]))
 
-	if dict['PURPOSE'] != None:
-		purpose_match = getMatch(dict['PURPOSE'], domain)
-		pattern_1.add((URIRef("#U"), AIR["purpose"], URIRef("#P")))
-		if purpose_match != None:
-			pattern_1.add((URIRef("#P"), RDF.type, USER_DEFINED[purpose_match]))
+	"""
 	
-	if (dict.has_key('PASSIVE_ENTITY')):	
-		if dict['PASSIVE_ENTITY'] != None:
-			""" I think this is not even in the AIR specification 
-			Therefore, @todo: Ask Lalana about this"""
-			transferee_match = getMatch(dict['PASSIVE_ENTITY'], domain)
-			pattern_1.add((URIRef("#A"), AIR["transfer"], URIRef("#D")))
-			pattern_1.add((URIRef("#D"), AIR["transferred-to"], URIRef("#R")))
-			if transferee_match != None:
-				pattern_1.add((URIRef("#R"), RDF.type, USER_DEFINED[transferee_match]))
-				
-			
-	totalConditions = len(dict['CONDITION'])
-	if totalConditions != 0:
-		conditions = dict['CONDITION']
-		# create the rule body
-		while (conditionCount < totalConditions):
-			#Handle the conditions here
-			if (conditions[conditionCount].subject[0] != '$'):
-				matched_subject = USER_DEFINED[getMatch(conditions[conditionCount].subject, domain)]
-			else:
-				matched_subject = URIRef(getVariable(conditions[conditionCount].subject[1:]))
-			
-			if (conditions[conditionCount].predicate[0] != '$'):
-				matched_predicate = USER_DEFINED[getMatch(conditions[conditionCount].predicate, domain)]
-			else:
-				matched_predicate = URIRef(getVariable(conditions[conditionCount].predicate[1:]))
-			
-			if (conditions[conditionCount].object[0] != '$'):
-				matched_object = USER_DEFINED[getMatch(conditions[conditionCount].object, domain)]
-			else:
-				matched_object = URIRef(getVariable(conditions[conditionCount].object[1:]))
-
-			conditionCount = conditionCount + 1
-				
-			if (matched_subject != None) and (matched_predicate != None) and (matched_object != None):
-				#The terms should exist in the ontology or should be identified variables
-				new_rule = "rule_"+conditionCount.__str__()
-				new_rule = URIRef(new_rule)
-				store.add((rule, AIR["rule"], new_rule))
-				pattern = Graph()
-				store.add((new_rule, AIR["pattern"], pattern))
-				pattern.add((matched_subject, matched_predicate, matched_object))
-						    
-		
-		""" Adding the assertion to the last rule  that was added"""
-		assertion = Graph()
-		store.add((new_rule, AIR["assert"], assertion))
-		if dict['FLAG']:
-			assertion.add((URIRef("#U"), AIR["compliant-with"], policy))
-		else:
-			assertion.add((URIRef("#U"), AIR["non-compliant-with"], policy))
-	
-	
+	if dict == None:
+		return "Please check the policy sentence"
 	else:
-		""" Adding the assertion to the first rule we created """
-		assertion = Graph()
-		store.add((rule, AIR["assert"], assertion))
-		if dict['FLAG']:
-		   assertion.add((URIRef("#U"), AIR["compliant-with"], policy))
-		else:
-			assertion.add((URIRef("#U"), AIR["non-compliant-with"], policy))
 		
-	""" @todo: support for air:description """	
+		store = Graph()
+		
+		# Bind a few prefix, namespace pairs.
+		store.bind("air", "http://dig.csail.mit.edu/TAMI/2007/amord/air#")
+		store.bind("owl", "http://www.w3.org/2002/07/owl#")
+		
+		if domain[-3:] == ".n3": #remove the n3 part and add the #
+			domain_name = domain[:-3] 
+			domain_chopped = domain.split("/")
+			domain_prefix = domain_chopped[len(domain_chopped)-1]
+			domain_name = domain_name + "#"
+			store.bind( domain_prefix , domain_name)
+		
+		# Create namespace objects
+		AIR = Namespace("http://dig.csail.mit.edu/TAMI/2007/amord/air#")
+		OWL = Namespace("http://www.w3.org/2002/07/owl#")
+		
+		
+		# create the policy
+		p = "#" + dict['POLICY'].replace(" ","_") 
+		policy = URIRef(p)
+		
+		store.add((policy, RDF.type, AIR["Policy"]))
+		store.add((policy, AIR["label"], Literal(dict['POLICY'])))
+		# add the variables
+		store.add((policy, AIR["variable"], URIRef("#U")))
+		store.add((policy, AIR["variable"], URIRef("#A")))
+		store.add((policy, AIR["variable"], URIRef("#D")))
+		store.add((policy, AIR["variable"], URIRef("#P")))
+		conditionCount = 0
+		
+		rule = "rule_"+conditionCount.__str__()
+		rule = URIRef(rule)
+		store.add((policy, AIR["rule"], rule))
+		
+		"""
+			Construct the pattern for the data
+		"""
+		store.add((rule, RDF.type, AIR["BeliefRule"]))
+		pattern_1 = Graph()
+		store.add((rule, AIR["pattern"], pattern_1))
+		
+		""" Add things to the pattern only if the sentence does not return null for each of the corresponding components"""
+		if dict['ACTION'] == "use":
+			pattern_1.add((URIRef("#U"), RDF.type, AIR["UseEvent"]))
+		#elif: @todo: what else should be there?
+		
+		if dict['ENTITY'] != None:
+			entity_match = getMatch(dict['ENTITY'],domain)
+			pattern_1.add((URIRef("#U"), AIR["actor"], URIRef("#A")))
+			if entity_match != None:
+				pattern_1.add((URIRef("#A"), RDF.type, entity_match))
+				
+		if dict['DATA'] != None:
+			data_match = getMatch(dict['DATA'], domain)
+			pattern_1.add((URIRef("#U"), AIR["data"], URIRef("#D")))
+			if data_match != None:
+				pattern_1.add((URIRef("#D"), RDF.type, data_match))
+	
+		if dict['PURPOSE'] != None:
+			purpose_match = getMatch(dict['PURPOSE'], domain)
+			pattern_1.add((URIRef("#U"), AIR["purpose"], URIRef("#P")))
+			if purpose_match != None:
+				pattern_1.add((URIRef("#P"), RDF.type, purpose_match))
+		
+		if (dict.has_key('PASSIVE_ENTITY')):	
+			if dict['PASSIVE_ENTITY'] != None:
+				""" I think this is not even in the AIR specification 
+				Therefore, @todo: Ask Lalana about this"""
+				transferee_match = getMatch(dict['PASSIVE_ENTITY'], domain)
+				pattern_1.add((URIRef("#A"), AIR["transfer"], URIRef("#D")))
+				pattern_1.add((URIRef("#D"), AIR["transferred-to"], URIRef("#R")))
+				if transferee_match != None:
+					pattern_1.add((URIRef("#R"), RDF.type, transferee_match))
+					
+				
+		totalConditions = len(dict['CONDITION'])
+		if totalConditions != 0:
+			conditions = dict['CONDITION']
+			# create the rule body
+			while (conditionCount < totalConditions):
+				#Handle the conditions here
+				if (conditions[conditionCount].subject[0] != '$'):
+					matched_subject = getMatch(conditions[conditionCount].subject, domain)
+				else:
+					matched_subject = URIRef(getVariable(conditions[conditionCount].subject[1:]))
+				
+				if (conditions[conditionCount].predicate[0] != '$'):
+					matched_predicate = getMatch(conditions[conditionCount].predicate, domain)
+				else:
+					matched_predicate = URIRef(getVariable(conditions[conditionCount].predicate[1:]))
+				
+				if (conditions[conditionCount].object[0] != '$'):
+					matched_object = getMatch(conditions[conditionCount].object, domain)
+				else:
+					matched_object = URIRef(getVariable(conditions[conditionCount].object[1:]))
+	
+				conditionCount = conditionCount + 1
+					
+				if (matched_subject != None) and (matched_predicate != None) and (matched_object != None):
+					#The terms should exist in the ontology or should be identified variables
+					new_rule = "rule_"+conditionCount.__str__()
+					new_rule = URIRef(new_rule)
+					store.add((rule, AIR["rule"], new_rule))
+					pattern = Graph()
+					store.add((new_rule, AIR["pattern"], pattern))
+					pattern.add((matched_subject, matched_predicate, matched_object))
+							    
 			
+			""" Adding the assertion to the last rule  that was added"""
+			assertion = Graph()
+			store.add((new_rule, AIR["assert"], assertion))
+			if dict['FLAG']:
+				assertion.add((URIRef("#U"), AIR["compliant-with"], policy))
+			else:
+				assertion.add((URIRef("#U"), AIR["non-compliant-with"], policy))
 		
-	# Serialize as N3
-	return store.serialize(format="n3")
-
+		
+		else:
+			""" Adding the assertion to the first rule we created """
+			assertion = Graph()
+			store.add((rule, AIR["assert"], assertion))
+			if dict['FLAG']:
+			   assertion.add((URIRef("#U"), AIR["compliant-with"], policy))
+			else:
+				assertion.add((URIRef("#U"), AIR["non-compliant-with"], policy))
+			
+		""" @todo: support for air:description """	
+				
+			
+		# Serialize as N3
+		return store.serialize(format="n3")
 	
