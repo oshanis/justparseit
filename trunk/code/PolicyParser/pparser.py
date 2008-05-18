@@ -14,6 +14,7 @@ class InvalidExpressionError(Exception):
 CFG2RDF_DICT = {'actor':'ENTITY', 'action':'ACTION',
                 'actedOn':'DATA', 'purpose':'PURPOSE', 
                 'condition' : 'CONDITION', 'mod' : 'FLAG'}
+#PASSIVE ENTITY
 
 CONCAT_OPERATOR = 'cat'
 AND_OPERATOR = 'and'
@@ -198,7 +199,7 @@ def parsePolicy(policy_name, policy_sentence):
     They are simply leaf nodes in the tree.
     """
     tree = trees[0]
-    
+
     try:
         policy_dict = parseSemantics(tree)
         policy_dict['POLICY'] = policy_name
