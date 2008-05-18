@@ -23,7 +23,7 @@
 		<!-- Begin Strap -->
 		
         <div id="strap">
-<b>Policy Parser</b> &raquo; Home</div>
+<b>Policy Parser</b> &raquo; Implementation</div>
 		
 		<!-- End Strap -->
 		 
@@ -34,7 +34,6 @@
 				<li><a href="index.html">Home</a></li>
 				<li><a href="intro.html">Intro</a></li>
 			    <li><a href="try.html">Try It Now!</a></li>
-                <li><a href="solution.html">Solution</a></li>
 	            <li><a href="#">Implementation</a></li>
                 <li><a href="results.html">Results</a></li>
 	            <li><a href="download.html">Download Code</a></li>
@@ -47,28 +46,61 @@
 		<!-- Begin Content-->
 
 		<div id="content">
-		    <h2> Welcome to the Policy Parser!</h2>
+		    <h2> Implementation of the Policy Parser</h2>
 			<br />
-			<p> This is the home page of the Policy Parser, the
-				final project for 6.863 Spring 2008.  The purpose of
-				our project is to build a system for parsing
-				law-enforcement policies, which are written in natural 
-              language, into a data
-				model called Resource Description Framework (RDF).
-				Once a policy is transformed into RDF, the user of our 
-              system can ask whether a particular sequence of events in a
-				scenario adheres to or violates the policy.  
-            </p>
-			<br />
+			<p> As briefly described in
+			the <a href="intro.html">Intro</a> section, the Policy
+              Parser consists of three major components: the NLTK
+			Parser, the Policy Interpreter, and the RDF
+			Generator.  The system also
+			includes the online RDF policy store as well as the AIR
+			reasoner, but these can be considered as peripheral to the
+			above three components.  In this section, we describe each
+			of these components in detail: 
+            </p><br />
+            <p><b>NTLK Parser</b>: Given a user's input policy, 
+              the first step is to parse this sentence into a
+              structured format that is manipulable by a
+              computer. Automatically parsing <i>any</i> natural
+              language sentence is an extremely challenging task, and
+              is out of scope of this project. Thus, we focus on a set
+              of <i>constrained</i> natural language sentences; more
+              specfiically, our system is able to process a sentence
+              of the following form:
+            </p><br />
             <p>
-              The project team consists of: 
-              <br />
-              <br /> Harshad Kasture (harshad@mit.edu)
-              <br /> Oshani Seneviratne (oshani@mit.edu)
-              <br /> Eunsuk Kang (eskang@mit.edu)
+              <tt>subject [mod] action object ['to' secondary_object] 
+                [purpose] [condition]*</tt>
+            </p><br /> 
+            <p>
+              where:
+              <ul id="panel">
+                <li> <tt>subject</tt>: The main actor or entity who
+                carries out an action (e.g. "A student")
+                <li> <tt>mod</tt>: An optional modal for an action
+                (e.g. "can" or "cannot")
+                <li> <tt>action</tt>: The action performed by the
+                subject (e.g "transfer")
+                <li> <tt>object</tt>: The object on which the action
+                is performed (e.g. "a proximity card")
+                <li> <tt>secondary object</tt>: an optional object
+                that modifies the action (e.g. "to another student") 
+                <li> <tt>purpose</tt>: an optional purpose for which the
+                action is performed (e.g. "for building access grant")
+                <li> <tt>condition</tt>: any optional condition on the
+                action performed (e.g. "if the student is not authorized")
               </ul>
-            </p>
-                <br />
+            </p><br /> 
+            <p>
+              We use a <i>feature-based</i> context-free grammar
+              (FCFG). Unlike an ordinary CFG, a FCFG embellishes 
+              its production rules with extra attributes to denote
+              each tree node having a set of properties. In              
+            </p><br />
+            <p><b>Policy Interpreter</b>:
+            </p><br />
+            <p><b>RDF Generator</b>:
+            </p><br />
 	        <p> Select <a style="text-decoration:none" href="#">Intro</a> on the left-hand menu to find more
 				about the project. If you feel adventurous, click 
               <a style="text-decoration:none" href="#">Try It Now!</a> to play with the online
