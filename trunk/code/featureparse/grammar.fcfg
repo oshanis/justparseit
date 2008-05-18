@@ -1,21 +1,39 @@
-S[actor = ?actor, mod = ?mod, action = ?action, actedOn = ?actedOn, purpose = ?purpose, condition = ?condition] -> Actor[actor = ?actor] Action[action = ?action, actedOn = ?actedOn, mod = ?mod] Purpose[purpose = ?purpose, condition = ?condition]
+S[actor = ?actor, mod = ?mod, action = ?action, actedOn = ?actedOn, passiveEntity = ?passiveEntity, purpose = ?purpose, condition = ?condition] -> Actor[actor = ?actor] Action[action = ?action, actedOn = ?actedOn, passiveEntity = ?passiveEntity, mod = ?mod] Purpose[purpose = ?purpose, condition = ?condition]
 
 Actor[actor = ?n] -> NP[sem = ?n]
 
-Action[action = ?v, actedOn = ?n, mod = ?mod] -> MOD[sem = ?mod] V[sem = ?v] NP[sem = ?n]
+Action[action = ?v, actedOn = ?actedOn, mod = ?mod, passiveEntity = ?passiveEntity] -> MOD[sem = ?mod] V[sem = ?v] ActedOn[sem = ?actedOn] TOPASS[sem = ?passiveEntity]
+Action[action = ?v, actedOn = ?actedOn, mod = ?mod, passiveEntity = ?passiveEntity] -> MOD[sem = ?mod] V[sem = ?v] PASS[sem = ?passiveEntity] ActedOn[sem = ?actedOn]
+Action[action = ?v, actedOn = ?actedOn, mod = ?mod, passiveEntity = ?passiveEntity] -> MOD[sem = ?mod] V[sem = ?v] 
 
 MOD[sem = ?mod] -> PMOD[sem = ?mod]
 MOD[sem = ?mod] -> NMOD[sem = ?mod]
 MOD[sem = <no>] -> PMOD[sem = ?pmod] NEG[sem = ?neg]
 
+ActedOn[sem = ?np] -> NP[sem = ?np]
+
+PASS[sem = <null>] ->
+PASS[sem = ?np] -> NP[sem = ?np]
+PASS[sem = ?pp] -> PP[sem = ?pp]
+
+TOPASS[sem = <null>] ->
+TOPASS[sem = ?np] -> TO[sem = ?to] NP[sem = ?np]
+
 Purpose[purpose = <null>, condition = ?condition] -> Condition[condition = ?condition]
 Purpose[purpose = ?n, condition = ?condition] -> FOR[sem = ?for] NP[sem = ?n] Condition[condition = ?condition]
 Purpose[purpose = ?vp, condition = ?condition] -> TO[sem = ?to] VP[sem = ?vp] Condition[condition = ?condition]
+Purpose[purpose = ?n, condition = ?condition] -> FOR[sem = ?for] VP[sem = ?n] Condition[condition = ?condition]
 
 Condition[condition = <null>] ->
 Condition[condition = ?cond] -> IF[sem = ?if] cond[sem = ?cond]
 cond[sem = <((?v ?np1) ?np2)>] -> NP[sem = ?np1] V[sem = ?v] NP[sem = ?np2]
+cond[sem = <((?v ?np1) ((cat ?np2) ?pp))>] -> NP[sem = ?np1] V[sem = ?v] NP[sem = ?np2] PP[sem = ?pp]
+cond[sem = <((?v ?np) ?ap)>] -> NP[sem = ?np] IS[sem = ?v] AP[sem = ?ap]
 cond[sem = <((and ?cond1) ?cond2)>] -> cond[sem = ?cond1] AND[sem = <and>] cond[sem = ?cond2]
+
+AP[sem = ?adj] -> ADJ[sem = ?adj]
+AP[sem = ?np] -> NP[sem = ?np] 
+AP[sem = <((cat ?adj) ?pp)>] -> ADJ[sem = ?adj] PP[sem = ?pp]
 
 NP[sem = ?n] -> DET[sem = ?det] NP[sem = ?n]
 NP[sem = <((cat ?np) ?adj)>] -> ADJ[sem = ?adj] NP[sem = ?np]
@@ -26,3 +44,6 @@ NP[sem = <((cat ?np) ?pp)>] -> NP[sem = ?np] PP[sem = ?pp]
 PP[sem = <((cat ?p) ?np)>] -> P[sem = ?p] NP[sem = ?np]
 
 VP[sem = <((cat ?v) ?np)>] -> V[sem = ?v] NP[sem = ?np]
+VP[sem = <((cat ((cat ?v) ?np)) ?pp)>] -> V[sem = ?v] NP[sem = ?np] PP[sem = ?pp]
+
+V[sem = ?v] -> IS[sem = ?v]
