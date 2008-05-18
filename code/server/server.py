@@ -6,11 +6,10 @@ def main():
     #sentence = "MIT can use prox card data for criminal investigation"
     sentence = "MIT can use prox card data for criminal investigation if MIT has authorization"
     domain = "http://www.mit.edu/~oshani/data/university.n3"
-    domain_name = "MIT"
     
     dict = parseNL(name, sentence)
 
-    returnString = constructPolicy(dict, domain, domain_name)
+    returnString = constructPolicy(dict, domain)
     
     print returnString
     
