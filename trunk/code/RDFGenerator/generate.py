@@ -209,8 +209,6 @@ def constructPolicy(dict, domain):
 			else:
 				matched_object = URIRef(getVariable(conditions[conditionCount].object[1:]))
 
-			print matched_object
-			
 			conditionCount = conditionCount + 1
 				
 			if (matched_subject != None) and (matched_predicate != None) and (matched_object != None):
