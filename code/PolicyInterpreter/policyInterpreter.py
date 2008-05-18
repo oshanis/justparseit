@@ -220,5 +220,5 @@ def run():
     
     print policy_dict
 
-#if __name__ == '__main__': # What else would it be?
-run()
+if __name__ == '__main__': # What else would it be?
+    run()
