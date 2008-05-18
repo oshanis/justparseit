@@ -1,4 +1,4 @@
-#!/usr/bin/env /mit/6.863/arch/i386_deb40/bin/python-nlp                                                                                                                                                         
+#!/usr/bin/env /mit/6.863/arch/i386_deb40/bin/python-nlp 
 
 import cgi
 from StringIO import StringIO
@@ -11,28 +11,31 @@ def end_headers(outfile):
         outfile.write("\r\n")
 
 def main():
-
-
+        
+        
         ctype = 'text/rdf+n3'
         outfile = sys.stdout
         sys.stdout = StringIO()
 
         form = cgi.FieldStorage()
 
-        send_header(outfile, "Content-type",ctype)
-
-        """                                                                                                                                                                                                      
-        name = "MITProxCardDataPolicy"                                                                                                                                                                           
-        sentence = "MIT can use prox card data for criminal investigation"                                                                                                                                       
-        domain = "../data/university.n3" 
         """
-
+        name = "MITProxCardDataPolicy"
+        sentence = "MIT can use prox card data for criminal investigation"
+        domain = "../data/university.n3"
+        """
+        
         name = form["name"].value
         sentence = form["sentence"].value
         domain =  form["domain"].value
-
+        
         dict = parseNL(name, sentence)
         s = constructPolicy(dict, domain)
+        
+        if s == "Please check the policy sentence!":
+            ctype = "text/plain"
+
+        send_header(outfile, "Content-type",ctype)
 
         s = s.encode('utf_8')
         length = str(len(s))
@@ -45,7 +48,7 @@ def main():
 
 
 if __name__ == '__main__':
-
+    
     import sys
     sys.path.append("../PolicyParser/")
     sys.path.append("../featureparse")
@@ -56,3 +59,4 @@ if __name__ == '__main__':
     from Condition import *
 
     main()
+
