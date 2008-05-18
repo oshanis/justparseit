@@ -18,8 +18,10 @@ N_ROOT:
  student AfterNoun   N[sem = <student>]
  authorization AfterNoun   N[sem = <authorization>]
  access AfterNoun N[sem = <access>]
+ committee AfterNoun N[sem = <committee>]
+ discipline AfterNoun N[sem = <discipline>]
  anyone  End   N[sem = <person>]
-
+ 
 PLURAL:
  +s   End   []
 
