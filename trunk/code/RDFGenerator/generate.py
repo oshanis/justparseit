@@ -4,7 +4,12 @@
 The RDF Generator
 """
 import sys
+import sys
 import logging
+
+sys.path.append("../PolicyParser")
+sys.path.append("../featureparse")
+sys.path.append("../rdflib-2.4.0")
 
 # Configure how we want rdflib logger to log messages
 _logger = logging.getLogger("rdflib")
@@ -20,7 +25,7 @@ from rdflib import RDF
 def parseNL(name, sentence):
 	"""This method will call the Policy Parser and get the relevant components
 	components = {'ENTITY': ENTITY_TXT, 'ACTION': ACTION_TXT, 'FLAG': FLAG_VAL, 'DATA':DATA_TXT, 'PURPOSE':PURPOSE_TXT, 'POLICY':POLICY_TXT,
-		 'CONDITION': CONDITION_VAL, 'TRANSFEREE': TRANSFEREE_VAL }
+		 'CONDITION': CONDITION_VAL, 'PASSIVE_ENTITY': PASSIVE_ENTITY_VAL }
 	"""
 	
 	from pparser import parsePolicy
@@ -64,7 +69,7 @@ def getMatch(term, domain):
 		return None
 	
 
-def constructPolicy(dict, domain, domain_name):
+def constructPolicy(dict, domain):
 	"""
 		Constructs the AIR policy
 		The AIR policy is of the following form where all the AIR rules are dereferenced from the previous AIR rule 
@@ -111,11 +116,17 @@ def constructPolicy(dict, domain, domain_name):
 	store.bind("owl", "http://www.w3.org/2002/07/owl#")
 	
 	d = "http://www.mit.edu/~oshani/data/university#"
-	store.bind("mit", d)
+	if domain[-3:] == ".n3": #remove the n3 part and add the #
+		domain_name = domain[:-3] 
+		domain_chopped = domain.split("/")
+		domain_prefix = domain_chopped[len(domain_chopped)-1]
+		domain_name = domain_name + "#"
+	
+	store.bind( domain_prefix , domain_name)
 	
 	# Create namespace objects
 	AIR = Namespace("http://dig.csail.mit.edu/TAMI/2007/amord/air#")
-	USER_DEFINED = Namespace(d);
+	USER_DEFINED = Namespace(domain_name);
 	#OWL = Namespace("http://www.w3.org/2002/07/owl#")
 	
 	
@@ -166,11 +177,11 @@ def constructPolicy(dict, domain, domain_name):
 		if purpose_match != None:
 			pattern_1.add((URIRef("#P"), RDF.type, USER_DEFINED[purpose_match]))
 	
-	if (dict.has_key('TRANSFEREE')):	
-		if dict['TRANSFEREE'] != None:
+	if (dict.has_key('PASSIVE_ENTITY')):	
+		if dict['PASSIVE_ENTITY'] != None:
 			""" I think this is not even in the AIR specification 
 			Therefore, @todo: Ask Lalana about this"""
-			transferee_match = getMatch(dict['TRANSFEREE'], domain)
+			transferee_match = getMatch(dict['PASSIVE_ENTITY'], domain)
 			pattern_1.add((URIRef("#A"), AIR["transfer"], URIRef("#D")))
 			pattern_1.add((URIRef("#D"), AIR["transferred-to"], URIRef("#R")))
 			if transferee_match != None:
@@ -230,6 +241,7 @@ def constructPolicy(dict, domain, domain_name):
 		else:
 			assertion.add((URIRef("#U"), AIR["non-compliant-with"], policy))
 		
+	""" @todo: support for air:description """	
 			
 		
 	# Serialize as N3
