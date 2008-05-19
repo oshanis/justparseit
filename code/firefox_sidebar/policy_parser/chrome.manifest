@@ -1,0 +1,4 @@
+content	policy_parser	chrome/content/
+locale	policy_parser	en-US	chrome/locale/en-US/
+skin	policy_parser	classic/1.0	chrome/skin/
+overlay	chrome://browser/content/browser.xul	chrome://policy_parser/content/firefoxOverlay.xul
