@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://policy_parser/locale/policy_parser.dtd">
+<overlay id="tamiSidebarOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  
+  <menupopup id="viewSidebarMenu">
+    <menuitem key="key_openPOLICYSidebar" observes="viewPOLICYSidebar"  />
+  </menupopup>
+  
+  <keyset id="mainKeyset">
+    <key id="key_openPOLICYSidebar" command="viewPOLICYSidebar"
+         key="&openPOLICYSidebar.commandkey;" 
+         modifiers="&openPOLICYSidebar.modifierskey;" />
+  </keyset>
+  
+  <broadcasterset id="mainBroadcasterSet"> 
+    <broadcaster id="viewPOLICYSidebar" 
+                 label="&policysidebar.title;"
+                 autoCheck="false"
+                 type="checkbox"
+                 group="sidebar"
+                 sidebarurl="chrome://policy_parser/content/policy_parser.xul"
+                 sidebartitle="&policysidebar.title;"
+                 oncommand="toggleSidebar('viewPOLICYSidebar');" />
+  </broadcasterset>
+</overlay>

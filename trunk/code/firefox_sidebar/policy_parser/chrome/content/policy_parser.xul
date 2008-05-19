@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type"text/css" ?>
+<?xml-stylesheet href="chrome://browser/skin/browser.css" type="text/css" ?>
+<!DOCTYPE page SYSTEM "chrome://policy_parser/locale/policy_parser.dtd">
+
+<page id="sbPolicy Parser" title="&policysidebar.title;"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script src="http://dig.csail.mit.edu/2005/ajar/ajaw/js/util.js" type="text/javascript"></script>
+<script src="http://dig.csail.mit.edu/2005/ajar/ajaw/js/webdav.js" type="text/javascript"></script>
+<script src="policy_parser.js" type="text/javascript"></script>
+
+<vbox flex="1">
+
+    <spacer style="height: 10px"/>
+
+ 
+    <groupbox orient="vertical">
+		<vbox flex="1">
+    		
+    		<label value="Name of the policy:"/>
+        	<textbox id="name" type="autocomplete" autocompletesearch="history"/>
+        	
+        	<spacer style="height: 10px"/>
+            
+            <label value="Domain:"/>
+        	<menulist>
+    			<menupopup>
+      				<menuitem label="option 1" value="1"/>
+      				<menuitem label="option 2" value="2"/>
+      				<menuitem label="option 3" value="3"/>
+      				<menuitem label="option 4" value="4"/>
+    			</menupopup>
+  			</menulist>
+        	
+		</vbox>
+	</groupbox> 
+
+    <spacer style="height: 10px"/>
+ 	
+    <groupbox orient="vertical">
+        <vbox flex="1">
+        
+            <label value="Sentence:"/>
+		
+		    <spacer style="height: 10px"/>
+        
+            <radiogroup>
+  				<hbox>
+            		<radio id="select" label="Select from pre-defined" accesskey="S"/>
+  					<radio id="write" label="Write my own"  accesskey="W" selected="true"/>
+				</hbox>
+            </radiogroup>
+        
+            <spacer style="height: 10px"/>
+            
+            <menulist>
+    			<menupopup>
+      				<menuitem label="option 1" value="1"/>
+      				<menuitem label="option 2" value="2"/>
+      				<menuitem label="option 3" value="3"/>
+      				<menuitem label="option 4" value="4"/>
+    			</menupopup>
+  			</menulist>
+
+		    <spacer style="height: 10px"/>
+            
+            <textbox multiline="true" id="sentence_text"/>
+
+        </vbox>
+
+    </groupbox> 
+    
+      <spacer style="height: 10px"/>
+
+  	<hbox>
+        <spacer flex="1"/>
+        <button label="Parse" oncommand="run()"/>
+        <spacer flex="1"/>
+  	</hbox>        
+    
+        
+    <spacer style="height: 10px"/>
+
+    <description>
+        Optional: Enter the name of the file you want to save the output as (must be a URI on a WebDAV server
+        you have access to).
+    </description>
+
+    <groupbox orient="vertical">
+
+          <label value="Output:"/>
+          <textbox id="outputURI" type="autocomplete" autocompletesearch="history" value="http://localhost/myWebDAV/output.n3"/>
+
+    </groupbox> 
+
+    <spacer style="height: 10px"/>
+
+    <description>
+        Select the your preferred reasoner, hit the "Run Reasoner", and wait 5 years for the output!<br/>
+    </description>
+
+    <groupbox orient="vertical">
+    <radiogroup>
+        <radio id="scheme" label="Scheme Reasoner" accesskey="S"/>
+        <radio id="python" label="Python Reasoner"  accesskey="P" selected="true"/>
+    </radiogroup>
+    </groupbox> 
+    
+  <spacer style="height: 10px"/>
+
+  <hbox>
+        <spacer flex="1"/>
+        <button label="Run Reasoner" oncommand="run()"/>
+        <spacer flex="1"/>
+  </hbox>        
+
+    <vbox id="progressBox">
+    </vbox>
+</vbox>
+
+</page>
