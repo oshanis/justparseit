@@ -234,14 +234,19 @@
             </p>
             <br/>
             
-            <p>AIR is a rule based policy language written in RDF for accountability and access control. Each AIR policy consists of one or more rules, where each rule
-            is made up of a pattern that when matched causes an <code>action</code> to be fired. Optionally there could be <code>descriptions</code> and <code>justifications</code> 
-            well. An <code>action</code> can either be an <code>assertion</code> which is a set of facts  that are added to the knowledge base or a nested <code>rule</code>.
-            </p>
-            <br/>
-            <pre>
+            <p>AIR is a rule based policy language written in RDF for accountability and access control. Each AIR policy consists of one or more rules:</p>
+                        <pre>
  policy = { rule }
+			</pre> 
+	        <p>Each rule is made up of a pattern that when matched causes an <code>action</code> to be fired. Optionally there could be <code>description</code> and <code>justification</code> 
+            elements as well.</p>
+                        <pre>
  rule = { pattern, action [ description justification ]} 
+ 			</pre> 
+            
+            <p> An <code>action</code> can either be an <code>assertion</code> (which is a set of facts  that are added to the knowledge base) or a nested <code>rule</code>.
+            </p>
+            <pre>
  action = { assertion | rule } 
 			</pre> 
   			
@@ -250,6 +255,7 @@
             <pre>
 :MyFirstPolicy a air:Policy;
 air:rule [
+	air:variable { ... };
 	air:pattern { ... };
 	air:assertion { ... };
 	air:rule [ ... ]
@@ -267,10 +273,12 @@ air:rule [
             predicate / object in the RDF.
             </p><br/>
             
-            <p>The approach taken in constructing the AIR policy is shown in the following diagram:</p>
-            <img src="images/rdfgen.png" alt="RDF Generation"/><br/>
+            <p>The following diagram shows how the dictionary keys and values from the Policy Interpreter is used in constructing the AIR policy.</p>
+            <img src="images/policy_parser.png" alt="RDF Generation"/><br/>
+            <br/>
             
-            <p></p><br/>
+            <p>The dictionary element "POLICY" is used to name the policy. If the key values of elements "ENTITY", "ACTION", "PURPOSE, "DATA" are "PASSIVE ENTITY"
+            are existing they are used to assign <code>air:variable</code>s</p><br/>
             
             <p></p><br/>
             
