@@ -226,15 +226,16 @@
             
             <br/>
             <p><b>RDF Generator</b>:</p>
-            <br/><br/>
+           <br/>
             
-            <p>This module is responsible for creating the <a href="http://dig.csail.mit.edu/TAMI/2007/AIR/">AIR (Accountability In RDF)</a> policy. Once the sentence is
+            <p>This module is responsible for creating the <a href="http://dig.csail.mit.edu/TAMI/2007/AIR/">AIR (Accountability In RDF)</a>[4]  policy. Once the sentence is
             fragmented into the relevant components as described above, it will identify the corresponding RDF segments and create the RDF graph using the
-             <a href="http://rdflib.net/">RDFLib</a> python library. 
+             <a href="http://rdflib.net/">RDFLib</a> [3] python library. 
             </p>
             <br/>
             
-            <p>AIR is a rule based policy language written in RDF for accountability and access control. Each AIR policy consists of one or more rules:</p>
+            <p><a href="http://dig.csail.mit.edu/TAMI/2007/AIR/">AIR</a> is a rule based policy language written in <a href="http://www.w3.org/RDF/">RDF</a> 
+            for accountability and access control. Each AIR policy consists of one or more rules:</p>
                         <pre>
  policy = { rule }
 			</pre> 
@@ -262,26 +263,45 @@ air:rule [
 	].
 	 		</pre>
             
-            <p>In order to generate an Air policy from a constrained natural language sentence, at least two other parameters are required:
+            <p>In order to generate an AIR policy from a constrained natural language sentence, at least two other parameters are required:
             <ol>
             <li>Name for the policy</li>
             <li>One or more domain ontologies</li>
             </ol></p><br/>
             
             <p>The name of the policy is required because the user should be able to identify the policy, and it is not suitable to have a random machine generated 
-            policy name. The domain ontology/ontologies are required because some of the sentence fragments need to be identified with the corresponding subject / 
-            predicate / object in the RDF.
+            policy name. The domain ontology is required because some of the sentence fragments need to be identified with the corresponding term (which could be 
+            either a subject or a predicate or an object) in RDF.
             </p><br/>
             
             <p>The following diagram shows how the dictionary keys and values from the Policy Interpreter is used in constructing the AIR policy.</p>
-            <img src="images/policy_parser.png" alt="RDF Generation"/><br/>
+            <br/>
+            <img src="images/rdf_gen.png" alt="RDF Generation"/>
+            <p>Figure: Mapping from the sentence fragments to the AIR Policy</p><br/>
             <br/>
             
-            <p>The dictionary element "POLICY" is used to name the policy. If the key values of elements "ENTITY", "ACTION", "PURPOSE, "DATA" are "PASSIVE ENTITY"
-            are existing they are used to assign <code>air:variable</code>s</p><br/>
+            <p>The dictionary element "POLICY" is used to name the policy. If the keys of dictionary elements: "ENTITY", "ACTION", "PURPOSE, "DATA" and "PASSIVE ENTITY"
+            have non-null values, they are used to assign <code>air:variable</code>s. The values of these dictionary elements are then mapped on to <code>air:pattern</code>s
+            where each <code>air:variable</code>s in the previous step are assigned the corresponding <code>rdf:type</code>s. 
+            </p>
+            <br/>
+            <p>The sentence could include conditions 
+             as in the following sentence: <code>"Committee on Discipline can use prox card data, if the Committee on Discipline has authorization"</code>. 
+            The conditional phrase beginning with the word "if" may refer to components which are already identified, such as "Committee on Discipline" 
+            (identified as the "ENTITY"). Therefore another 
+            pattern will be constructed with the subject, predicate or object values encoded in the "CONDITION". </p><br/>
+            
+            <p>All of these steps requires proper identification
+            of the RDF terms as defined in the ontology. <a href="http://www.w3.org/TR/rdf-sparql-query/">SPARQL</a> queries are used to identify the correct 
+            term from the RDF ontolgy. There is an underlying assumption that for each <code>rdfs:Class</code> and <code>rdfs:Property</code>, which corresponds to 
+            subject/object and predicate respectively,  the ontology author has 
+            defined a proper <code>rdfs:label</code> attribute. This attribute is very much likely to be used by the policy author, hence the SPARQL query
+            is to search for the subject which matches the dictionary value. </p><br/>
+            
+            <p>Finally, the "FLAG" sent by the Policy 
+            Interpreter will determine to specify whether "ACTION" is compliant or not with the policy.</p><br/>
             
             <p></p><br/>
-            
             
             <!-- End of RDF Generator -->
             
