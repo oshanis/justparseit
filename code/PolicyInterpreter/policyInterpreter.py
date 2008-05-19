@@ -2,25 +2,30 @@
 6.863 Spring 2008 Project
 
 The Policy Interpreter
+- Extracts semantic information from a syntax tree that corresponds to a policy
 """
 
 from featureparse import *
-from Condition import *
+from condition import *
+from policyParserExceptions import *
 
-class InvalidExpressionError(Exception):
-    def __init__(self, value):
-        self.value = value
-
+""" 
+    Beginning of Constants
+"""
 CFG2RDF_DICT = {'actor':'ENTITY', 'action':'ACTION',
                 'actedOn':'DATA', 'purpose':'PURPOSE', 
-                'condition' : 'CONDITION', 'mod' : 'FLAG'}
-#PASSIVE ENTITY
+                'condition' : 'CONDITION', 'mod' : 'FLAG',
+                'passiveEntity': 'PASSIVE_ENTITY'}
 
 CONCAT_OPERATOR = 'cat'
 AND_OPERATOR = 'and'
 TRUE_MOD = 'yes'
 FALSE_MOD = 'no'
 NULL_VALUE = 'null'
+
+"""
+    End of Constants
+"""
 
 def isVariable(exp):
     return type(exp) == nltk.sem.logic.VariableExpression
@@ -31,6 +36,18 @@ def isApplication(exp):
 def isOperator(exp):
     return type(exp) == nltk.sem.logic.Operator
 
+""" 
+    Check whether a feature is null
+    A null feature is assigned '<null>'
+"""
+def isNullFeature(feature):
+    return isVariable(feature) and feature.name() == NULL_VALUE
+      
+"""
+    Process a function application expression
+    The expression must be a curried application of 'cat'
+    to two sub-expressions
+"""
 def processAppExpression(appExp):
     left = appExp.first
     right = appExp.second
@@ -38,7 +55,7 @@ def processAppExpression(appExp):
 #    print 'left:' + left.__str__()
 #    print 'right:' + right.__str__()
 
-    #exp = ((cat X) Y)
+    # exp = ((cat X) Y)
     if isApplication(left):
         
         left_left = left.first
@@ -58,6 +75,11 @@ def processAppExpression(appExp):
     
     return result
 
+"""
+    Traverse a logical (i.e. lambda-calculus) expression that represents a feature
+    and returns a string representation of the expression, to be stored as the value
+    to a particular policy constituent
+"""
 def traverseExpression(exp):
     
 #    print 'exp:' + exp.__str__()
@@ -73,6 +95,11 @@ def traverseExpression(exp):
        
     return result
 
+"""
+    Match "token" against any of the keys in
+    "policy_dict". If there is a match, then 
+    prepend the character '$' to the key and return it. 
+"""
 def matchTokenInDict(token, policy_dict):
     
     for key in policy_dict:
@@ -81,8 +108,13 @@ def matchTokenInDict(token, policy_dict):
             return '$' + key
     
     return token
-        
-def parseSingleCondition(cond, policy_dict):
+
+"""
+    Extract subject-predicate-object information from
+    an expression that corresponds to a single condition.
+    Returns an instance of class Cond.
+"""      
+def interpretSingleCondition(cond, policy_dict):
     
     #cond = (action actor) (actedOn)
     left = cond.first
@@ -103,6 +135,11 @@ def parseSingleCondition(cond, policy_dict):
 
     return result
 
+"""
+    Traverse the expression corresponding to the condition feature
+    The feature may contain multiple conditions, concatenated using
+    the logical "and" operator.
+"""
 def traverseConditions(exp, policy_dict):
 
     if isApplication(exp):
@@ -115,9 +152,9 @@ def traverseConditions(exp, policy_dict):
             left_left = left.first
             left_right = left.second
             if isOperator(left_left) and left_left.name() == AND_OPERATOR and isApplication(left_right):
-                result = [parseSingleCondition(left_right, policy_dict)] + traverseConditions(right, policy_dict)
+                result = [interpretSingleCondition(left_right, policy_dict)] + traverseConditions(right, policy_dict)
             else:
-                result = [parseSingleCondition(exp, policy_dict)]
+                result = [interpretSingleCondition(exp, policy_dict)]
         else:
             raise InvalidExpressionError(exp)     
     elif isVariable(exp) and exp.name() == NULL_VALUE:
@@ -128,6 +165,11 @@ def traverseConditions(exp, policy_dict):
     
     return result
 
+"""
+    Extract the modality information
+    Return True if it's a positive modality ("can", "may")
+            False if it's a negative one ("cannot", "may not")
+"""
 def traverseMod(exp):
     
     if isVariable(exp):
@@ -143,15 +185,22 @@ def traverseMod(exp):
     
     return result
 
-def parseSemantics(tree):
+"""
+    Given a parse tree, extract policy constituents, 
+    and return a dictionary that contains the list of key-pair
+    values for the constituents
+"""
+def interpretPolicy(tree):
     
     node = tree.node
     policy_dict = {}
     
     for key in CFG2RDF_DICT:
         if (key == 'condition'):
+            # skip conditions for now
             continue
         elif (key == 'mod'):
+            # modality is a special case
             value = traverseMod(node[key])
         else:
             value = traverseExpression(node[key])
@@ -166,59 +215,3 @@ def parseSemantics(tree):
     policy_dict[CFG2RDF_DICT['condition']] = value
        
     return policy_dict
-
-def parsePolicy(policy_name, policy_sentence):
- 
-    grammar_file = 'grammar.fcfg'
-    grammar = nltk.data.load('file:../data/'+grammar_file)
-    kimmofile = 'gazdar.kimmo.yaml'
-   
-    import kimmo
-   
-    if kimmofile is not None:
-        kimmo_obj = kimmo.load('../data/'+kimmofile)
-        lexicon_func = kimmoScanner(kimmo_obj)
-    else:
-        lexicon_func = None
-    
-    parser = FeatureParser(grammar, lexicon_func, trace=3)
-   
-    # parse the sentence into a tree(s)
-    trees = parser.parse_sentence(policy_sentence)
-    num_parses = len(trees)
-
-    if num_parses == 0:
-        print 'Error: Could not parse this policy!'
-        return None
-    elif num_parses > 1:
-        print 'Warning: More than one parses for this policy!'
-    
-    """
-    Extract the Actor, Action, ActedOn, Purpose, and Condition 
-    from the parse tree.
-    They are simply leaf nodes in the tree.
-    """
-    tree = trees[0]
-
-    try:
-        policy_dict = parseSemantics(tree)
-        policy_dict['POLICY'] = policy_name
-        return policy_dict
-    except InvalidExpressionError, e:
-        print "Could not parse the expression:" + e.value.__str__()
-    
-    return None
-
-def run():
-    """
-    The main method for the policy parser
-    """ 
-    policy_name = raw_input("Enter the name of a policy: ")
-    policy_sentence = raw_input("Enter the policy sentence: ")
-   
-    policy_dict = parsePolicy(policy_name, policy_sentence)
-    
-    print policy_dict
-
-if __name__ == '__main__': # What else would it be?
-    run()
