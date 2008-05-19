@@ -86,21 +86,25 @@
               format. A high-level architecture of our system is shown
               in the following: 
             </p><br />
+            <div style="text-align: center;">
+              <img height=70% width=70% src="images/architecture.png">
+            </div>
             <p> Our user enters a policy sentence into our
-            system using a web interface (available 
-              <a href="try.html">here</a>). The sentence is then
+            system using a web interface - available 
+              <a href="try.html">here</a> (Step 1). The sentence is then
               parsed into a feature-based context-free grammar (FCFG) using
-              the NLTK system [1]. In the next step,  
+              the NLTK system [1]. In Step 3,  
               the Policy Interpreter extracts semantic information about the
               policy (e.g. the actor who is responsible for a
               particular action) from the CFG. This information is
               passed to the RDF Generator, which then generates an RDF
               file that corresponds to this policy and stores it in 
-              a persistent location (URI) on the web. 
+              a persistent location (URI) on the web (Steps 4 & 5). 
               The user can immediately (or at any
               later convenient time) check the compliance/violation of 
               the policy by providing the URI and a particular scenario to the
-              AIR reasoner, which is executible directly from the web. 
+              AIR reasoner (Steps 6 - 8), which is executible 
+              directly from the web. 
             </p><br />
             <p>
               A more detailed description of each component can be found in
