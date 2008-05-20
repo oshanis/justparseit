@@ -50,7 +50,42 @@
 			<br />
 			<p> <a href="data">Click here</a> to download the complete code for 
               the Policy Parser.  
-            </p>
+            </p><br />
+            <p>
+            The directory structure of the code (after expanding the .zip file) is as follows:
+            </p><br />
+            <p>
+            <ul id="panel">
+              <li>data/: contains the FCFG grammar file (.fcfg), the lexicon (.lex), the spelling change rules (.yaml), and the RDF ontology file (.n3).
+              <li>featureparse/: the Feature Parsing Library, written by Rob Speer and provided on the 6.863 website.
+              <li>PolicyInterpreter/: Contains the complete Python code for the Policy Interpreter.
+              <li>RDFGenerator/: Contains the complete Python code for
+              the RDF Generator
+           </ul>
+              </p><br />
+              <p>
+              Executing the Policy Parser on the command line:
+              </p><br />
+                <p>
+                  Even though the Policy Parser is available on the web for use, the user may wish you execute it on their own machine. The instructions for running the Policy Parser on the command line is as follows:
+               </p><br />
+                <p>
+                  NOTE: The user must have the NLTK library already installed on the machine, and the path to the library should be added to the environment variable PYTHONPATH.
+                </p><br />
+                <p>
+                  Unzip PolicyParser.zip into a directory of choice. In
+                  that directory, type:</p><br />
+            <p>
+                <tt>  
+              bash$: cd PolicyInterpreter <br />
+              bash$: python <br />
+              Python 2.5.1 (r251:54863, Feb 4 2008, 21:48:13) <br />
+              [GCC 4.0.1 (Apple Inc. build 5465)] on darwin <br />
+              Type "help", "copyright", "credits" or "license" for
+              more information. <br />
+              >>> <br />
+           </tt>
+           </p>
 	    </div>
 		
 		<!-- End Content -->
