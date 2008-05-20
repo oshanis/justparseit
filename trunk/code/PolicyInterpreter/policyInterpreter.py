@@ -19,6 +19,8 @@ CFG2RDF_DICT = {'actor':'ENTITY', 'action':'ACTION',
 
 CONCAT_OPERATOR = 'cat'
 AND_OPERATOR = 'and'
+STR_OF = 'of'
+STR_PURPOSE = 'purpose'
 TRUE_MOD = 'yes'
 FALSE_MOD = 'no'
 NULL_VALUE = 'null'
@@ -52,9 +54,6 @@ def processAppExpression(appExp):
     left = appExp.first
     right = appExp.second
 
-#    print 'left:' + left.__str__()
-#    print 'right:' + right.__str__()
-
     # exp = ((cat X) Y)
     if isApplication(left):
         
@@ -64,9 +63,15 @@ def processAppExpression(appExp):
         if isVariable(left_left) and isVariable(left_right) and left_left.name() == CONCAT_OPERATOR:
             
             left_value = left_right.name()  #X
-            right_value = traverseExpression(right) #Y
-            
-            result = left_value + ' ' + right_value
+            # special case: if the phrase is "purpose of Z", then strip off "purpose of"
+            if left_value == STR_PURPOSE:
+                if isApplication(right) and right.first.second.name() == STR_OF:
+                    result = traverseExpression(right.second)
+                else:
+                    raise InvalidExpressionError(appExp)
+            else:
+                right_value = traverseExpression(right) #Y
+                result = left_value + ' ' + right_value
             
         else:
             raise InvalidExpressionError(appExp)
@@ -82,8 +87,6 @@ def processAppExpression(appExp):
 """
 def traverseExpression(exp):
     
-#    print 'exp:' + exp.__str__()
-          
     if isApplication(exp):  
         result = processAppExpression(exp)
     elif isVariable(exp):
