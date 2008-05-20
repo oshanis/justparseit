@@ -242,7 +242,6 @@ def constructPolicy(dict, domain):
 			
 		""" @todo: support for air:description """	
 				
-			
 		# Serialize as N3
 		return store.serialize(format="n3")
 	

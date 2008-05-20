@@ -3,8 +3,13 @@
 
 The Policy Parser
 """
+import sys
 
+sys.path.append('../featureparse/')
+sys.path.append('../RDFGenerator/')
+   
 from policyInterpreter import *
+from generate import *
 
 GRAMMAR_FILE = 'file:../data/grammar.fcfg'
 KIMMO_FILE = '../data/gazdar.kimmo.yaml'
@@ -12,8 +17,8 @@ KIMMO_FILE = '../data/gazdar.kimmo.yaml'
 """
     Given multiple syntax trees from an input sentence, pick the one
     with the least number of null features
-    ("purpose" and "passiveEntity" are optional - look for parse trees that
-        contain non-null values for these features)
+    ("passiveEntity" is optional - look for parse trees that
+        contain non-null values for this feature)
 """
 def pickMostLikelyParse(trees):
     
@@ -24,10 +29,7 @@ def pickMostLikelyParse(trees):
         curNode = curTree.node
         if isNullFeature(oldNode['purpose']) and not isNullFeature(curNode['purpose']):
             tree = curTree
-       
-     #   if isNullFeature(oldNode['passiveEntity']) and not isNullFeature(curNode['passiveEntity']):
-    #      tree = curTree
-  
+     
     return tree
 
 
@@ -83,13 +85,18 @@ def parsePolicy(policy_name, policy_sentence):
 """
     The main method for the policy parser
 """    
-def run():
+def runPolicyParser():
+ 
+    domain = "http://www.mit.edu/~oshani/data/university.n3"
+   
     policy_name = raw_input("Enter the name of a policy: ")
-    policy_sentence = raw_input("Enter the policy sentence: ")
+    policy_sentence = raw_input("Enter the sentence for the policy: ")
    
     policy_dict = parsePolicy(policy_name, policy_sentence)
-   
-    print policy_dict
+    
+    rdf = constructPolicy(policy_dict, domain)
+    
+    print rdf
 
 #if __name__ == '__main__': # What else would it be?
-run()
+runPolicyParser()
