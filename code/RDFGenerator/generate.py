@@ -10,6 +10,8 @@ import logging
 sys.path.append("../PolicyInterpreter")
 sys.path.append("../featureparse")
 sys.path.append("../rdflib")
+	
+from policyParser import *
 
 # Configure how we want rdflib logger to log messages
 _logger = logging.getLogger("rdflib")
@@ -27,8 +29,6 @@ def parseNL(name, sentence):
 	components = {'ENTITY': ENTITY_TXT, 'ACTION': ACTION_TXT, 'FLAG': FLAG_VAL, 'DATA':DATA_TXT, 'PURPOSE':PURPOSE_TXT, 'POLICY':POLICY_TXT,
 		 'CONDITION': CONDITION_VAL, 'PASSIVE_ENTITY': PASSIVE_ENTITY_VAL }
 	"""
-	
-	from policyParser import *
 	components = parsePolicy(name, sentence)
 	return components
 
