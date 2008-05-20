@@ -53,17 +53,18 @@ def parsePolicy(policy_name, policy_sentence):
     else:
         lexicon_func = None
 
-    parser = FeatureParser(grammar, lexicon_func, trace=3)
+    parser = FeatureParser(grammar, lexicon_func, trace=0)
    
     # parse the sentence into a syntax tree(s) using featureparser
     trees = parser.parse_sentence(policy_sentence)
     num_parses = len(trees)
 
     if num_parses == 0:
-        print 'Error: Could not parse this policy!'
+        print ""
+        print "Policy Parser Error: Could not parse this policy!"
+        print "You are probably entering a sentence that does not fit the following structure:"
+        print "subject [mod] action object ['to' secondary_object] ['for' purpose] [condition]*"
         return None
-    elif num_parses > 1:
-        print 'Warning: More than one parses for this policy!'
     
     # if there are multiple parses, pick the most likely one
     tree = pickMostLikelyParse(trees)
@@ -77,7 +78,9 @@ def parsePolicy(policy_name, policy_sentence):
         policy_dict = interpretPolicy(tree)
         policy_dict['POLICY'] = policy_name
     except InvalidExpressionError, e:
-        print "Could not interpret the expression:" + e.value.__str__()
+        print ""
+        print "Policy Parser Error: Could not interpret this policy!" 
+        print "You are probably entering words that are not a part of the lexicon."
         return None
   
     return policy_dict
