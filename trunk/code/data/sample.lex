@@ -43,6 +43,7 @@ N_ROOT:
  possession AfterNoun   N[sem = <possession>]
  state   AfterNoun   N[sem = <state>]
  massachusetts AfterNoun   N[sem = <massachusetts>]
+ purpose AfterNoun N[sem = <purpose>]
 
 GENITIVE:
  's   End   []
