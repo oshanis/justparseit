@@ -98,5 +98,5 @@ def runPolicyParser():
     
     print rdf
 
-#if __name__ == '__main__': # What else would it be?
-runPolicyParser()
+if __name__ == '__main__': # What else would it be?
+    runPolicyParser()
