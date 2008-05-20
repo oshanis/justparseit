@@ -1,21 +1,30 @@
 function createRequest() {
   var request = null;
-  try {
-    request = new XMLHttpRequest();
+  try 
+  {
+	netscape.security.PrivilegeManager.enablePrivilege('UniversalBrowserRead');
+	request = new XMLHttpRequest();
   } 
-  catch (trymicrosoft) {
-    try {
+  catch (trymicrosoft) 
+  {
+    try 
+	{
       request = new ActiveXObject("Msxml2.XMLHTTP");
     } 
-	catch (othermicrosoft) {
-      try {
+	catch (othermicrosoft) 
+	{
+      try 
+	  {
         request = new ActiveXObject("Microsoft.XMLHTTP");
       } 
-	  catch (failed) {
+	  catch (failed) 
+	  {
         request = null;
       }
     }
   }
+
+  
   if (request == null) {
     alert("Error creating request object!");
   } 
@@ -25,20 +34,20 @@ function createRequest() {
 }
 
 function sendRequest(request, url) {
-  netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
-  netscape.security.PrivilegeManager.enablePrivilege("UniversalPreferencesRead");   
- try{
-  request.onreadystatechange = update;
-  request.open("GET", url, true);
-  request.send(null);
-  }
-  catch(e){alert(e);}
+	try 
+	{
+		netscape.security.PrivilegeManager.enablePrivilege('UniversalBrowserRead');
+		request.open("GET", url, true);
+		request.onreadystatechange = update;
+		request.send(null);
+	} 
+	catch(e) 
+	{
+		alert(e)
+	}
 }
 
 function parse() {
-  
-  netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserAccess");
-  netscape.security.PrivilegeManager.enablePrivilege("UniversalPreferencesRead");   
 
   var name = document.getElementById("name").value;
   var sentence = document.getElementById("sentence").value;
@@ -53,15 +62,8 @@ function parse() {
                 name + " AIR policy");
   */
     var url = "http://scripts.mit.edu/~oshani/justparseit/code/server/run.py?name=" + escape(name) +"&sentence=" + escape(sentence) +"&domain=" + escape(domain);
-	try {
-		var request1 = createRequest();
-	} 
-   catch (e) {
-    alert("Permission UniversalBrowserRead denied.");
-   }  
-
-
-    sendRequest(request1, url);
+	var request1 = createRequest();
+	sendRequest(request1, url);
   /*}
   else {
       alert("Sorry! Wait till the sentence parses");

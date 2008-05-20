@@ -18,7 +18,8 @@
 	rdfs:comment "This class should denote someone who has authority to carry out a disciplinary hearing" .
 
 :CriminalInvestigation a rdfs:Class;
-	rdfs:label "investigate crime" .
+	rdfs:label "crime investigate" ;
+	rdfs:comment "This class should denote someone who has authority to carry out a disciplinary hearing" .
 	
 :has a rdfs:Property;
 	rdfs:label "has";
