@@ -162,7 +162,6 @@ def constructPolicy(dict, domain):
 		
 		if dict['ENTITY'] != None:
 			entity_match = getMatch(dict['ENTITY'],domain)
-			print entity_match
 			pattern_1.add((URIRef("#U"), AIR["actor"], URIRef("#A")))
 			if entity_match != None:
 				pattern_1.add((URIRef("#A"), RDF.type, entity_match))

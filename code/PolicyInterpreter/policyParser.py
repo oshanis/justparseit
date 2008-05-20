@@ -93,10 +93,13 @@ def runPolicyParser():
     policy_sentence = raw_input("Enter the sentence for the policy: ")
    
     policy_dict = parsePolicy(policy_name, policy_sentence)
-    
     rdf = constructPolicy(policy_dict, domain)
-    
+     
+    print ""
+    print "The Policy Parser has generated the following RDF:"
     print rdf
-
+    
+    return rdf
+    
 if __name__ == '__main__': # What else would it be?
     runPolicyParser()
