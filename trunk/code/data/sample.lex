@@ -54,20 +54,21 @@ N_TO_ADJ:
  +inal   End   ADJ[]
 
 V_ROOT:
- is   End   IS[sem = <is>]
- was  End   IS[sem = <was>]
- has  End   V[sem = <has>]
- use  AfterVerb   V[sem = <use>]
- discriminate  AfterVerb   V[sem = <discriminate>]
- investigate AfterVerb V[sem = <investigate>]
- access  AfterVerb   V[sem = <access>]
- transfer   AfterVerb   V[sem = <transfer>]
- deny AfterVerb   V[sem = <deny>]
- request AfterVerb   V[sem = <request>]
- reside  AfterVerb   V[sem = <reside>]
- associate  AfterVerb   V[sem = <associate>]
- search  AfterVerb   V[sem = <search>]
- have AfterVerb   V[sem = <have>]
+ is   End   IS[sem = <is>, so = false]
+ was  End   IS[sem = <was>, so = false]
+ has  End   V[sem = <has>, so = false]
+ use  AfterVerb   V[sem = <use>, so = false]
+ discriminate  AfterVerb   V[sem = <discriminate>, so = false]
+ investigate AfterVerb V[sem = <investigate>, so = false]
+ access  AfterVerb   V[sem = <access>, so = false]
+ transfer   AfterVerb   V[sem = <transfer>, so = true]
+ deny AfterVerb   V[sem = <deny>, so = true]
+ request AfterVerb   V[sem = <request>, so = true]
+ reside  AfterVerb   V[sem = <reside>, so = false]
+ associate  AfterVerb   V[sem = <associate>, so = true]
+ search  AfterVerb   V[sem = <search>, so = false]
+ have AfterVerb   V[sem = <have>, so = false]
+ give	AfterVerb	V[sem = <give>, so = true]
 
 V_SUFFIX:
  +ion End N[]
@@ -104,6 +105,10 @@ PARTICLE:
  not  End   NEG[sem = <no>]
  and  End   AND[sem = <and>]
  if   End   IF[sem = <if>]
+ his  End   DET[sem = <his>]
+ her  End   DET[sem = <her>]
+ their   End   DET[sem = <their>]
+ its  End   DET[sem = <its>]
 
 End:
 '#'   End   None

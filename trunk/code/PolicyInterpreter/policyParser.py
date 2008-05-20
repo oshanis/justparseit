@@ -25,8 +25,8 @@ def pickMostLikelyParse(trees):
         if isNullFeature(oldNode['purpose']) and not isNullFeature(curNode['purpose']):
             tree = curTree
        
-        if isNullFeature(oldNode['passiveEntity']) and not isNullFeature(curNode['passiveEntity']):
-            tree = curTree
+     #   if isNullFeature(oldNode['passiveEntity']) and not isNullFeature(curNode['passiveEntity']):
+    #      tree = curTree
   
     return tree
 
