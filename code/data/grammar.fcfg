@@ -2,9 +2,9 @@ S[actor = ?actor, mod = ?mod, action = ?action, actedOn = ?actedOn, passiveEntit
 
 Actor[actor = ?n] -> NP[sem = ?n]
 
-Action[action = ?v, actedOn = ?actedOn, mod = ?mod, passiveEntity = ?passiveEntity] -> MOD[sem = ?mod] V[sem = ?v] ActedOn[sem = ?actedOn] TOPASS[sem = ?passiveEntity]
-Action[action = ?v, actedOn = ?actedOn, mod = ?mod, passiveEntity = ?passiveEntity] -> MOD[sem = ?mod] V[sem = ?v] PASS[sem = ?passiveEntity] ActedOn[sem = ?actedOn]
-Action[action = ?v, actedOn = ?actedOn, mod = ?mod, passiveEntity = ?passiveEntity] -> MOD[sem = ?mod] V[sem = ?v] 
+Action[action = ?v, actedOn = ?actedOn, mod = ?mod, passiveEntity = ?passiveEntity] -> MOD[sem = ?mod] V[sem = ?v, so = true] ActedOn[sem = ?actedOn] TOPASS[sem = ?passiveEntity]
+Action[action = ?v, actedOn = ?actedOn, mod = ?mod, passiveEntity = ?passiveEntity] -> MOD[sem = ?mod] V[sem = ?v, so = true] PASS[sem = ?passiveEntity] ActedOn[sem = ?actedOn]
+Action[action = ?v, actedOn = ?actedOn, mod = ?mod, passiveEntity = <null>] -> MOD[sem = ?mod] V[sem = ?v, so = false] ActedOn[sem = ?actedOn]
 
 MOD[sem = ?mod] -> PMOD[sem = ?mod]
 MOD[sem = ?mod] -> NMOD[sem = ?mod]
@@ -12,12 +12,10 @@ MOD[sem = <no>] -> PMOD[sem = ?pmod] NEG[sem = ?neg]
 
 ActedOn[sem = ?np] -> NP[sem = ?np]
 
-PASS[sem = <null>] ->
 PASS[sem = ?np] -> NP[sem = ?np]
 PASS[sem = ?pp] -> PP[sem = ?pp]
 
-TOPASS[sem = <null>] ->
-TOPASS[sem = ?np] -> TO[sem = ?to] NP[sem = ?np]
+TOPASS[sem = <?np>] -> P[sem = ?p] NP[sem = ?np]
 
 Purpose[purpose = <null>, condition = ?condition] -> Condition[condition = ?condition]
 Purpose[purpose = ?n, condition = ?condition] -> FOR[sem = ?for] NP[sem = ?n] Condition[condition = ?condition]
@@ -36,7 +34,7 @@ AP[sem = ?np] -> NP[sem = ?np]
 AP[sem = <((cat ?adj) ?pp)>] -> ADJ[sem = ?adj] PP[sem = ?pp]
 
 NP[sem = ?n] -> DET[sem = ?det] NP[sem = ?n]
-NP[sem = <((cat ?np) ?adj)>] -> ADJ[sem = ?adj] NP[sem = ?np]
+NP[sem = <((cat ?adj) ?np)>] -> ADJ[sem = ?adj] NP[sem = ?np]
 NP[sem = ?n] -> N[sem = ?n]
 NP[sem = <((cat ?n1) ?n2)>] -> N[sem = ?n1] NP[sem = ?n2]
 NP[sem = <((cat ?np) ?pp)>] -> NP[sem = ?np] PP[sem = ?pp]
@@ -47,3 +45,6 @@ VP[sem = <((cat ?v) ?np)>] -> V[sem = ?v] NP[sem = ?np]
 VP[sem = <((cat ((cat ?v) ?np)) ?pp)>] -> V[sem = ?v] NP[sem = ?np] PP[sem = ?pp]
 
 V[sem = ?v] -> IS[sem = ?v]
+
+P[sem = ?for] -> FOR[sem = ?for]
+P[sem = ?to] -> TO[sem = ?to]
