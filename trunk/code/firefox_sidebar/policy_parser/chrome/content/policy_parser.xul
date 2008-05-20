@@ -8,15 +8,20 @@
 
 <script src="http://dig.csail.mit.edu/2005/ajar/ajaw/js/util.js" type="text/javascript"></script>
 <script src="http://dig.csail.mit.edu/2005/ajar/ajaw/js/webdav.js" type="text/javascript"></script>
+<script src="webdav.js" type="text/javascript"></script>
+<script src="reasoner.js" type="text/javascript"></script>
 <script src="policy_parser.js" type="text/javascript"></script>
 
 <vbox flex="1">
 
+	<groupbox orient="vertical">
+	
     <spacer style="height: 10px"/>
 
  
     <groupbox orient="vertical">
-		<vbox flex="1">
+    
+    	<vbox flex="1">
     		
     		<label value="Name of the policy:"/>
         	<textbox id="name" type="autocomplete" autocompletesearch="history"/>
@@ -24,12 +29,9 @@
         	<spacer style="height: 10px"/>
             
             <label value="Domain:"/>
-        	<menulist>
+        	<menulist id="domain">
     			<menupopup>
-      				<menuitem label="option 1" value="1"/>
-      				<menuitem label="option 2" value="2"/>
-      				<menuitem label="option 3" value="3"/>
-      				<menuitem label="option 4" value="4"/>
+      				<menuitem label="University (MIT)" value="http://www.mit.edu/~oshani/data/university.n3"/>
     			</menupopup>
   			</menulist>
         	
@@ -44,22 +46,26 @@
             <label value="Sentence:"/>
 		
 		    <spacer style="height: 10px"/>
-        
-            <radiogroup>
-  				<hbox>
-            		<radio id="select" label="Select from pre-defined" accesskey="S"/>
-  					<radio id="write" label="Write my own"  accesskey="W" selected="true"/>
-				</hbox>
-            </radiogroup>
-        
+     				
+     		<hbox>
+               <radiogroup id="sentence_pref" onclick="set_sentence()">
+            		<radio id="select" value="0" label="Select from pre-defined" accesskey="S" selected="true"/>
+  					<radio id="write" value="1" label="Write my own"  accesskey="W" />
+		        </radiogroup>
+    		</hbox>
+    
             <spacer style="height: 10px"/>
             
-            <menulist>
+            <menulist id="sentence_menu">
     			<menupopup>
-      				<menuitem label="option 1" value="1"/>
-      				<menuitem label="option 2" value="2"/>
-      				<menuitem label="option 3" value="3"/>
-      				<menuitem label="option 4" value="4"/>
+      				<menuitem label="MIT can use prox card data for criminal investigation" value="MIT can use prox card data for criminal investigation"/>
+      				<menuitem label="MIT may use prox card data for criminal investigation" value="MIT may use prox card data for criminal investigation"/>
+      				<menuitem label="MIT students can not transfer prox cards to another student" value="MIT students can not transfer prox cards to another student"/>
+      				<menuitem label="Police may search people's homes if police have people's permission" value="Police may search people's homes if police have people's permission"/>
+      				<menuitem label="A person may access data on the private mit domain if the person has permission for that data" value="A person may access data on the private mit domain if the person has permission for that data"/>
+      				<menuitem label="A service provider may not use phone records to deny service to a customer" value="A service provider may not use phone records to deny service to a customer"/>
+      				<menuitem label="TSA can transfer data to the fbi if the data is associated with terrorism" value="TSA can transfer data to the fbi if the data is associated with terrorism"/>
+      				<menuitem label="Anyone can access data in the possession of the state of Massachusetts" value="Anyone can access data in the possession of the state of Massachusetts"/>
     			</menupopup>
   			</menulist>
 
@@ -79,44 +85,52 @@
         <spacer flex="1"/>
   	</hbox>        
     
+    </groupbox> 
         
-    <spacer style="height: 10px"/>
+   <spacer style="height: 10px"/>
 
-    <description>
-        Optional: Enter the name of the file you want to save the output as (must be a URI on a WebDAV server
-        you have access to).
-    </description>
-
-    <groupbox orient="vertical">
-
-          <label value="Output:"/>
-          <textbox id="outputURI" type="autocomplete" autocompletesearch="history" value="http://localhost/myWebDAV/output.n3"/>
-
-    </groupbox> 
+   <groupbox orient="vertical">
 
     <spacer style="height: 10px"/>
 
     <description>
-        Select the your preferred reasoner, hit the "Run Reasoner", and wait 5 years for the output!<br/>
+    	For demo purposes only!
     </description>
+ 
+   <spacer style="height: 10px"/>
+      
+    	<label value="Store the generated policy here:"/>
+          <textbox id="store_location" type="autocomplete" autocompletesearch="history" value="http://dig.csail.mit.edu/2008/webdav/policy.n3"/>
 
-    <groupbox orient="vertical">
-    <radiogroup>
-        <radio id="scheme" label="Scheme Reasoner" accesskey="S"/>
-        <radio id="python" label="Python Reasoner"  accesskey="P" selected="true"/>
-    </radiogroup>
-    </groupbox> 
+	  	<hbox>
+    	    <spacer flex="1"/>
+        	<button label="Store Policy" oncommand="store()"/>
+        	<spacer flex="1"/>
+  		</hbox>        
+ 
+    <spacer style="height: 10px"/>
+
+	<label value="Select the log file:"/>
+   	<menulist id="log">
+    	<menupopup>
+    		<menuitem label="University (MIT) logs" value="http://www.mit.edu/~oshani/data/university.n3"/>
+    	</menupopup>
+  	</menulist>
+        	
     
   <spacer style="height: 10px"/>
 
   <hbox>
         <spacer flex="1"/>
-        <button label="Run Reasoner" oncommand="run()"/>
+        <button label="Run Reasoner" oncommand="reasoner()"/>
         <spacer flex="1"/>
   </hbox>        
 
     <vbox id="progressBox">
     </vbox>
+    
+    </groupbox> 
+    
 </vbox>
 
 </page>

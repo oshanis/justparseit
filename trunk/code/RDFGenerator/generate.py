@@ -7,7 +7,7 @@ import sys
 import sys
 import logging
 
-sys.path.append("../PolicyParser")
+sys.path.append("../PolicyInterpreter")
 sys.path.append("../featureparse")
 sys.path.append("../rdflib")
 
@@ -28,7 +28,7 @@ def parseNL(name, sentence):
 		 'CONDITION': CONDITION_VAL, 'PASSIVE_ENTITY': PASSIVE_ENTITY_VAL }
 	"""
 	
-	from pparser import parsePolicy
+	from policyParser import *
 	components = parsePolicy(name, sentence)
 	return components
 
@@ -162,6 +162,7 @@ def constructPolicy(dict, domain):
 		
 		if dict['ENTITY'] != None:
 			entity_match = getMatch(dict['ENTITY'],domain)
+			print entity_match
 			pattern_1.add((URIRef("#U"), AIR["actor"], URIRef("#A")))
 			if entity_match != None:
 				pattern_1.add((URIRef("#A"), RDF.type, entity_match))
