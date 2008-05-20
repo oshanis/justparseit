@@ -110,7 +110,7 @@ def constructPolicy(dict, domain):
 	"""
 	
 	if dict == None:
-		return "Please check the policy sentence!"
+		return None
 	else:
 		
 		store = Graph()
