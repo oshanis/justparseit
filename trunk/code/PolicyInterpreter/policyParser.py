@@ -32,7 +32,6 @@ def pickMostLikelyParse(trees):
      
     return tree
 
-
 """
     Parses the input policy using the NTLK parser and
     extracts the semantic information about the policy
@@ -65,7 +64,7 @@ def parsePolicy(policy_name, policy_sentence):
         print "You are probably entering a sentence that does not fit the following structure:"
         print "subject [mod] action object ['to' secondary_object] ['for' purpose] [condition]*"
         return None
-    
+        
     # if there are multiple parses, pick the most likely one
     tree = pickMostLikelyParse(trees)
 
@@ -98,7 +97,7 @@ def runPolicyParser():
    
     policy_dict = parsePolicy(policy_name, policy_sentence)
     rdf = constructPolicy(policy_dict, domain)
-    
+
     print ""
     print "The Policy Parser has generated the following RDF:"
     print rdf

@@ -54,8 +54,8 @@ def processAppExpression(appExp):
     left = appExp.first
     right = appExp.second
 
-#    print "left:" + left.__str__()
-#    print "right:" + right.__str__()
+    #print "left:" + left.__str__()
+    #print "right:" + right.__str__()
 
     # exp = ((cat X) Y)
     if isApplication(left):
@@ -63,9 +63,13 @@ def processAppExpression(appExp):
         left_left = left.first
         left_right = left.second 
         
-        if isVariable(left_left) and isVariable(left_right) and left_left.name() == CONCAT_OPERATOR:
+        if isVariable(left_left) and left_left.name() == CONCAT_OPERATOR:
             
-            left_value = left_right.name()  #X
+            if isVariable(left_right): 
+                left_value = left_right.name()  #X
+            else:
+                left_value = traverseExpression(left_right)
+          
             # special case: if the phrase is "purpose of Z", then strip off "purpose of"
             if left_value == STR_PURPOSE:
                 if isApplication(right) and right.first.second.name() == STR_OF:
