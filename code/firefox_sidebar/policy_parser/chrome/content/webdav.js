@@ -10,6 +10,7 @@ function store()
 function fetch()
 {
 	content.window.location.replace(store_location,true);
+	alert("The generated policy was successfully saved at "+store_location);
 }
 
 function view()

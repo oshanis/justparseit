@@ -1,25 +1,30 @@
-var request1= Util.XMLHTTPFactory();
+//////////////////////////////
+// UI Specific Functions
 
-//////////
-
-var new_sentence_flag = false;
-
-function set_sentence()
+function predefined()
 {
-	alert(document.getElementById("sentence_pref").value);
 	if (document.getElementById("sentence_pref").value == "0")
 	{
-		document.getElementById("sentence_text").disabled = false
-		document.getElementById("sentence_menu").disabled = true
+		document.getElementById("sentence_text").disabled = true;
+		document.getElementById("sentence_menu").disabled = false;
 		new_sentence_flag = false;
 	}
-	else if (document.getElementById("sentence_pref").value == "1")
+	if (document.getElementById("sentence_pref").value == "1")
 	{
-		document.getElementById("sentence_text").disabled = true
-		document.getElementById("sentence_menu").disabled = false
+		document.getElementById("sentence_text").disabled = false;
+		document.getElementById("sentence_menu").disabled = true;
 		new_sentence_flag = true;
 	}
 }
+
+/////////////////////////////
+
+
+/////////////////////////////
+// Request stuff
+
+var request1= Util.XMLHTTPFactory();
+
 
 function sendRequest(request, url) 
 {
@@ -38,7 +43,19 @@ function sendRequest(request, url)
 function run() 
 {
 	var name = document.getElementById("name").value;
-	var sentence = document.getElementById("sentence_menu").value; //@todo: handle the user input sentences as well
+	var sentence = null
+	
+	if (document.getElementById("sentence_pref").value == "0"
+		|| document.getElementById("sentence_pref").value == ""
+		|| document.getElementById("sentence_pref").value == null)
+	{
+		sentence =document.getElementById("sentence_menu").value; 
+	}
+	else
+	{
+		sentence =document.getElementById("sentence_text").value; 
+	}
+	
 	var domain = document.getElementById("domain").value;
   
 	if (name != "")

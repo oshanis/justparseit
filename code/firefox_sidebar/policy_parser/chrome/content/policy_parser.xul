@@ -48,12 +48,12 @@
 		    <spacer style="height: 10px"/>
      				
      		<hbox>
-               <radiogroup id="sentence_pref" onclick="set_sentence()">
+               <radiogroup id="sentence_pref" onclick="predefined()">
             		<radio id="select" value="0" label="Select from pre-defined" accesskey="S" selected="true"/>
-  					<radio id="write" value="1" label="Write my own"  accesskey="W" />
+					<radio id="write" value="1" label="Write my own"  accesskey="W" />
 		        </radiogroup>
     		</hbox>
-    
+
             <spacer style="height: 10px"/>
             
             <menulist id="sentence_menu">
@@ -69,9 +69,7 @@
     			</menupopup>
   			</menulist>
 
-		    <spacer style="height: 10px"/>
-            
-            <textbox multiline="true" id="sentence_text"/>
+            <textbox multiline="true" id="sentence_text" disabled="true"/>
 
         </vbox>
 
