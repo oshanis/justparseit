@@ -2,9 +2,7 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl:  <http://www.w3.org/2002/07/owl#> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
-@prefix : <http://www.mit.edu/~oshani/data/ontology#> .
-
-<> rdfs:comment "Describes classes and properties used in scenario 0".
+@prefix : <http://mit.edu/oshani/data/ontology#> .
 
 :MIT a rdfs:Class;
 	rdfs:label "mit";
@@ -104,59 +102,5 @@
 
 :evidence a rdf:Property;
 	rdfs:domain :CoDallegation.
-
-#### NOT USED ############################################
-
-:University a rdfs:Class;
-	rdfs:label "University class";
-	rdfs:comment "MIT is of type University".
-
-:hasSchool a rdf:Property;
-	rdfs:label "hasSchool property";
-	rdfs:domain :University;
-	rdfs:range :School;
-	rdfs:comment "University is made up of different schools".
-
-:School a rdfs:Class;
-	rdfs:label "School class";
-	rdfs:comment "University is made up of different schools".
-
-:hasLab a rdf:Property;
-	rdfs:label "hasLab property";
-	rdfs:domain :School;
-	rdfs:range :Lab;
-	rdfs:comment "A school is made up of different labs".
-
-:Lab a rdfs:Class;
-	rdfs:label "Lab class";
-	rdfs:comment "A school is made up of different labs".
-
-:Building a rdf:Class.
-:Floor a rdf:Class.
-
-:partOf a rdf:Property;
-	rdfs:domain :Floor;
-	rdfs:range :Building.
-
-
-:Staff rdfs:subClassOf :MITIndividual;
-	rdfs:label "Staff class";
-	rdfs:comment "People who work at MIT".
-
-:worksIn a rdf:Property;
-	rdfs:label "attends property";
-	rdfs:domain :Staff;
-	rdfs:range :Lab;
-	rdfs:comment "Individuals who work in the Lab".
-
-:attends a rdf:Property;
-	rdfs:label "attends property";
-	rdfs:range :University;
-	rdfs:domain :Student;
-	rdfs:comment "student who attends the University".
-
-:Paper a rdfs:Class;
-	rdfs:label "Paper class";
-	rdfs:comment "Papers".
 
 #ends
