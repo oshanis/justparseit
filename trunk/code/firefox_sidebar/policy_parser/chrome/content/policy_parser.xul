@@ -36,7 +36,6 @@
     				</menupopup>
   				</menulist>
             	<button label="View" oncommand="viewOnt()"/>
-    			<spacer style="height: 10px"/>
    	    	</hbox>
 		</vbox>
 	</groupbox> 
@@ -53,7 +52,7 @@
      		<hbox>
                <radiogroup id="sentence_pref" onclick="predefined()">
             		<radio id="select" value="0" label="Select from pre-defined" accesskey="S" selected="true"/>
-					<radio id="write" value="1" label="Write my own"  accesskey="W" />
+					<radio id="write" value="1" label="Write your own"  accesskey="W" />
 		        </radiogroup>
     		</hbox>
 
@@ -89,19 +88,7 @@
     <vbox id="progressBox"></vbox>
     
     </groupbox> 
-        
-   <spacer style="height: 10px"/>
 
-   <groupbox orient="vertical">
-
-    <spacer style="height: 10px"/>
-
-    <description>
-    	For demo purposes only!
-    </description>
- 
-   <spacer style="height: 10px"/>
- 
   	<groupbox orient="vertical">
       
     	<label value="Store the generated policy here:"/>
@@ -109,16 +96,25 @@
 
 	  	<hbox>
     	    <spacer flex="1"/>
-        	<button label="Store" oncommand="store()"/>
+        	<button label="Store Policy" oncommand="store()"/>
         	<spacer flex="1"/>
-        	<button label="View" oncommand="view()"/>
+        	<button label="View Policy" oncommand="view()"/>
         	<spacer flex="1"/>
   		</hbox>        
  
   	</groupbox>
  
     <spacer style="height: 10px"/>
+        
+   <groupbox orient="vertical">
 
+    <spacer style="height: 10px"/>
+
+  <description>
+    	Demo with the AIR reasoner:
+    </description>
+ 
+ 
   	<groupbox orient="vertical">
   
 		<label value="Select the log file:"/>
@@ -132,6 +128,7 @@
 			<spacer flex="1"/>
 		    <button label="Fetch Log" oncommand="fetchLog()"/>
 	    	<spacer flex="1"/>
+		    <button label="View Log" oncommand="viewLog()"/>
 		</hbox>        
 
   	</groupbox>
