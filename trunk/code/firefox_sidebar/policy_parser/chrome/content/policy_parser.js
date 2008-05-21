@@ -1,5 +1,4 @@
 var request1= Util.XMLHTTPFactory();
-var request2= Util.XMLHTTPFactory();
 
 //////////
 
@@ -62,6 +61,6 @@ function update()
 		var response = request1.responseText;
     } 
 	else 
-      alert("Error! Request status is " + request1.status);
+      alert("Error! Something is wrong.");
   } 
 }

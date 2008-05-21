@@ -22,7 +22,7 @@ def main():
         """
         name = "MITProxCardDataPolicy"
         sentence = "MIT can use prox card data for criminal investigation"
-        domain = "../data/university.n3"
+        domain = "../data/ontology.n3"
         """
         
         name = form["name"].value

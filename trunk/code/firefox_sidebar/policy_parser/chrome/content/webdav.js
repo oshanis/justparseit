@@ -12,6 +12,11 @@ function fetch()
 	content.window.location.replace(store_location,true);
 }
 
+function view()
+{
+	store();
+}
+
 function success()
 {
         //TODO: Do something on the callback?
