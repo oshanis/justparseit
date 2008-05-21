@@ -45,18 +45,15 @@ def main():
         outfile.write(s)
         sys.stdout = outfile
 
-
-
 if __name__ == '__main__':
     
     import sys
-    sys.path.append("../PolicyParser/")
+    sys.path.append("../PolicyInterpreter/")
     sys.path.append("../featureparse")
     sys.path.append("../RDFGenerator")
 
     from generate import *
-    from pparser import *
-    from Condition import *
+    from policyParser import *
+    from condition import *
 
     main()
-
