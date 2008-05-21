@@ -122,23 +122,24 @@ def constructPolicy(dict, domain):
 		# Create namespace objects
 		AIR = Namespace("http://dig.csail.mit.edu/TAMI/2007/amord/air#")
 		OWL = Namespace("http://www.w3.org/2002/07/owl#")
-		
+		BASE = Namespace("http://dig.csail.mit.edu/2008/webdav/policy#")
 		
 		# create the policy
-		p = "#" + dict['POLICY'].replace(" ","_") 
-		policy = URIRef(p)
+		p =  dict['POLICY'].replace(" ","_") 
+		#policy = URIRef(p)
+		policy = BASE[p]
 		
 		store.add((policy, RDF.type, AIR["Policy"]))
 		store.add((policy, AIR["label"], Literal(dict['POLICY'])))
 		# add the variables
-		store.add((policy, AIR["variable"], URIRef("#U")))
-		store.add((policy, AIR["variable"], URIRef("#A")))
-		store.add((policy, AIR["variable"], URIRef("#D")))
-		store.add((policy, AIR["variable"], URIRef("#P")))
+		store.add((policy, AIR["variable"], BASE["U"]))
+		store.add((policy, AIR["variable"], BASE["A"]))
+		store.add((policy, AIR["variable"], BASE["D"]))
+		store.add((policy, AIR["variable"], BASE["P"]))
 		conditionCount = 0
 		
 		rule = "rule_"+conditionCount.__str__()
-		rule = URIRef(rule)
+		rule = BASE[rule]
 		store.add((policy, AIR["rule"], rule))
 		
 		"""
@@ -150,36 +151,36 @@ def constructPolicy(dict, domain):
 		
 		""" Add things to the pattern only if the sentence does not return null for each of the corresponding components"""
 		if dict['ACTION'] == "use":
-			pattern_1.add((URIRef("#U"), RDF.type, AIR["UseEvent"]))
+			pattern_1.add((BASE["U"], RDF.type, AIR["UseEvent"]))
 		#elif: @todo: what else should be there?
 		
 		if dict['ENTITY'] != None:
 			entity_match = getMatch(dict['ENTITY'],domain)
-			pattern_1.add((URIRef("#U"), AIR["actor"], URIRef("#A")))
+			pattern_1.add((BASE["U"], AIR["actor"], BASE["A"]))
 			if entity_match != None:
-				pattern_1.add((URIRef("#A"), RDF.type, entity_match))
+				pattern_1.add((BASE["A"], RDF.type, entity_match))
 				
 		if dict['DATA'] != None:
 			data_match = getMatch(dict['DATA'], domain)
-			pattern_1.add((URIRef("#U"), AIR["data"], URIRef("#D")))
+			pattern_1.add((BASE["U"], AIR["data"], BASE["D"]))
 			if data_match != None:
-				pattern_1.add((URIRef("#D"), RDF.type, data_match))
+				pattern_1.add((BASE["D"], RDF.type, data_match))
 	
 		if dict['PURPOSE'] != None:
 			purpose_match = getMatch(dict['PURPOSE'], domain)
-			pattern_1.add((URIRef("#U"), AIR["purpose"], URIRef("#P")))
+			pattern_1.add((BASE["U"], AIR["purpose"], BASE["P"]))
 			if purpose_match != None:
-				pattern_1.add((URIRef("#P"), RDF.type, purpose_match))
+				pattern_1.add((BASE["P"], RDF.type, purpose_match))
 		
 		if (dict.has_key('PASSIVE_ENTITY')):	
 			if dict['PASSIVE_ENTITY'] != None:
 				""" I think this is not even in the AIR specification 
 				Therefore, @todo: Ask Lalana about this"""
 				transferee_match = getMatch(dict['PASSIVE_ENTITY'], domain)
-				pattern_1.add((URIRef("#A"), AIR["transfer"], URIRef("#D")))
-				pattern_1.add((URIRef("#D"), AIR["transferred-to"], URIRef("#R")))
+				pattern_1.add((BASE["A"], AIR["transfer"], BASE["D"]))
+				pattern_1.add((BASE["D"], AIR["transferred-to"], BASE["R"]))
 				if transferee_match != None:
-					pattern_1.add((URIRef("#R"), RDF.type, transferee_match))
+					pattern_1.add((BASE["R"], RDF.type, transferee_match))
 					
 				
 		totalConditions = len(dict['CONDITION'])
@@ -191,37 +192,35 @@ def constructPolicy(dict, domain):
 				if (conditions[conditionCount].subject[0] != '$'):
 					matched_subject = getMatch(conditions[conditionCount].subject, domain)
 				else:
-					matched_subject = URIRef(getVariable(conditions[conditionCount].subject[1:]))
+					matched_subject = BASE[getVariable(conditions[conditionCount].subject[1:])]
 				
 				if (conditions[conditionCount].predicate[0] != '$'):
 					matched_predicate = getMatch(conditions[conditionCount].predicate, domain)
 				else:
-					matched_predicate = URIRef(getVariable(conditions[conditionCount].predicate[1:]))
+					matched_predicate = BASE[getVariable(conditions[conditionCount].predicate[1:])]
 				
 				if (conditions[conditionCount].object[0] != '$'):
 					matched_object = getMatch(conditions[conditionCount].object, domain)
 				else:
-					matched_object = URIRef(getVariable(conditions[conditionCount].object[1:]))
+					matched_object = BASE[getVariable(conditions[conditionCount].object[1:])]
 	
 				conditionCount = conditionCount + 1
 					
 				if (matched_subject != None) and (matched_predicate != None) and (matched_object != None):
 					#The terms should exist in the ontology or should be identified variables
 					new_rule = "rule_"+conditionCount.__str__()
-					new_rule = URIRef(new_rule)
+					new_rule = BASE[new_rule]
 					store.add((rule, AIR["rule"], new_rule))
 					pattern = Graph()
 					store.add((new_rule, AIR["pattern"], pattern))
 					pattern.add((matched_subject, matched_predicate, matched_object))
-							    
-			
-			""" Adding the assertion to the last rule  that was added"""
-			assertion = Graph()
-			store.add((new_rule, AIR["assert"], assertion))
-			if dict['FLAG']:
-				assertion.add((URIRef("#U"), AIR["compliant-with"], policy))
-			else:
-				assertion.add((URIRef("#U"), AIR["non-compliant-with"], policy))
+					""" Adding the assertion to the last rule  that was added"""
+					assertion = Graph()
+					store.add((new_rule, AIR["assert"], assertion))
+					if dict['FLAG']:
+						assertion.add((BASE["U"], AIR["compliant-with"], policy))
+					else:
+						assertion.add((BASE["U"], AIR["non-compliant-with"], policy))
 		
 		
 		else:
@@ -229,9 +228,9 @@ def constructPolicy(dict, domain):
 			assertion = Graph()
 			store.add((rule, AIR["assert"], assertion))
 			if dict['FLAG']:
-			   assertion.add((URIRef("#U"), AIR["compliant-with"], policy))
+			   assertion.add((BASE["U"], AIR["compliant-with"], policy))
 			else:
-				assertion.add((URIRef("#U"), AIR["non-compliant-with"], policy))
+				assertion.add((BASE["U"], AIR["non-compliant-with"], policy))
 			
 		""" @todo: support for air:description """	
 				

@@ -3,8 +3,14 @@
 def main():
     
     name = "MITProxCardDataPolicy"
+    
     #sentence = "MIT can use prox card data for criminal investigation"
-    sentence = "mit may use prox card data for criminal investigation"
+    #sentence = "police may search people's homes if police have people's permission"
+    #sentence = "a person may access data on the private mit domain if the person  has permission for that data"
+    #sentence = "a service provider may not use phone records to deny service to a customer"
+    #sentence = "tsa can transfer data to the fbi if the data is associated with  terrorism"
+    sentence = "anyone can access data in the possession of the state of  massachusetts"
+    
     domain = "../data/ontology.n3"
     
     dict = parseNL(name, sentence)

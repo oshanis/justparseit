@@ -31,7 +31,7 @@
             <label value="Domain:"/>
         	<menulist id="domain">
     			<menupopup>
-      				<menuitem label="University (MIT)" value="http://www.mit.edu/~oshani/data/university.n3"/>
+      				<menuitem label="University (MIT)" value="http://www.mit.edu/~oshani/data/ontology.n3"/>
     			</menupopup>
   			</menulist>
         	
@@ -98,24 +98,41 @@
     </description>
  
    <spacer style="height: 10px"/>
+ 
+  	<groupbox orient="vertical">
       
     	<label value="Store the generated policy here:"/>
           <textbox id="store_location" type="autocomplete" autocompletesearch="history" value="http://dig.csail.mit.edu/2008/webdav/policy.n3"/>
 
 	  	<hbox>
     	    <spacer flex="1"/>
-        	<button label="Store Policy" oncommand="store()"/>
+        	<button label="Store" oncommand="store()"/>
+        	<spacer flex="1"/>
+        	<button label="View" oncommand="view()"/>
         	<spacer flex="1"/>
   		</hbox>        
  
+  	</groupbox>
+ 
     <spacer style="height: 10px"/>
 
-	<label value="Select the log file:"/>
-   	<menulist id="log">
-    	<menupopup>
-    		<menuitem label="University (MIT) logs" value="http://www.mit.edu/~oshani/data/university.n3"/>
-    	</menupopup>
-  	</menulist>
+  	<groupbox orient="vertical">
+  
+		<label value="Select the log file:"/>
+	
+	  	<hbox>
+		   	<menulist id="log">
+		    	<menupopup>
+		    		<menuitem label="University (MIT) log" value="http://www.mit.edu/~oshani/data/log.n3"/>
+		    	</menupopup>
+		  	</menulist>
+			<spacer flex="1"/>
+		    <button label="Fetch Log" oncommand="fetchLog()"/>
+	    	<spacer flex="1"/>
+		</hbox>        
+
+  	</groupbox>
+      
         	
     
   <spacer style="height: 10px"/>
