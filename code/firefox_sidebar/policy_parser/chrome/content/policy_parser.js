@@ -1,6 +1,12 @@
 //////////////////////////////
 // UI Specific Functions
 
+function viewOnt()
+{
+	ont = document.getElementById("domain").value;
+	content.window.location.replace(ont,true); 
+}
+
 function predefined()
 {
 	if (document.getElementById("sentence_pref").value == "0")
@@ -17,6 +23,13 @@ function predefined()
 	}
 }
 
+function createProgressBar(){
+	const XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+	var item = document.createElementNS(XUL_NS, "progressmeter"); 
+	item.setAttribute("mode", "undetermined");
+    return item;  
+}
+
 /////////////////////////////
 
 
@@ -30,6 +43,11 @@ function sendRequest(request, url)
 {
 	try 
 	{
+		//Progress Bar magic :)
+		var progressBox = document.getElementById("progressBox"); 
+        var progressBar = createProgressBar(); 
+        progressBox.appendChild(progressBar);
+
 		request.open("GET", url, true);
 		request.onreadystatechange = update;
 		request.send(null);
@@ -76,8 +94,15 @@ function update()
   if (request1.readyState == 4) {
     if (request1.status == 200) {
 		var response = request1.responseText;
+		                    
+		//Remove the progress bar
+        var element = document.getElementById("progressBox");
+        while(element.hasChildNodes())
+		{
+			element.removeChild(element.firstChild);
+        }
     } 
 	else 
-      alert("Error! Something is wrong.");
+      alert("Error! Something is wrong with the request.");
   } 
 }
