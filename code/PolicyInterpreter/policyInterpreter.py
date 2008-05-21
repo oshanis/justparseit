@@ -54,6 +54,9 @@ def processAppExpression(appExp):
     left = appExp.first
     right = appExp.second
 
+#    print "left:" + left.__str__()
+#    print "right:" + right.__str__()
+
     # exp = ((cat X) Y)
     if isApplication(left):
         
@@ -86,6 +89,8 @@ def processAppExpression(appExp):
     to a particular policy constituent
 """
 def traverseExpression(exp):
+    
+    #print "exp:" + exp.__str__()
     
     if isApplication(exp):  
         result = processAppExpression(exp)
@@ -123,16 +128,15 @@ def interpretSingleCondition(cond, policy_dict):
     left = cond.first
     right = cond.second
     
-    if isVariable(right) and isApplication(left):
+    if isApplication(left):
         left_left = left.first
         left_right = left.second
-        if isVariable(left_left) and isVariable(left_right):
-            subject = matchTokenInDict(left_right.name(), policy_dict)
-            predicate = matchTokenInDict(left_left.name(),policy_dict)
-            object = matchTokenInDict(right.name(), policy_dict)
-            result = Cond(subject, predicate, object)
-        else:
-            raise InvalidExpressionError(cond)            
+        
+        subject = matchTokenInDict(traverseExpression(left_right), policy_dict)
+        predicate = matchTokenInDict(traverseExpression(left_left),policy_dict)
+        object = matchTokenInDict(traverseExpression(right), policy_dict)
+        
+        result = Cond(subject, predicate, object)
     else:
         raise InvalidExpressionError(cond)
 
@@ -199,6 +203,7 @@ def interpretPolicy(tree):
     policy_dict = {}
     
     for key in CFG2RDF_DICT:
+   
         if (key == 'condition'):
             # skip conditions for now
             continue
@@ -214,6 +219,7 @@ def interpretPolicy(tree):
         Conditions should be parsed as the last,
         because they depend on the previous entries in the dictionary
     """
+  
     value = traverseConditions(node['condition'], policy_dict)
     policy_dict[CFG2RDF_DICT['condition']] = value
        

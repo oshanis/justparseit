@@ -81,6 +81,7 @@ def parsePolicy(policy_name, policy_sentence):
         print ""
         print "Policy Parser Error: Could not interpret this policy!" 
         print "You are probably entering words that are not a part of the lexicon."
+        print e.value().__str__()
         return None
   
     return policy_dict
@@ -97,7 +98,7 @@ def runPolicyParser():
    
     policy_dict = parsePolicy(policy_name, policy_sentence)
     rdf = constructPolicy(policy_dict, domain)
-     
+    
     print ""
     print "The Policy Parser has generated the following RDF:"
     print rdf
