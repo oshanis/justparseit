@@ -1,6 +1,12 @@
 var request2= Util.XMLHTTPFactory(); //for the reasoner
 var request3= Util.XMLHTTPFactory(); //for the log
-var logData = null;
+var logData = "";
+
+function viewLog()
+{
+	var log = document.getElementById("log").value;
+	content.window.location.replace(log, true);
+}
 
 function fetchLog()
 {
@@ -21,18 +27,20 @@ function reasoner()
 {
 	var policyData = request1.responseText;
 
+	if (logData == "")
+	{
+		alert("Please select the log from the drop down box and hit 'Fetch Log'");
+	}
+	if (policyData == "")
+	{
+		alert("Policy generation has failed!");
+	}
 	if (logData != "" && policyData != "")
 	{
 		var url = "http://mr-burns.w3.org/cgi-bin/server_cgi.py";
 		var params = "log=" + escape(logData) +"&policy=" + escape(policyData);
 		sendReasonerRequest(url,params);
-//		content.window.document.replace(url,true);
 	}
-	else
-	{
-		alert("Please give the log and the policy!");
-	}
-
 }
 
 function sendReasonerRequest(url,params) 
