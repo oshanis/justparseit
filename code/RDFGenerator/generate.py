@@ -13,13 +13,6 @@ sys.path.append("../rdflib")
 	
 from policyParser import *
 
-# Configure how we want rdflib logger to log messages
-_logger = logging.getLogger("rdflib")
-_logger.setLevel(logging.DEBUG)
-_hdlr = logging.StreamHandler()
-_hdlr.setFormatter(logging.Formatter('%(name)s %(levelname)s: %(message)s'))
-_logger.addHandler(_hdlr)
-
 from rdflib.Graph import Graph
 from rdflib import URIRef, Literal, BNode, Namespace
 from rdflib import RDF

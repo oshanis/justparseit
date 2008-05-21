@@ -8,7 +8,6 @@ def main():
     domain = "../data/ontology.n3"
     
     dict = parseNL(name, sentence)
-    print dict
     returnString = constructPolicy(dict, domain)
     
     print returnString
