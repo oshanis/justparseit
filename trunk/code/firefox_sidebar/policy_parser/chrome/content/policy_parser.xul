@@ -29,12 +29,15 @@
         	<spacer style="height: 10px"/>
             
             <label value="Domain:"/>
-        	<menulist id="domain">
-    			<menupopup>
-      				<menuitem label="University (MIT)" value="http://www.mit.edu/~oshani/data/ontology.n3"/>
-    			</menupopup>
-  			</menulist>
-        	
+            <hbox>
+        		<menulist id="domain">
+    				<menupopup>
+      					<menuitem label="University (MIT)" value="http://www.mit.edu/~oshani/data/ontology.n3"/>
+    				</menupopup>
+  				</menulist>
+            	<button label="View" oncommand="viewOnt()"/>
+    			<spacer style="height: 10px"/>
+   	    	</hbox>
 		</vbox>
 	</groupbox> 
 
@@ -82,6 +85,8 @@
         <button label="Parse" oncommand="run()"/>
         <spacer flex="1"/>
   	</hbox>        
+    
+    <vbox id="progressBox"></vbox>
     
     </groupbox> 
         
@@ -141,8 +146,6 @@
         <spacer flex="1"/>
   </hbox>        
 
-    <vbox id="progressBox">
-    </vbox>
     
     </groupbox> 
     
