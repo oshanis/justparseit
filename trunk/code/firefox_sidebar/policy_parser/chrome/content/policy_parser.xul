@@ -32,7 +32,7 @@
             <hbox>
         		<menulist id="domain">
     				<menupopup>
-      					<menuitem label="University (MIT)" value="http://www.mit.edu/~oshani/data/log.n3"/>
+      					<menuitem label="University (MIT)" value="http://www.mit.edu/~oshani/data/ontology.n3"/>
     				</menupopup>
   				</menulist>
             	<button label="View" oncommand="viewOnt()"/>
