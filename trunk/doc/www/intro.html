@@ -1,139 +1,135 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2" />
-<title>6.863 Project: Policy Parser</title>
-<link rel="stylesheet" type="text/css" href="style.css" />
-</head>
-<body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2" />
+<title>6.863 Project: Policy Parser</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+
+	<!-- Begin Wrapper -->
+	
+		<div id="wrapper">
+		
+		<!-- Begin Header -->
+			
+			<div id="header">
+				<h1>Policy Parser</h1>
+				<h2>6.863 Spring 2008 Project</h2>		 
+			</div>
+			
+		<!-- End Header -->
+			
+		<!-- Begin Strap -->
+		
+        <div id="strap">
+<b>Policy Parser</b> &raquo; Intro</div>
+		
+		<!-- End Strap -->
+		 
+		<!-- Begin Navigation -->
+		
+		<div id="navigation">
+			<ul id="menu">
+				<li><a href="index.html">Home</a></li>
+				<li><a href="#">Intro</a></li>
+			    <li><a href="try.html">Try It Now!</a></li>
+	            <li><a href="implementation.html">Implementation</a></li>
+                <li><a href="results.html">Results</a></li>	            <li><a href="future.html">Future Directions</a></li>
+	            <li><a href="download.html">Download Code</a></li>
+ 			 	<li><a href="members.html">Members</a></li>
+			</ul>
+		</div>
+		
+		<!-- End Navigation -->
+		 
+		<!-- Begin Content-->
+
+		<div id="content">
+		    <h2> What is the Policy Parser?</h2>
+			<br />
+			<p> Lawyers work with law-enforcement policies.  
+              Lawyers make policies, and also determine, given a scenario and a set of policies, whether a particular 
+              sequence of events in this scenario violates one or more of the given policies. 
+              Enforcing policies can be a challenging and error-prone process, 
+              as the number of policies gets larger
+              or the scenario itself becomes more complex. In some cases, for example enforcing privacy policies governing access to data on the internet, manual enforcement of policies is particularly inefficient. Fortunately,
+              some parts of the policy enforcement process
+              are purely deductive reasoning, and therefore,
+              can be automated by a computer. Thanks to 
+              recent advancements in knowledge-based reasoning, 
+              there now exist systems that can assist in 
+              this process; 
+              the <a href="http://dig.csail.mit.edu/TAMI/2007/AIR/">
+                AIR ("Accountability in RDF") Reasoner</a> 
+              is one of such systems. 
+            </p><br />
+            <p>  AIR taken in as input policies and scenarios expressed in RDF and determines whether or not the given scenario violates any of the given policies. RDF (Resournce Description Framework) is a data model proposed by the WWWW consortium as a major mechanixm of information exchange throughout the web. AIR can be used for automatically enforcing policies (for example data access policies) without manual intervention. One of the current barriers to wide spread use of
+              AIR is that it requires the user (person who specifies the policies; often a lawyer) of the system to be
+              accomplished in coding in RDF.
+              
+              
+             
+              Although RDF is
+              a well-known, portable language, it is likely that most laywers will not be well versed in its use. 
+              Even for someone who
+              is an expert in RDF, translating a natural language
+              policy into RDF can be tedious and time-consuming. It thus becomes difficult to create and update policies that can be enforced automatically.
+            </p><br />
+            <p>  As a first step towards addressing these challenges, we have built the
+              <b>Policy Parser</b>, which takes a policy, written in constrained natural
+              language, and automatically translates it into its RDF representation.
+              A high-level architecture of our system is shown
+              in the following: 
+            </p><br />
+            <div style="text-align: center;">
+              <img height=70% width=70% src="images/architecture.png">
+            </div><br />
+            <p> The user enters a policy sentence into our
+            system using a web interface - available 
+              <a href="try.html">here</a> (Step 1). The sentence is then
+              parsed using a feature-based context-free grammar (FCFG) which extracts semantic information of interest from the input natural language policy. This parsing system is built on top of 
+              the NLTK system [1] and the feature parsing library (featureparse). 
+	      The semantic information contained in the natural language sentence is recorded in the features of the parse tree.  In Step 3,  
+              the Policy Interpreter then further processes and analyzes this semantic information about the
+              policy (e.g. the actor who is responsible for a
+              particular action) contained in the features of the parse tree and bundles it up into a suitable form, which is then. 
+              passed to the RDF Generator. The RDF generator generates an RDF
+              file that corresponds to this policy and stores it in 
+              a persistent location (URI) on the web (Steps 4 & 5). 
+              The user can immediately (or at any
+              later convenient time) check the compliance/violation of 
+              the policy by providing the URI and a particular scenario to the
+              AIR reasoner (Steps 6 - 8), which is executible 
+              directly from the web. 
+            </p><br />
+            <p>
+              A more detailed description of each component can be found in
+              the <a href="implementation.html">Implementation
+              page</a>. If you want to experience the Policy Parser, click 
+              <a href="try.html">Try It Now!</a>
+            </p>                        <br />			<br />			<h3>References:</h3>			<br />			
+           <p>
+             [1] Steve Bird and Edward Loper. NLTK: The Natural
+             Language Toolkit. <i>Proceedings of the ACL demonstration
+             session</i>. pp 214-217, Barcelona, Association for
+             Computational Lingusitics, July 2004.
+            </p>
+	    </div>
+		
+		<!-- End Content -->
+		
+		<!-- Start Footer -->
+		
+		<div id="footer">
 
-	<!-- Begin Wrapper -->
-	
-		<div id="wrapper">
-		
-		<!-- Begin Header -->
-			
-			<div id="header">
-				<h1>Policy Parser</h1>
-				<h2>6.863 Spring 2008 Project</h2>		 
-			</div>
-			
-		<!-- End Header -->
-			
-		<!-- Begin Strap -->
-		
-        <div id="strap">
-<b>Policy Parser</b> &raquo; Intro</div>
-		
-		<!-- End Strap -->
-		 
-		<!-- Begin Navigation -->
-		
-		<div id="navigation">
-			<ul id="menu">
-				<li><a href="index.html">Home</a></li>
-				<li><a href="#">Intro</a></li>
-			    <li><a href="try.html">Try It Now!</a></li>
-	            <li><a href="implementation.html">Implementation</a></li>
-                <li><a href="results.html">Results</a></li>
-	            <li><a href="future.html">Future Directions</a></li>
-	            <li><a href="download.html">Download Code</a></li>
- 			 	<li><a href="members.html">Members</a></li>
-			</ul>
-		</div>
-		
-		<!-- End Navigation -->
-		 
-		<!-- Begin Content-->
-
-		<div id="content">
-		    <h2> What is the Policy Parser?</h2>
-			<br />
-			<p> Lawyers work with law-enforcement policies.  
-              Given a scenario and a set of policies, one of 
-              their main tasks is to determine whether a particular 
-              sequence of events in this scenario
-			  violates one or more give policies. 
-              This can prove to be a challenging and error-prone process, 
-              as the number of policies gets larger
-              or the scenario itself becomes more complex.  Fortunately,
-              some parts of
-              this task involve purely deductive reasoning, and therefore,
-              can be automated by a computer. Thanks to 
-              recent advancements in knowledge-based reasoning, 
-              there now exist systems that can assist lawyers in 
-              this process; 
-              the <a href="http://dig.csail.mit.edu/TAMI/2007/AIR/">
-                AIR ("Accountability in RDF") Reasoner</a> 
-              is one of such systems. 
-            </p><br />
-            <p>  One of the current barriers to a wide spread of
-              AIR is that it requires the user of the system to be
-              knowledgeable about a specialized computer language.
-              The input language to AIR is in
-              Resource Description Framework (RDF), a data model
-              proposed by the WWW consortium as a major mechanism of
-              information exchange throughout the web. Although RDF is
-              a well-known, portable language, many laywers are still not
-              familiar with it. When faced with the task of
-              learning RDF, many of them are likely to turn away and seek
-              for a tool that is easier to use. Even for someone who
-              is an expert in RDF, translating a natural language
-              policy into RDF can be tedious and time-consuming. 
-            </p><br />
-            <p>  In order to solve these challenges, we have built the
-              <b>Policy Parser</b>, which takes a policy, written in natural
-              language, and automatically translates it into an RDF
-              format. A high-level architecture of our system is shown
-              in the following: 
-            </p><br />
-            <div style="text-align: center;">
-              <img height=70% width=70% src="images/architecture.png">
-            </div><br />
-            <p> Our user enters a policy sentence into our
-            system using a web interface - available 
-              <a href="try.html">here</a> (Step 1). The sentence is then
-              parsed into a feature-based context-free grammar (FCFG) using
-              the NLTK system [1]. In Step 3,  
-              the Policy Interpreter extracts semantic information about the
-              policy (e.g. the actor who is responsible for a
-              particular action) from the CFG. This information is
-              passed to the RDF Generator, which then generates an RDF
-              file that corresponds to this policy and stores it in 
-              a persistent location (URI) on the web (Steps 4 & 5). 
-              The user can immediately (or at any
-              later convenient time) check the compliance/violation of 
-              the policy by providing the URI and a particular scenario to the
-              AIR reasoner (Steps 6 - 8), which is executible 
-              directly from the web. 
-            </p><br />
-            <p>
-              A more detailed description of each component can be found in
-              the <a href="implementation.html">Implementation
-              page</a>. If you want to experience the Policy Parser, click 
-              <a href="try.html">Try It Now!</a>
-            </p><br />
-           <p>
-             [1] Steve Bird and Edward Loper. NLTK: The Natural
-             Language Toolkit. <i>Proceedings of the ACL demonstration
-             session</i>. pp 214-217, Barcelona, Association for
-             Computational Lingusitics, July 2004.
-            </p>
-	    </div>
-		
-		<!-- End Content -->
-		
-		<!-- Start Footer -->
-		
-		<div id="footer">
-			<p>&copy; 2008 Kasture Ltd. All right Reserved.</p>
-		</div>
-		
-		<!-- End Footer -->
-		 
-    </div>
-	
-    <!-- End Wrapper -->
-	
-</body>
-</html>
+		</div>
+		
+		<!-- End Footer -->
+		 
+    </div>
+	
+    <!-- End Wrapper -->
+	
+</body>
+</html>
