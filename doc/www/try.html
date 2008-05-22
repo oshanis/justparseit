@@ -109,7 +109,7 @@
 				
 		<div style="text-align: center;">
         	<img src="images/policy_output_tab.png" width="100%" alt="Policy Parser Output"/>
-            <p>Figure 5: Policy Parser Output in Tabulator</p><br/>
+            <p>Figure 3: Policy Parser Output in Tabulator</p><br/>
         </div>
 
 		<br/>
@@ -120,7 +120,7 @@
 
 		<div style="text-align: center;">
         	<img src="images/policy_output_normal.png" alt="Policy Parser Output"/>
-            <p>Figure 5: Policy Parser Output if Tabulator is not installed</p><br/>
+            <p>Figure 4: Policy Parser Output if Tabulator is not installed</p><br/>
         </div>
 
 		<br/>
@@ -129,18 +129,39 @@
 		<div>Now that you have generated the AIR policy you could make it persistant by either storing it in your local file system, or somewhere on the World Wide Web.
 		For demonstration purposes, we have chosen to save it in a WebDAV space so that it will be universally accessible through a Universal Resource Identifier.
 		If you have your own WebDav space, please feel free to enter it in the text box underneath "Store the generated policy here: ". By default this text box 
-		contains the value <code>http://dig.csail.mit.edu/2008/webdav/policy.n3</code>. You could enter a new name instead of "policy.n3" and click the "Store Policy"
-		button. When storing the policy it will ask for some authorization. You can try out this feature by using the temperory username "policyparser" and password
+		contains the value:<br/> <code>http://dig.csail.mit.edu/2008/webdav/policy.n3</code>. 
+		<br/>
+		You could enter a new name instead of "policy.n3" and click the "Store Policy"
+		button. When storing the policy it will ask for authorization. You can try out this feature by using the temperory username "policyparser" and password
 		"policyparser". Once you have clicked the "Store Policy" you could view the policy in it's new storgae location by clicking the "View Policy" button.</div>
 
 		<br/>
 		
-		<div></div>
+		<div>If you are interested, you can see how this generated policy may be reasoned over a log file (which includes a set of facts) by the AIR reasoner.
+		For this particular demo, you would have to select a log file from the drop down box, and press the "Fetch Log" button. If you wish to see the contents
+		of the log file, you have to click the "View Log" button. Once you have cicked it you should be able to see the following:</div>
 		
-		<p></p><br/>
+		<br/>
+
+		<div style="text-align: center;">
+        	<img src="images/log.png" alt="Sample Log File"/>
+            <p>Figure 5: Sample Log File</p><br/>
+        </div>
+
+		<br/>
 		
-		<p></p><br/>
+		<div>If you have performed all the steps above, you are all set to invoke the AIR reasoner. Click the "Run Reasoner" button and you should be able to get 
+		the following output:</div>
+
+		<br/>
 		
+		<a name="fig6">
+		<div style="text-align: center;">
+        	<img src="images/current_output.png" alt="Current Output from the AIR reasoner"/>
+            <p>Figure 6: Current Output from the AIR reasoner</p><br/>
+        </div>
+		</a>
+		<br/>
 		
 		</div>
 		
@@ -149,7 +170,6 @@
 		<!-- Start Footer -->
 		
 		<div id="footer">
-			<p>&copy; 2008 Kasture Ltd. All right Reserved.</p>
 		</div>
 		
 		<!-- End Footer -->
