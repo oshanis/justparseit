@@ -90,14 +90,33 @@
 		
 		<br/>
 		
-		<div>When inputing a sentence, the user has two options. Select from pre-defined sentences displayed in the drop-down box (which are guaranteed to work) OR input a 
+		<div>When inputing a sentence, the user has two options. He/she can select from pre-defined sentences displayed in the drop-down box (which are guaranteed to work) OR input a 
 		sentence manually by looking at the sentence format.</div>
 		
 		<br/>
 		
-		<div></div>
+		<div>Once a name is given to the policy, a domain ontology is selected, and a sentence is specified, the user can press the "parse" button. This will invoke
+		the python Policy Parser web service hosted at <a href="http://scripts.mit.edu/~oshani/justparseit/code/server/run.py">http://scripts.mit.edu/~oshani/justparseit/code/server/run.py</a>
+		with the corresponding parameters. Please note that there could be a slight delay in seeing the actual result (so please be patient!). Once the result
+		is sent back to the browser you would be able to see the following: </div>
+
+		<br/>
+				
+		<div style="text-align: center;">
+        	<img src="images/output.png" alt="Policy Parser Output"/>
+            <p>Figure 3: Policy Parser Output</p><br/>
+        </div>
+
+		<br/>
 		
-		<div></div>
+		<div>Now that you have generated the AIR policy you could make it persistant by either storing it in your local file system, or somewhere on the web.
+		For demonstration purposes, we have chosen to save it in a WebDAV space so that it will be universally accessible through a Universal Resource Identifier.
+		If you have your own WebDav space, please feel free to enter it in the text box underneath "Store the generated policy here: ". By default this text box 
+		contains the value <code>http://dig.csail.mit.edu/2008/webdav/policy.n3</code>. You could enter a new name instead of "policy.n3" and click the "Store Policy"
+		button. When storing the policy it will ask for some authorization. You can try out this feature by using the temperory username "policyparser" and password
+		"policyparser". Once you have clicked the "Store Policy" you could view the policy in it's new storgae location by clicking the "View Policy" button.</div>
+
+		<br/>
 		
 		<div></div>
 		
