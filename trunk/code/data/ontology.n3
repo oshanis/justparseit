@@ -102,5 +102,3 @@
 
 :evidence a rdf:Property;
 	rdfs:domain :CoDallegation.
-
-#ends
