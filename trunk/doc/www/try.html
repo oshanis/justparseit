@@ -63,6 +63,9 @@
 		<br/>
 		
 		<h3>Optional Pre-requisite:</h3>
+		
+		<br/>
+		
 		<div>Please install <a href="http://dig.csail.mit.edu/2007/tab/release/tabulator-0-8-3.xpi">Tabulator Firefox Extension</a>. This is not 
 		<strong>required</strong> for the "Policy Parser" to work. However, it would render 
 		the output rdf/n3 nicely on the browser itself. The absence of the Tabulator extension will make you download the generated file, and you will have to open
@@ -71,6 +74,8 @@
 		<br/>
 		
 		<h3>Using the Policy Editor Sidebar:</h3>
+		
+		<br/>
 		
 		<div>
 		First of all the user will have to specify a name for the policy that he/she intends to create. This name could be something like "MIT Prox Card Data Policy"
@@ -98,18 +103,30 @@
 		<div>Once a name is given to the policy, a domain ontology is selected, and a sentence is specified, the user can press the "parse" button. This will invoke
 		the python Policy Parser web service hosted at <a href="http://scripts.mit.edu/~oshani/justparseit/code/server/run.py">http://scripts.mit.edu/~oshani/justparseit/code/server/run.py</a>
 		with the corresponding parameters. Please note that there could be a slight delay in seeing the actual result (so please be patient!). Once the result
-		is sent back to the browser you would be able to see the following: </div>
+		is sent back to the browser, provided that you have installed Tabulator you would be able to see the following: </div>
 
 		<br/>
 				
 		<div style="text-align: center;">
-        	<img src="images/output.png" alt="Policy Parser Output"/>
-            <p>Figure 3: Policy Parser Output</p><br/>
+        	<img src="images/policy_output_tab.png" width="100%" alt="Policy Parser Output"/>
+            <p>Figure 5: Policy Parser Output in Tabulator</p><br/>
         </div>
 
 		<br/>
+
+		<div>If you do not have Tabulator installed, you would be asked to download a file. Once you open that file, you could see the generated AIR policy similar
+		to the following:</div>
+		<br/>
+
+		<div style="text-align: center;">
+        	<img src="images/policy_output_normal.png" alt="Policy Parser Output"/>
+            <p>Figure 5: Policy Parser Output if Tabulator is not installed</p><br/>
+        </div>
+
+		<br/>
+
 		
-		<div>Now that you have generated the AIR policy you could make it persistant by either storing it in your local file system, or somewhere on the web.
+		<div>Now that you have generated the AIR policy you could make it persistant by either storing it in your local file system, or somewhere on the World Wide Web.
 		For demonstration purposes, we have chosen to save it in a WebDAV space so that it will be universally accessible through a Universal Resource Identifier.
 		If you have your own WebDav space, please feel free to enter it in the text box underneath "Store the generated policy here: ". By default this text box 
 		contains the value <code>http://dig.csail.mit.edu/2008/webdav/policy.n3</code>. You could enter a new name instead of "policy.n3" and click the "Store Policy"
