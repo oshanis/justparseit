@@ -48,142 +48,127 @@
 
 		<div id="content">
 		    <h2> Implementation of the Policy Parser</h2>
-			<br />
+			<br>
 			<p> As briefly described in
 			the <a href="intro.html">Intro</a> section, the Policy
-              Parser consists of three major components: the NLTK
-			  Parser, the Policy Interpreter, and the RDF
-			  Generator.  The system also
+              Parser consists of three major components: the 
+			  Parser, which uses a feature-based context free grammar to extract semntic information of interest, the Policy Interpreter, which analyzes and processes the semantic information, and the RDF
+			  Generator, which generates the corresponding policy in the RDF format.  The system also
 			  includes the online RDF policy store as well as the AIR
 			  reasoner, but these can be considered peripheral to the
 			  above three components.  In this section, we will describe each
 			  of these components in detail. Before we dive
-			  into the detail, we first define the scope
+			  into the details, we first define the scope
 			  of our project with respect to the types of user input that
-			  the Policy Parser is capable of handling.
-            </p><br />
-            <p><b>Assumptions on User Input</b>:</p><br />
-            <p>Automatically parsing <i>any</i> natural
+			  the Policy Parser is designed to handle. 
+            </p><br>
+            <p><b>Assumptions on User Input</b>:</p><br>
+            <p>Automatically parsing an arbitrary natural
               language sentence is an extremely challenging task, and
-              is out of scope of this project. Thus, we focus on a set
-              of <i>constrained</i> natural language sentences; more
-              specfiically, our system is able to accept a sentence
-              of the following form:
-            </p><br />
+              is beyond the scope of this project. Thus, we focus on a constrained set
+              of natural language sentence forms. Past research has shown that constrained natural language can be effectively used for automatically generating policies, and that unconstrained natural language gives significantly poorer results [1], [2].  More
+              specfiically, our system assumes a specific structure for a natural language policy which is as follows:
+            </p><br>
             <p>
-              <tt>subject [mod] action object ['to' secondary_object] 
-                ['for' purpose] [condition]*</tt>
-            </p><br /> 
+              <tt>subject mod action [object] [secondary_object] 
+                [purpose] [condition]*</tt>
+            </p><br> 
             <p>
               where the meanings of the constituents are the following:
-              <ul id="panel">
+              </p><ul id="panel">
                 <li> <tt>subject</tt>: The main actor or entity who
-                carries out an action (e.g. "A student")
-                <li> <tt>mod</tt>: An optional modality for an action
-                (e.g. "can" or "cannot")
-                <li> <tt>action</tt>: The action performed by the
-                subject (e.g "transfer")
-                <li> <tt>object</tt>: The object on which the action
-                is performed (e.g. "a proximity card")
-                <li> <tt>secondary object</tt>: an optional object
-                that modifies the action (e.g. "to another person") 
-                <li> <tt>purpose</tt>: an optional purpose for which the
-                action is performed (e.g. "for building access")
-                <li> <tt>condition</tt>: any optional condition on the
-                action performed (e.g. "if the student is not authorized")
-              </ul>
-            </p><br /> 
+                carries out an action 
+                </li><li> <tt>mod</tt>: The modality of the rule (i.e., whether the subject is allowed or disallowed to perform the specified action under the specified constraints, expressed using words such as "can", "cannot" etc.)
+                </li><li> <tt>action</tt>: The action performed by the
+                subject 
+                </li><li> <tt>object</tt>: The object on which the action
+                is performed (when "action" is a transitive verb)
+                </li><li> <tt>secondary object</tt>: the secondary object for the action (applicable only if "action" is a ditransitive verb)
+                </li><li> <tt>purpose</tt>: an (optional) purpose for which the
+                action is performed
+                </li><li> <tt>condition</tt>: an (optional) condition (or set of conditions) on the under which the rule is applicable
+              </li></ul>
+            <br><p> 
+For example, consider the sentence "Police may search people's homes for criminal investigation if the police have a warrant". Here, we have the following key value pairs:
+	   </p> <br>
+            <ul id="panel">
+<li> subject: police
+</li><li> mod: yes
+</li><li> action: search
+</li><li> object: people's homes
+</li><li> secondary_object: <i>none</i>
+</li><li> purpose: criminal investigation
+</li><li> condition: police have a warrant
+</li></ul>
+<br>
+
             <p>
               Each sentence corresponds to a <i>single</i> policy. 
               The constituents between '[' and ']' are optional; therefore, an
               input sentence must consist of, at minimum, 
-              a subject, an action, and
-              an object. Also, '*' means "one or more";
-              thus, a policy may consist of any number of
-              conditions.
-            </p><br />
-            <p>
-              For example, the following sentence is a
-              valid input policy to the Policy Parser:
-            </p><br />
-            <p>
-              <b>Committee on Discipline may access prox card data
-              for criminal investigation. </b>
-            </p><br />
-            <p>
-              where:
-              <ul id="panel">
-                <li> the subject is <b>"Committee on Discipline"</b>;
-                <li> the modality is the auxiliary verb <b>"may"</b>;
-                <li> the object is <b>"prox card data"</b>;
-                <li> the purpose is <b>"criminal investigation"</b>; and
-                <li> the secondary object and the condition are none.
-              </ul>
-            </p><br />             
-            <p><b>NTLK Parser</b>:</p><br />
-            <p> Given a user's input policy, 
-              the first step is to parse this sentence into a
-              structured format that is manipulable by a
-              computer. We use a <i>feature-based</i> context-free grammar
-              (FCFG). Unlike an ordinary CFG, a FCFG embellishes 
-              its production rules with extra attributes to denote
-              each tree node having a set of properties. For example,
-              the above sentence "Committee on Discipline may access
-              prox card data for criminal investigation" is parsed
+              a subject, an action
+              and the modality of the rule. Also, '*' means "one or more";
+              thus, a policy may consist of any number of conditions.
+</p><br>
+<p><b>NTLK Parser</b>:</p><br>
+<p>
+Given a user's input policy, the first step is to parse this sentence into a strucutred frmat that can be manipulated further by a computer. As stated earlier, we do this usine FCFGs. 
+              Each of the constituents of a policy statement (subject, action etc.) are further composed of simpler constituents such as noun phrases (NPs), verb phrases (VPs) etc. The permissible forms for each constituent as well as its subparts, and the relation of a node's semantic value with that of its children is specified by the FCFG. 
+
+The start node of the FCFG (S) has a feature corresponding to each of the constituents (subject, action etc.) mentioned above.
+Since we are interested in the semantic interpretation of the natural language policy, we use the <i>sem</i> feature to record semantic values and propagate them up the parse tree by combining the semantic values of a node's children [7]. The values of features like <i>subject, action, object etc. </i> are derived from the values of the sem features of various constituents. Since we assume a rather constrained form of input, we are able to develop a simple grammar that parses sentences of the form described above and is able to infer the semantic role of a word in the sentences from its position in the parse tree relative to other constituents. In particular, we don't have to worry about many complications that arise in unconstrained natural language with quantifiers. 
+</p><br>
+
+<p>
+The words recognized by the system and their categories (N,V etc.) are included in a lexicon file. Spelling changes for words in the lexicon are handled by a kimmo rule (yaml) file. We have thus modularized our implementation so that the feature-based CFG is decoupled from the lexicon and the spelling rule changes. Also, the lexicon and the spelling change rules allow us to do some clever things, for example, the two sentence snippets "...for criminal investigation..." and "...to investigate crime..." lead to the same value for the feature <i>purpose</i> (purpose = (investigate crime)). This gives the user of the system some freedom in expressing a policy. This is particularly important in light of the way the AIR policy associates sentence fragments with predefined ontologies (as explained in the section on the <b>RDF Generator</b>). This and other such techniques may be used to make the system more flexible. 
+</p><br>
+
+
+              For example, the sentence above, "Police may search people's homes for criminal investigation if the police have a warrant" is parsed
               into the following syntax tree: 
-            </p><br />
+            </p><br>
             <p>
-              (A syntax tree goes here)
-            </p><br />
+ 		<br/>
+
+		<div style="text-align: center;">
+        	<a href="images/example_parse_tree.png" target="_blank"><img src="images/example_parse_tree.png" width="100%" alt="Example Parse Tree"/></a>
+            <p>Figure 1: Example Parse Tree (click on the image to enlarge; image will be displayed in another window)</p><br/>
+        </div>
+           </p><br>
             <p>
               As shown in this tree, the left-hand side of 
               the top-level production rule 'S' contains a
-              feature for each of the constituents (e.g. for example, 
+              feature for each of the semantic constituents (e.g. for example, 
               the feature "action" for the action constituent in the
-              policy). The value assigned to each top-level feature 
+              policy) for the natural language rule. The value assigned to each top-level feature 
               is defined in terms of features from the subtrees. Note
               that the l.h.s. of each part-of-speech rule 
               (e.g. 'NP' for noun-phrase) is augmented with the 'sem'
               feature; this allows us to assign a logical expression
-              to each node in the tree. Here, we use the application
+              to each node in the tree. 
+Here, we use the application
               of the lambda function 'cat' to concatenate one or more lexicons
               into a single constituent.  
-            </p><br />
+            </p><br>
             <p>
-              There are two benefits to this feauture-based
-              approach over an ordinary CFG-based appraoch.  
-              First of all, by explicitly stating each
-              constituent as a top-level feature, it makes the process
-              of extracting semantic information from a policy a lot
-              eaiser; the Policy Interpreter (the next component in
-              the pipeline) simply needs to walk over
+
+By explicitly defining a top-level feature corresponding to each constituent of interest, the implementation of the Policy Interpreter (the next component in the pipeline) is greatly simplified - it just
+              needs to walk over
               the list of top-level features and map each to a
-              corresponding RDF construct. Secondly, the
-              feature-based approach simplifies the grammar
-              itself. For example, two sentences may be textually 
-              different from each other but semantically, they may represent 
-              the same policy. A FCFG that parses both of these
-              sentences is smaller than
-              a corresponding ordinary CFG, since the semantic
-              information captured in the features allow us to
-              collapse multiple production rules in the CFG into a single
-              rule in the FCFG.
-            </p><br />
+              corresponding RDF construct. 
+            </p><br>
             <p>  
-              We used an existing infrastructure in the Natural
-              Language Toolkit (NLTK) [1] for this part of the Policy
-              Parser.  More specifcially, we adopted the data
-              structure for FCFGs and the feature parser, both of
-              which were available in a NLTK-based library [2], developed
-              by Rob Speer.
+              We make us of the existing infrastructure in the Natural
+              Language Toolkit (NLTK) [3] for this part of the Policy
+              Parser.  More specifcially, we use the featureparser class [4], which in turn is built on top of the Natural Language Toolkit for Python.
               In addition to a user's sentence, 
               the FCFG parser in NLTK requires three arguments; the
               FCFG grammar (stored as a .fcfg file), the spelling
               change rules (a Kimmo file), and the
               lexicon (.lex file). All of these files are available in
               the <a href="download.html">Download Code</a> section. 
-            </p><br />
-            <p><b>Policy Interpreter</b>:</p><br />
+            </p><br>
+            <p><b>Policy Interpreter</b>:</p><br>
             <p> Given a syntax tree generated by the NLTK Parser, the
               role of the Policy Interpreter is to extract the
               semantic information about the user's policy - i.e. the
@@ -197,7 +182,7 @@
               prox (cat card data))' for "prox card data"); this step is
               implemented using a recursive function for traversing an
               expression. 
-            </p><br />
+            </p><br>
             <p>
               The output from the Policy Interpreter is a dictionary
               (i.e. a list of key-value pairs) that maps each
@@ -205,9 +190,9 @@
               tree for the sentence "Committee on Discipline may access
               prox card data for criminal investigation", the Policy
               Interpreter outputs the following dictionary: 
-             </p><br />
+             </p><br>
 			  <table border="0">
-			    <tr>
+			    <tbody><tr>
                   <th align="left">Key</th>
                   <th align="left">Value</th>
                   <th align="left"></th>             
@@ -217,10 +202,10 @@
                   <td><tt>'MIT Prox Card Policy'</tt></td>
                   <td>/* name of the policy */</td>
                 </tr>
-                  <td><tt>'ENTITY'</tt></td>
-                  <td><tt>'Committee on Discipline'&nbsp&nbsp</td>
+                  <tr><td><tt>'ENTITY'</tt></td>
+                  <td><tt>'Committee on Discipline'&nbsp;&nbsp;</tt></td>
                   <td>/* actor */</td>
-                <tr>
+                </tr><tr>
                   <td><tt>'FLAG'</tt></td>
                   <td>True</td>
                   <td>/* modality (True for positive, such as 'can') */</td>
@@ -246,23 +231,23 @@
                   <td></td>
                 </tr>
                 <tr>
-                  <td><tt>'SECONDARY ENTITY'&nbsp&nbsp</td>
+                  <td><tt>'SECONDARY ENTITY'&nbsp;&nbsp;</tt></td>
                   <td>None</td>
                   <td></td>
                 </tr>
-              </table>
-              <br /> 
+              </tbody></table>
+              <br> 
               Note that some of the keys in the dictionary have
               different names than the constituents, but there is a 1-1 
               correspondence between these two sets of names.  The
               renaming was done due to the fact that RDF uses a set of
               pre-designated identifiers for its constructs. 
-            </p><br />   
+            <br>   
             <p>
               The Policy Interpreter has been implemented in Python and
               can be found in the PolicyInterpreter directory of the
               <a href="download.html">downloadble code</a>. 
-            </p><br />
+            </p><br>
               <!-- RDF Generator -->
             
             <p><b>RDF Generator</b>:</p>
@@ -328,7 +313,7 @@ air:rule [
             <br/>
             <div style="text-align: center;">
             <img src="images/rdf_gen.png" width=80% height=80% alt="RDF Generation"/>
-             <p>Figure: Mapping from the sentence fragments to the AIR Policy</p><br/>
+             <p>Figure 2: Mapping from the sentence fragments to the AIR Policy</p><br/>
             </div>
 
             <p>The dictionary element 'POLICY' is used to name 
@@ -362,21 +347,32 @@ air:rule [
               is compliant or not with the policy.</p><br/>
                         
             <!-- End of RDF Generator -->
-            
+			
+			<br />
+			<br />
+			<h3>References:</h3>
+			<br />
+			            
             <p>
-             [1] Steve Bird and Edward Loper. NLTK: The Natural
+	     [1] Carolyne A. Brodie, Clare-Marie N. Karat, John Karat and JinJuan Feng. Usable Security and Privacy: A Case Study of Developing Privacy Management Tools. <i> SOUPS 2005 Symposium on Usable Privacy and Security </i>. ACM, April 2005 <br>
+	     [2] Clare-Marie Karat. SPARCLE (Server Privacy Architecture and Capability Enablement) policy workbench. <a href="http://domino.watson.ibm.com/comm/research.nsf/pages/r.security.innovation2.html"> 
+http://domino.watson.ibm.com/comm/research.nsf/pages/r.security.innovation2.html</a> 
+<br>
+             [3] Steve Bird and Edward Loper. NLTK: The Natural
              Language Toolkit. <i>Proceedings of the ACL demonstration
              session</i>. pp 214-217, Barcelona, Association for
-             Computational Lingusitics, July 2004. <br />
-             [2] Rob Speer. The 6.863 Feature Parsing Library. 
+             Computational Lingusitics, July 2004. <br>
+             [4] Rob Speer. The 6.863 Feature Parsing Library. 
              <a href="http://web.mit.edu/6.863/www/parser">
                http://web.mit.edu/6.863/www/parser</a>
 
                <!-- References for the RDF Generator -->
-			<br/>               
-             [3] RDFLib <a href="http://rdflib.net/">http://rdflib.net/</a><br />
-             [4] Lalana Kagal, Chris Hanson, Daniel Weitzner at al, Decentralized Information Group, CSAIL, MIT. 
-             AIR Policy Language <a href="http://dig.csail.mit.edu/TAMI/2007/AIR/">http://dig.csail.mit.edu/TAMI/2007/AIR/</a><br />
+			<br>               
+             [5] RDFLib <a href="http://rdflib.net/">http://rdflib.net/</a><br>
+             [6] Lalana Kagal, Chris Hanson, Daniel Weitzner at al, Decentralized Information Group, CSAIL, MIT. 
+             AIR Policy Language <a href="http://dig.csail.mit.edu/TAMI/2007/AIR/">http://dig.csail.mit.edu/TAMI/2007/AIR/
+</a><br>
+	     [7] Natural Language Toolkit Book <a href="http://nltk.org/index.php/Book"> http://nltk.org/index.php/Book  </a><br>
             <!-- End of References for the RDF Generator -->
                
 
@@ -389,7 +385,6 @@ air:rule [
 		<!-- Start Footer -->
 		
 		<div id="footer">
-			<p>&copy; 2008 Kasture Ltd. All right Reserved.</p>
 		</div>
 		
 		<!-- End Footer -->
