@@ -48,12 +48,25 @@
 
 		<div id="content">
 		    <h2> Implementation of the Policy Parser</h2>
-			<br>
+			<br/>
+			<div id="panel">
+			<b>
+				<a href="#intro">Introduction</a><br/>
+				<a href="#assumptions">Assumptions on User Input</a><br/>
+				<a href=""></a><br/>
+				<a href=""></a><br/>
+			</b>
+			</div>
+			<hr/>
+			<br/>
+			
+			<a name="intro">Introduction</a><br/><br/>
+			
 			<p> As briefly described in
 			the <a href="intro.html">Intro</a> section, the Policy
               Parser consists of three major components: the 
-			  Parser, which uses a feature-based context free grammar to extract semntic information of interest, the Policy Interpreter, which analyzes and processes the semantic information, and the RDF
-			  Generator, which generates the corresponding policy in the RDF format.  The system also
+			  Parser, which uses a feature-based context free grammar to extract semantic information of interest, the Policy Interpreter, which analyzes and processes the semantic information, and the RDF
+			  Generator, which generates the corresponding AIR policy in the <a href="http://www.w3.org/DesignIssues/Notation3">RDF/N3 format</a>.  The system also
 			  includes the online RDF policy store as well as the AIR
 			  reasoner, but these can be considered peripheral to the
 			  above three components.  In this section, we will describe each
@@ -62,11 +75,12 @@
 			  of our project with respect to the types of user input that
 			  the Policy Parser is designed to handle. 
             </p><br>
-            <p><b>Assumptions on User Input</b>:</p><br>
+            <p><b><a name="assumptions">Assumptions on User Input</a></b>:</p><br>
             <p>Automatically parsing an arbitrary natural
               language sentence is an extremely challenging task, and
               is beyond the scope of this project. Thus, we focus on a constrained set
-              of natural language sentence forms. Past research has shown that constrained natural language can be effectively used for automatically generating policies, and that unconstrained natural language gives significantly poorer results [1], [2].  More
+              of natural language sentence forms. Past research has shown that constrained natural language can be effectively used for automatically generating policies, and that unconstrained natural language 
+              gives significantly poorer results <a href="#1">[1]</a>, <a href="#2">[2]</a>.  More
               specfiically, our system assumes a specific structure for a natural language policy which is as follows:
             </p><br>
             <p>
@@ -354,25 +368,26 @@ air:rule [
 			<br />
 			            
             <p>
-	     [1] Carolyne A. Brodie, Clare-Marie N. Karat, John Karat and JinJuan Feng. Usable Security and Privacy: A Case Study of Developing Privacy Management Tools. <i> SOUPS 2005 Symposium on Usable Privacy and Security </i>. ACM, April 2005 <br>
-	     [2] Clare-Marie Karat. SPARCLE (Server Privacy Architecture and Capability Enablement) policy workbench. <a href="http://domino.watson.ibm.com/comm/research.nsf/pages/r.security.innovation2.html"> 
-http://domino.watson.ibm.com/comm/research.nsf/pages/r.security.innovation2.html</a> 
+	     <a name="1">[1]</a> Carolyne A. Brodie, Clare-Marie N. Karat, John Karat and JinJuan Feng. Usable Security and Privacy: 
+	     A Case Study of Developing Privacy Management Tools. <i> SOUPS 2005 Symposium on Usable Privacy and Security </i>. ACM, April 2005 <br>
+	     <a name="2">[2]</a> Clare-Marie Karat. SPARCLE (Server Privacy Architecture and Capability Enablement) policy workbench. <a href="http://domino.watson.ibm.com/comm/research.nsf/pages/r.security.innovation2.html"> 
+http://domino.watson.ibm.com/comm/research.nsf/pages/r.security.innovation2.html</a>
 <br>
-             [3] Steve Bird and Edward Loper. NLTK: The Natural
+             <a name="3">[3]</a> Steve Bird and Edward Loper. NLTK: The Natural
              Language Toolkit. <i>Proceedings of the ACL demonstration
              session</i>. pp 214-217, Barcelona, Association for
              Computational Lingusitics, July 2004. <br>
-             [4] Rob Speer. The 6.863 Feature Parsing Library. 
+             <a name="4">[4]</a> Rob Speer. The 6.863 Feature Parsing Library. 
              <a href="http://web.mit.edu/6.863/www/parser">
                http://web.mit.edu/6.863/www/parser</a>
 
                <!-- References for the RDF Generator -->
 			<br>               
-             [5] RDFLib <a href="http://rdflib.net/">http://rdflib.net/</a><br>
-             [6] Lalana Kagal, Chris Hanson, Daniel Weitzner at al, Decentralized Information Group, CSAIL, MIT. 
+             <a name="5">[5]</a> RDFLib <a href="http://rdflib.net/">http://rdflib.net/</a><br>
+             <a name="6">[6]</a> Lalana Kagal, Chris Hanson, Daniel Weitzner at al, Decentralized Information Group, CSAIL, MIT. 
              AIR Policy Language <a href="http://dig.csail.mit.edu/TAMI/2007/AIR/">http://dig.csail.mit.edu/TAMI/2007/AIR/
 </a><br>
-	     [7] Natural Language Toolkit Book <a href="http://nltk.org/index.php/Book"> http://nltk.org/index.php/Book  </a><br>
+	     <a name="7">[7]</a> Natural Language Toolkit Book <a href="http://nltk.org/index.php/Book"> http://nltk.org/index.php/Book  </a><br>
             <!-- End of References for the RDF Generator -->
                
 
