@@ -48,12 +48,12 @@
 		<div id="content">
 		    <h2> What is the Policy Parser?</h2>
 			<br />
-			<p> Lawyers work with law-enforcement policies.  
-              Lawyers make policies, and also determine, given a scenario and a set of policies, whether a particular 
+			<p> Lawyers work with law-enforcement policies all the time.  
+              They also determine given a scenario and a set of policies, whether a particular 
               sequence of events in this scenario violates one or more of the given policies. 
               Enforcing policies can be a challenging and error-prone process, 
               as the number of policies gets larger
-              or the scenario itself becomes more complex. In some cases, for example enforcing privacy policies governing access to data on the internet, manual enforcement of policies is particularly inefficient. Fortunately,
+              or the scenario itself becomes more complex. In some cases, for example enforcing privacy policies governing access to data on the               World Wide Web, manual enforcement of policies is particularly inefficient. Fortunately,
               some parts of the policy enforcement process
               are purely deductive reasoning, and therefore,
               can be automated by a computer. Thanks to 
@@ -61,39 +61,33 @@
               there now exist systems that can assist in 
               this process; 
               the <a href="http://dig.csail.mit.edu/TAMI/2007/AIR/">
-                AIR ("Accountability in RDF") Reasoner</a> 
+                AIR ("Accountability in RDF") Reasoner</a> [1]
               is one of such systems. 
             </p><br />
-            <p>  AIR taken in as input policies and scenarios expressed in RDF and determines whether or not the given scenario violates any of the given policies. RDF (Resournce Description Framework) is a data model proposed by the WWWW consortium as a major mechanixm of information exchange throughout the web. AIR can be used for automatically enforcing policies (for example data access policies) without manual intervention. One of the current barriers to wide spread use of
-              AIR is that it requires the user (person who specifies the policies; often a lawyer) of the system to be
-              accomplished in coding in RDF.
-              
-              
-             
-              Although RDF is
-              a well-known, portable language, it is likely that most laywers will not be well versed in its use. 
+            <p>  The AIR reasoner takes input policies and scenarios expressed in RDF and determines whether or not the given scenario violates             any of the given policies. RDF (Resource Description Framework) is a data model proposed by the WWW Consortium as a major mechanism of             data exchange on the web. AIR can be used for automatically enforcing policies (for example data access policies) without manual intervention.                         </p><br />            <p>            One of the current barriers to wide spread use of AIR is that it requires the user (person who specifies the policies; often a lawyer) of the             system to write the AIR policies in RDF. Although RDF is
+              a well-known, portable language, it is likely that most lawyers will not be well versed in its use. 
               Even for someone who
               is an expert in RDF, translating a natural language
-              policy into RDF can be tedious and time-consuming. It thus becomes difficult to create and update policies that can be enforced automatically.
+              policy into RDF can be tedious and a time-consuming task. It thus becomes difficult to create and update policies that can be enforced automatically.
             </p><br />
             <p>  As a first step towards addressing these challenges, we have built the
               <b>Policy Parser</b>, which takes a policy, written in constrained natural
               language, and automatically translates it into its RDF representation.
               A high-level architecture of our system is shown
-              in the following: 
+              in the following diagram: 
             </p><br />
             <div style="text-align: center;">
               <img height=70% width=70% src="images/architecture.png">
             </div><br />
             <p> The user enters a policy sentence into our
-            system using a web interface - available 
+            system which is a Firefox sidebar extension available 
               <a href="try.html">here</a> (Step 1). The sentence is then
               parsed using a feature-based context-free grammar (FCFG) which extracts semantic information of interest from the input natural language policy. This parsing system is built on top of 
-              the NLTK system [1] and the feature parsing library (featureparse). 
+              the NLTK system [2] and the <a href="http://web.mit.edu/6.863/www/parser">feature parsing library (featureparse)</a> [3]. 
 	      The semantic information contained in the natural language sentence is recorded in the features of the parse tree.  In Step 3,  
               the Policy Interpreter then further processes and analyzes this semantic information about the
               policy (e.g. the actor who is responsible for a
-              particular action) contained in the features of the parse tree and bundles it up into a suitable form, which is then. 
+              particular action) contained in the features of the parse tree and bundles it up into a suitable form, which is then
               passed to the RDF Generator. The RDF generator generates an RDF
               file that corresponds to this policy and stores it in 
               a persistent location (URI) on the web (Steps 4 & 5). 
@@ -108,14 +102,13 @@
               the <a href="implementation.html">Implementation
               page</a>. If you want to experience the Policy Parser, click 
               <a href="try.html">Try It Now!</a>
-            </p>                        <br />			<br />			<h3>References:</h3>			<br />			
-           <p>
-             [1] Steve Bird and Edward Loper. NLTK: The Natural
+            </p>                        <br />			<br />			<h3>References:</h3>			<br />			           <p>           [1] AIR (Accountability in RDF). <a href="http://dig.csail.mit.edu/TAMI/2007/AIR/">http://dig.csail.mit.edu/TAMI/2007/AIR/</a>           </p>           			<br />			           <p>		
+             [2] Steve Bird and Edward Loper. NLTK: The Natural
              Language Toolkit. <i>Proceedings of the ACL demonstration
              session</i>. pp 214-217, Barcelona, Association for
              Computational Lingusitics, July 2004.
-            </p>
-	    </div>
+            </p>			<br />			           <p>		    		[3] Rob Speer. The 6.863 Feature Parsing Library.  <a href="http://web.mit.edu/6.863/www/parser">http://web.mit.edu/6.863/www/parser</a>. 
+	    </p>	    </div>
 		
 		<!-- End Content -->
 		
