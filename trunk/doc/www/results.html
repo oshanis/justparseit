@@ -23,7 +23,7 @@
 		<!-- Begin Strap -->
 		
         <div id="strap">
-<b>Policy Parser</b> &raquo; Results</div>
+          <b>Policy Parser</b> &raquo; Results</div>
 		
 		<!-- End Strap -->
 		 
@@ -47,34 +47,117 @@
 		<!-- Begin Content-->
 
 		<div id="content">
-		    <h2> Welcome to the Policy Parser!</h2>
+		    <h2> Results</h2>
 			<br />
-			<p> This is the home page of the Policy Parser, the
-				final project for 6.863 Spring 2008.  The purpose of
-				our project is to build a system for parsing
-				law-enforcement policies, which are written in natural 
-              language, into a data
-				model called Resource Description Framework (RDF).
-				Once a policy is transformed into RDF, the user of our 
-              system can ask whether a particular sequence of events in a
-				scenario adheres to or violates the policy.  
-            </p>
-			<br />
+		    <p>We have fully implemented the Policy Parser and 
+              deployed it on the web. The following is a list of
+              example sentences from which our system is able to 
+              successfully generate RDFs:
+            </p><br />
             <p>
-              The project team consists of: 
-              <br />
-              <br /> Harshad Kasture (harshad@mit.edu)
-              <br /> Oshani Seneviratne (oshani@mit.edu)
-              <br /> Eunsuk Kang (eskang@mit.edu)
+              <ul id="panel">
+                <li> Police may search people's homes if police have people's permission
+                <li> MIT may use prox card data for criminal investigation
+                <li> MIT students can not transfer prox cards to another student
+                <li> A person may access data on the private mit domain if the person has permission for that data
+                <li> A service provider may not use phone records to deny service to a customer
+                <li> TSA can transfer data to the FBI if the data is associated with terrorism
+                <li> Anyone can access data in the possession of the
+                state of massachusetts
               </ul>
-            </p>
-                <br />
-	        <p> Select <a style="text-decoration:none" href="#">Intro</a> on the left-hand menu to find more
-				about the project. If you feel adventurous, click 
-              <a style="text-decoration:none" href="#">Try It Now!</a> to play with the online
-              Policy Parser.
-	        </p>
-	    </div>
+            </p><br />
+            <p>
+              This represents only a small subset of all sentences
+              that our system is able to handle. For example, since
+              our underlying CFG uses spelling change automata, it can
+              successfully parse all sentences with variations that
+              are recognized by these automata - for example, adding
+              "s" to pluralize a noun or recognizing that 1st-person
+              and 3rd-person verbs with the same root. In addition,
+              by using the features in the CFG, the system is able to
+              interpret whether two different sentences have the same
+              meaning.  For example, the following two sentences
+              result in the generation of the same RDF:
+            </p><br />
+            <p>
+              <ul id="panel">
+                <li> MIT can give records to FBI to investigate crimes.
+                <li> MIT can give FBI records for criminal investigations.
+                 </ul>
+            </p><br />
+            <p>
+              The capacity of the Parser 
+              depends on three parameters.  The first is 
+              the FCFG (available <a href="data/grammar.fcfg">here</a>), 
+              which determines the structure of
+              sentences that the Parser is able to parse. As discussed in
+              the <a href="implementation.html">Implementation</a>
+              page, the current FCFG 
+              recognizes the sentences of the form
+            </p><br />
+            <p>
+            <tt>subject [mod] action object ['to' secondary_object] 
+              ['for' purpose] [condition]*</tt>
+            </p><br />
+            <p>
+            The second parameter is
+            the <a href="data/sample.lex">lexicon</a> 
+            and the <a href="data/gazdar.kimmo.yaml">spelling
+            change rules</a>, both of which are used by the FCFG as 
+            terminals. Technically, the number of sentences that are
+            recognized by the FCFG is infinite, since the grammar is
+            recursive (for example, it can parse sentences with an
+            arbitrary number of repetitive propositional phrases such
+            as "Committee on Discipline on Discipline on
+            Discipline..."). However, only a finite subset of this
+            infinite set contains meaningful sentences, so the
+            capacity of our system cannot be judged purely by the
+            number of sentences that it parses.
+             </p><br />
+            <p>
+            The third parameter that determines the capacity of the
+            Policy Parser is the set of domain ontologies (combined
+            into a  <a href="data/ontology.n3">single file</a>), 
+            which act as vocabularies during RDF
+            generation. Therefore, even if the system is able to parse (NLTK
+            parser) and interpret (Policy Interpreter) an input
+            policy, it cannot
+            generate a corresponding RDF if the constituents of the
+            policy cannot be mapped to corresponding components of an
+            ontology. 
+            </p><br />
+            <p>
+              All these three parameters together define the
+              limitation of our system, but this also means that each
+              of them can be extended in order to make the system more
+              flexible. For example, the FCFG can be modified to
+              handle a wider variety of sentence structures; the
+              lexicon can be expanded; and new ontologies can be added
+              generate more RDFs.  These possible future extensions
+              are discussed more thoroughly in the
+              <a href="future.html">Future Directions</a> section.
+            </p><br />
+            <p>
+            Another limitation of our system is that it cannot relate
+            pronouns to its corresponding noun phrase. For example,
+            the sentence 
+            </p><br />
+            <p>
+              <b>A student can access data on the private MIT domain if
+              she has the permission for that data</b>
+            </p><br />
+            <p>
+            is rejected by the Policy Parser; to correct this, the
+            user must replace <b>"she"</b> in the <b>"if"</b> 
+            condition phrase with
+            <b>"the student"</b>. In this particular case, it would have been
+            possible to infer that the pronoun "she" actually refers
+            to "the student", but in some other cases, such inferences
+            can run into ambiguities that must be resolved - this is
+            out of the scope of this project, but is considered 
+            a possible future extension.  
+            </p><br />
+       </div>
 		
 		<!-- End Content -->
 		
