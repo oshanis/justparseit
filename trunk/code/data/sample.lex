@@ -72,7 +72,7 @@ V_ROOT:
  give	AfterVerb	V[sem = <give>, so = true]
 
 V_SUFFIX:
- +ion End N[]
+ +ion AfterNoun	N[]
  +s   End   V[]
  +ed  End   V[]
  +ed  End   ADJ[]
