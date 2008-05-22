@@ -30,6 +30,16 @@ function createProgressBar(){
     return item;  
 }
 
+function removeProgressBar()
+{
+	var element = document.getElementById("progressBox");
+    while(element.hasChildNodes())
+	{
+		element.removeChild(element.firstChild);
+    }
+
+}
+
 /////////////////////////////
 
 
@@ -94,15 +104,13 @@ function update()
   if (request1.readyState == 4) {
     if (request1.status == 200) {
 		var response = request1.responseText;
-		                    
-		//Remove the progress bar
-        var element = document.getElementById("progressBox");
-        while(element.hasChildNodes())
-		{
-			element.removeChild(element.firstChild);
-        }
+		removeProgressBar();                    
     } 
-	else 
-      alert("Error! Something is wrong with the request.");
+	else
+	{
+	  removeProgressBar();
+      alert("Error! Cannot parse sentence.");
+	  content.window.location.replace("about:blank",true);
+	}
   } 
 }
