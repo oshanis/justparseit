@@ -84,13 +84,14 @@ def parsePolicy(policy_name, policy_sentence):
         return None
   
     return policy_dict
- 
+
 """
     The main method for the policy parser
 """    
 def runPolicyParser():
  
-    domain = "http://www.mit.edu/~oshani/data/university.n3"
+    domain = "../data/ontology.n3"
+        #"http://www.mit.edu/~oshani/data/university.n3"
    
     policy_name = raw_input("Enter the name of a policy: ")
     policy_sentence = raw_input("Enter the sentence for the policy: ")
