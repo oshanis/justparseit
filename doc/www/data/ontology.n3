@@ -1,0 +1,106 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://mit.edu/oshani/data/ontology#> .
+
+:MIT a rdfs:Class;
+	rdfs:label "mit";
+	rdfs:comment "This class should denote someone who has authority to carry out a disciplinary hearing" .
+
+:CriminalInvestigation a rdfs:Class;
+	rdfs:label "crime investigate" ;
+	rdfs:comment "This class should denote someone who has authority to carry out a disciplinary hearing" .
+	
+:has a rdfs:Property;
+	rdfs:label "has";
+	rdfs:comment "indicates the property of having something" .
+	
+:Authorization a rdfs:Class;
+	rdfs:label "authorization";
+	rdfs:comment "having authority" .
+	 
+:MITIndividual a rdfs:Class;
+	rdfs:label "MIT Individual class";
+	rdfs:comment "Anyone who works in/attends MIT".
+
+:Student rdfs:subClassOf :MITIndividual;
+	rdfs:label "Student class";
+	rdfs:comment "People who study at MIT".
+
+:registeredFor a rdf:Property;
+	rdfs:label "registeredFor property of Student class";
+	rdfs:range :Course;
+	rdfs:domain :Student;
+	rdfs:comment "student who has registered for a course".
+
+:TA rdfs:subClassOf :Student;
+	rdfs:label "Teaching Assistant class".
+
+:Professor rdfs:subClassOf :Staff;
+	rdfs:label "Professor class";
+	rdfs:comment "Professor class".
+
+:Course a rdfs:Class;
+	rdfs:label "Course class";
+	rdfs:comment "A course being taught".
+
+:teaches a rdf:Property;
+	rdfs:label "teaches property";
+	rdfs:domain :Professor;
+	rdfs:range :Course;
+	rdfs:comment "A professor teaches a course".
+
+:helpsTeach a rdf:Property;
+	rdfs:label "helpsTeach property of TA class";
+	rdfs:domain :TA;
+	rdfs:range :Course;
+	rdfs:comment "A TA helps a professor teache a course".
+
+:ProxCard a rdfs:Class;
+	rdfs:label "prox card data";
+	rdfs:comment "Every MIT person has a prox card for entering and using the MIT premises".
+
+:hasCard a rdf:Property;
+	rdfs:label "hasCard property of MIT individual";
+	rdfs:domain :MITIndividual;
+	rdfs:range :ProxCard;
+	rdfs:comment "Every MIT person has a prox card for entering and using the MIT premises".
+
+:ProxCardEvent a rdfs:Class;
+	rdfs:label "Prox Card Event Class";
+	rdfs:comment "Use of prox card".
+
+:usedDateTime a rdf:Property;
+	rdfs:label "usedDateTime property of ProxCardEvent";
+	rdfs:domain :ProxCardEvent;
+	rdfs:range xsd:dateTime; # e.g. 2007-07-01T10:30:00-5:00
+	rdfs:comment "Date & time when prox card was used".
+
+:location a rdf:Property;
+	rdfs:label "location property of ProxCardEvent";
+	rdfs:domain :ProxCardEvent;
+	rdfs:comment "Location where prox card was used".
+
+:card a rdf:Property;
+	rdfs:label "card property of ProxCardEvent";
+	rdfs:domain :ProxCardEvent;
+	rdfs:comment "the prox card that was used".
+
+:CoDAllegation a rdf:Class.
+
+:filedBy a rdf:Property;
+	rdfs:domain :CoDAllegation;
+	rdfs:range :MITIndividual.
+
+:against a rdf:Property;
+	rdfs:domain :CoDAllegation;
+	rdfs:range :MITIndividual.
+
+:for a rdf:Property;
+	rdfs:domain :CoDAllegation.
+
+:evidence a rdf:Property;
+	rdfs:domain :CoDallegation.
+
+#ends
