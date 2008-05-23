@@ -1,0 +1,45 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://people.csail.mit.edu/oshani/ontologies/federal#> .
+
+:Record a rdfs:Class;
+	rdfs:label "record".
+
+:Person a rdfs:Class;
+	rdfs:label "person".
+
+:FBI a rdfs:Class;
+	rdfs:label "fbi" .
+
+:Police a rdfs:Class;
+	rdfs:label "police" .	
+
+:ServiceProvider a rdfs:Class;
+	rdfs:label "service provider" .	
+
+:PhoneRecord a rdfs:Class;
+	rdfs:label "phone record" .	
+
+:TSA a rdfs:Class;
+	rdfs:label "tsa" .
+	
+:ServiceDenial a rdfs:Class;
+	rdfs:label "deny service to customer" .
+	
+:Home a rdfs:Class;
+	rdfs:label "people home" .
+
+:Permission a rdfs:Class;
+	rdfs:label "people's permission" ;
+	rdfs:label "people permission" .
+
+:TerroristActivity a rdfs:Class;
+	rdfs:label "associate with terrorism" .
+	
+:is a rdf:Property;
+	rdfs:label "is".
+	
+:have a rdf:Property;
+	rdfs:label "have".
