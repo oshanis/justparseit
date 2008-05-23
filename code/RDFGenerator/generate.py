@@ -152,7 +152,16 @@ def constructPolicy(dict, domain):
 		""" Add things to the pattern only if the sentence does not return null for each of the corresponding components"""
 		if dict['ACTION'] == "use":
 			pattern_1.add((BASE["U"], RDF.type, AIR["UseEvent"]))
-		#elif: @todo: what else should be there?
+		elif dict['ACTION'] == "give": 
+			pattern_1.add((BASE["U"], RDF.type, AIR["GiveEvent"]))
+		elif dict['ACTION'] == "search": 
+			pattern_1.add((BASE["U"], RDF.type, AIR["SearchEvent"]))
+		elif dict['ACTION'] == "access": 
+			pattern_1.add((BASE["U"], RDF.type, AIR["AccessEvent"]))
+		elif dict['ACTION'] == "transfer": 
+			pattern_1.add((BASE["U"], RDF.type, AIR["TransferEvent"]))
+		else:
+			pattern_1.add((BASE["U"], RDF.type, AIR["OtherEvent"]))
 		
 		if dict['ENTITY'] != None:
 			entity_match = getMatch(dict['ENTITY'],domain)
