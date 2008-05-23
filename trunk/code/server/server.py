@@ -17,6 +17,7 @@ def main():
     #domain = "../data/federal.n3"
     #domain = "../data/state.n3"
     
+    dict = parseNL(name, sentence)
     returnString = constructPolicy(dict, domain)
     
     print returnString
