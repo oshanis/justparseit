@@ -12,7 +12,7 @@ from policyInterpreter import *
 from generate import *
 
 GRAMMAR_FILE = 'file:../data/grammar.fcfg'
-KIMMO_FILE = '../data/gazdar.kimmo.yaml'
+KIMMO_FILE = '../data/parser.kimmo.yaml'
 
 """
     Given multiple syntax trees from an input sentence, pick the one
