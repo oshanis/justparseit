@@ -126,9 +126,9 @@
 	  	<hbox>
 		   	<menulist id="log">
 		    	<menupopup>
-		    		<menuitem label="University (MIT) log" value="http://people.csail.mit.edu/oshani/ontologies/log.n3"/>
-		    		<menuitem label="State (MA) log" value="http://people.csail.mit.edu/oshani/ontologies/log.n3"/>
-		    		<menuitem label="Federal (USA) log" value="http://people.csail.mit.edu/oshani/ontologies/log.n3"/>
+		    		<menuitem label="University (MIT) log" value="http://people.csail.mit.edu/oshani/ontologies/MIT_log.n3"/>
+		    		<menuitem label="State (MA) log" value="http://people.csail.mit.edu/oshani/ontologies/MA_log.n3"/>
+		    		<menuitem label="Federal (USA) log" value="http://people.csail.mit.edu/oshani/ontologies/USA_log.n3"/>
 		    	</menupopup>
 		  	</menulist>
 			<spacer flex="1"/>
