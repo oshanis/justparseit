@@ -32,7 +32,9 @@
             <hbox>
         		<menulist id="domain">
     				<menupopup>
-      					<menuitem label="University (MIT)" value="http://www.mit.edu/~oshani/data/ontology.n3"/>
+      					<menuitem label="University (MIT)" value="http://people.csail.mit.edu/oshani/ontologies/university.n3"/>
+      					<menuitem label="State (MA)" value="http://people.csail.mit.edu/oshani/ontologies/state.n3"/>
+      					<menuitem label="Federal (USA)" value="http://people.csail.mit.edu/oshani/ontologies/federal.n3"/>
     				</menupopup>
   				</menulist>
             	<button label="View" oncommand="viewOnt()"/>
@@ -62,6 +64,8 @@
     			<menupopup>
       				<menuitem label="MIT can use prox card data for criminal investigation" value="MIT can use prox card data for criminal investigation"/>
       				<menuitem label="MIT may use prox card data for criminal investigation" value="MIT may use prox card data for criminal investigation"/>
+      				<menuitem label="MIT can give records to FBI to investigate crimes" value="MIT can give records to FBI to investigate crimes"/>
+      				<menuitem label="MIT can give FBI records for criminal investigations" value="MIT can give FBI records for criminal investigations"/>
       				<menuitem label="MIT students can not transfer prox cards to another student" value="MIT students can not transfer prox cards to another student"/>
       				<menuitem label="Police may search people's homes if police have people's permission" value="Police may search people's homes if police have people's permission"/>
       				<menuitem label="A person may access data on the private mit domain if the person has permission for that data" value="A person may access data on the private mit domain if the person has permission for that data"/>
@@ -122,7 +126,9 @@
 	  	<hbox>
 		   	<menulist id="log">
 		    	<menupopup>
-		    		<menuitem label="University (MIT) log" value="http://mit.edu/oshani/www/data/log.n3"/>
+		    		<menuitem label="University (MIT) log" value="http://people.csail.mit.edu/oshani/ontologies/log.n3"/>
+		    		<menuitem label="State (MA) log" value="http://people.csail.mit.edu/oshani/ontologies/log.n3"/>
+		    		<menuitem label="Federal (USA) log" value="http://people.csail.mit.edu/oshani/ontologies/log.n3"/>
 		    	</menupopup>
 		  	</menulist>
 			<spacer flex="1"/>
