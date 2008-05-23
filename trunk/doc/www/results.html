@@ -1,177 +1,154 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2" />
-<title>6.863 Project: Policy Parser</title>
-<link rel="stylesheet" type="text/css" href="style.css" />
-</head>
-<body>
-
-	<!-- Begin Wrapper -->
-	
-		<div id="wrapper">
-		
-		<!-- Begin Header -->
-			
-			<div id="header">
-				<h1>Policy Parser</h1>
-				<h2>6.863 Spring 2008 Project</h2>		 
-			</div>
-			
-		<!-- End Header -->
-			
-		<!-- Begin Strap -->
-		
-        <div id="strap">
-          <b>Policy Parser</b> &raquo; Results</div>
-		
-		<!-- End Strap -->
-		 
-		<!-- Begin Navigation -->
-		
-		<div id="navigation">
-			<ul id="menu">
-				<li><a href="index.html">Home</a></li>
-				<li><a href="intro.html">Intro</a></li>
-			    <li><a href="try.html">Try It Now!</a></li>
-                <li><a href="implementation.html">Implementation</a></li>
-                <li><a href="#">Results</a></li>
-	            <li><a href="future.html">Future Directions</a></li>
-	            <li><a href="download.html">Download Code</a></li>
- 			 	<li><a href="members.html">Members</a></li>
-			</ul>
-		</div>
-		
-		<!-- End Navigation -->
-		 
-		<!-- Begin Content-->
-
-		<div id="content">
-		    <h2> Results</h2>
-			<br />
-		    <p>We have fully implemented the Policy Parser which parses constrained natural language sentences into AIR policies and deployed it as a Firefox
-		    Sidebar extension. The following is a list of
-              example sentences from which our system is able to 
-              successfully generate AIR policies:
-            </p><br />
-            <p>
-              <ul id="panel">
-                <li> MIT may use prox card data for criminal investigations</li>
-                <li> MIT students can not transfer prox cards to another student</li>
-                <li> A person may access data on the private mit domain if the person has permission for that data</li>
-                <li> A service provider may not use phone records to deny service to a customer</li>
-                <li> TSA can transfer data to the FBI if the data is associated with terrorism</li>
-                <li> Anyone can access data in the possession of the
-                state of Massachusetts</li>
-                <li> Police may search people's homes if police have people's permission</li> 
-                
-              </ul>
-            </p><br />
-            <p>
-              This represents only a small subset of all sentences
-              that our system is able to handle. For example, since
-              our underlying CFG uses spelling change automata, it can
-              successfully parse all sentences with variations that
-              are recognized by these automata - for example, adding
-              "s" to pluralize a noun or recognizing that 1st-person
-              and 3rd-person verbs with the same root. In addition,
-              by using the features in the CFG, the system is able to
-              interpret whether two different sentences have the same
-              meaning.  For example, the following two sentences
-              result in the generation of the same AIR policies in RDF:
-            </p><br />
-            <p>
-              <ul id="panel">
-                <li> MIT can give records to FBI to investigate crimes.
-                <li> MIT can give FBI records for criminal investigations.
-                 </ul>
-            </p><br />
-            <p>
-              The capacity of the Parser 
-              depends on three parameters.  The first is 
-              the FCFG (available <a href="data/grammar.fcfg">here</a>), 
-              which determines the structure of
-              sentences that the Parser is able to parse. As discussed in
-              the <a href="implementation.html">Implementation</a>
-              page, the current FCFG 
-              recognizes the sentences of the form
-            </p><br />
-            <p>
-            <tt>subject [mod] action object ['to' secondary_object] 
-              ['for' purpose] [condition]*</tt>
-            </p><br />
-            <p>
-            The second parameter is
-            the <a href="data/sample.lex">lexicon</a> 
-            and the <a href="data/gazdar.kimmo.yaml">spelling
-            change rules</a>, both of which are used by the FCFG as 
-            terminals. Technically, the number of sentences that are
-            recognized by the FCFG is infinite, since the grammar is
-            recursive (for example, it can parse sentences with an
-            arbitrary number of repetitive propositional phrases such
-            as "Committee on Discipline on Discipline on
-            Discipline..."). However, only a finite subset of this
-            infinite set contains meaningful sentences, so the
-            capacity of our system cannot be judged purely by the
-            number of sentences that it parses.
-             </p><br />
-            <p>
-            The third parameter that determines the capacity of the
-            Policy Parser is the set of domain ontologies (combined
-            into a  <a href="data/ontology.n3">single file</a>), 
-            which act as vocabularies during RDF
-            generation. Therefore, even if the system is able to parse (NLTK
-            parser) and interpret (Policy Interpreter) an input
-            policy, it cannot
-            generate a corresponding RDF if the constituents of the
-            policy cannot be mapped to corresponding components of an
-            ontology. 
-            </p><br />
-            <p>
-              All these three parameters together define the
-              limitation of our system, but this also means that each
-              of them can be extended in order to make the system to be more
-              flexible. For example, the FCFG can be modified to
-              handle a wider variety of sentence structures; the
-              lexicon can be expanded; and new ontologies can be added to
-              generate more AIR policies.  These possible future extensions
-              are discussed more thoroughly in the
-              <a href="future.html">Future Directions</a> section.
-            </p><br />
-            <p>
-            Another limitation of our system is that it cannot relate
-            pronouns to its corresponding noun phrase. For example,
-            the sentence 
-            </p><br />
-            <p>
-              <b>A student can access data on the private MIT domain if
-              she has the permission for that data</b>
-            </p><br />
-            <p>
-            is rejected by the Policy Parser; to correct this, the
-            user must replace <b>"she"</b> in the <b>"if"</b> 
-            condition phrase with
-            <b>"the student"</b>. In this particular case, it would have been
-            possible to infer that the pronoun "she" actually refers
-            to "the student", but in some other cases, such inferences
-            can run into ambiguities that must be resolved - this is
-            out of the scope of this project, but is considered 
-            a possible future extension.  
-            </p><br />
-       </div>
-		
-		<!-- End Content -->
-		
-		<!-- Start Footer -->
-		
-		<div id="footer">
-		</div>
-		
-		<!-- End Footer -->
-		 
-    </div>
-	
-    <!-- End Wrapper -->
-	
-</body>
-</html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2" />
+<title>6.863 Project: Policy Parser</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+
+	<!-- Begin Wrapper -->
+	
+		<div id="wrapper">
+		
+		<!-- Begin Header -->
+			
+			<div id="header">
+				<h1>Policy Parser</h1>
+				<h2>6.863 Spring 2008 Project</h2>		 
+			</div>
+			
+		<!-- End Header -->
+			
+		<!-- Begin Strap -->
+		
+        <div id="strap">
+          <b>Policy Parser</b> &raquo; Results</div>
+		
+		<!-- End Strap -->
+		 
+		<!-- Begin Navigation -->
+		
+		<div id="navigation">
+			<ul id="menu">
+				<li><a href="index.html">Home</a></li>
+				<li><a href="intro.html">Intro</a></li>
+			    <li><a href="try.html">Try It Now!</a></li>
+                <li><a href="implementation.html">Implementation</a></li>
+                <li><a href="#">Results</a></li>
+	            <li><a href="future.html">Future Directions</a></li>
+	            <li><a href="download.html">Download Code</a></li>
+ 			 	<li><a href="members.html">Members</a></li>
+			</ul>
+		</div>
+		
+		<!-- End Navigation -->
+		 
+		<!-- Begin Content-->
+
+		<div id="content">
+		    <h2> Results</h2>
+			<br />
+		    <p>We have fully implemented the Policy Parser which parses constrained natural language sentences into AIR policies and deployed it as a Firefox
+		    Sidebar extension. The following is a list of
+              example sentences for which our system is able to 
+              successfully generate AIR policies:
+            </p><br />
+            <p>
+              <ul id="panel">
+                <li> MIT may use prox card data for criminal investigations</li>
+                <li> MIT students can not transfer prox cards to another student</li>
+                <li> A person may access data on the private mit domain if the person has permission for that data</li>
+                <li> A service provider may not use phone records to deny service to a customer</li>
+                <li> TSA can transfer data to the FBI if the data is associated with terrorism</li>
+                <li> Anyone can access data in the possession of the
+                state of Massachusetts</li>
+                <li> Police may search people's homes if the police have people's permission</li> 
+                
+              </ul>
+            </p><br />
+            <p>
+              This represents only a small subset of all sentences
+              that our system is able to handle. For example, since
+              our underlying CFG uses spelling change automata, it can
+              successfully parse all sentences with variations that
+              are recognized by these automata - for example, adding
+              "s" to pluralize a noun or recognizing that 1st-person
+              and 3rd-person verbs with the same root. In addition,
+              the system (in particular the grammar and the lexicon) has been designed such that reasonable variations of a sentence give the same values for the features of interest. 
+              For example, the following two sentences
+              result in the generation of the same AIR policies in RDF:
+            </p><br />
+            <p>
+              <ul id="panel">
+                <li> MIT can give records to FBI to investigate crimes.
+                <li> MIT can give FBI records for criminal investigations.
+                 </ul>
+            </p><br />
+<p>
+Our results indicate that the system does a good job of accurately extracting semantic information from the natural language policies. It is fairly flexible in handling different forms of the input sentence. We were able to parse a variety of natural language policies into AIR policies and use them with the reasoner to check complaince of data logs. Also, while we only consider a constrained set of sentences and do not handle many interesting phenomenon (e.g. wh movement, relating pronouns to appropriate nouns in the sentence, quantifiers etc.), we believe that the system can successfully be extended to address these shortcomings. We did not attempt these more ambitious tasks due to the limited time frame of the project, and our system is only a first step towards the eventual goal of automatically parsing a wide variety of natural language policies.
+</p><br>
+            <p>
+              Three components of the system are central to the performance (generality, accuracy etc.) of the Parser 
+              .  The first is 
+              the FCFG (available <a href="data/grammar.fcfg">here</a>), 
+              which determines the structure of
+              sentences that the Parser is able to parse. As discussed in
+              the <a href="implementation.html">Implementation</a>
+              page, the current FCFG 
+              recognizes the sentences of the form
+            </p><br />
+            <p>
+            <tt>subject [mod] action object [secondary_object] 
+              [for/to purpose] [if condition (and condition)*]</tt>
+            </p><br />
+
+<p>
+The FCFG also determines the structure of each of these components and how they are assigned feature values. The FCFG can be extended to parse additional policy templates.  
+</p><br>
+            <p>
+            The second vital component is
+            the <a href="data/parser.lex">lexicon</a> 
+            and the <a href="data/parser.kimmo.yaml">spelling
+            change rules</a>, both of which together provide the terminals used in the FCFG. As mentioned before, this allows one to parse a wider variety of sentences by simply modifying the lexicon and/or the spelling change rules while using the same grammar. (Note: The lexicon does not, at the moment, recognize any words with capital words: all recognized words use lower case letters only)
+             </p><br />
+            <p>
+            The third component that determines the capacity of the
+            Policy Parser is the set of domain ontologies (combined
+            into a  <a href="data/ontology.n3">single file</a>), 
+            which act as vocabularies during RDF
+            generation. Therefore, even if the system is able to parse (NLTK
+            parser) and interpret (Policy Interpreter) an input
+            policy, it cannot
+            generate a corresponding RDF if the constituents of the
+            policy cannot be mapped to corresponding components of an
+            ontology. However, once all ontologies relevant to a domain (e.g. MIT prox card data access) have been defined, anyone can very easily make new rules or modify existing ones, and it is from this fact that makes such a system valuable.
+            </p><br />
+            <p>
+              All these three parameters together define the
+              limits of what our system can do, and they can be suitably extended
+              to make the system more
+              flexible. For example, the FCFG can be modified to
+              handle a wider variety of sentence structures; the
+              lexicon can be expanded; and new ontologies can be added to
+              generate more AIR policies.  These possible future extensions
+              are discussed more thoroughly in the
+              <a href="future.html">Future Directions</a> section.
+            </p><br />
+       </div>
+		
+		<!-- End Content -->
+		
+		<!-- Start Footer -->
+		
+		<div id="footer">
+		</div>
+		
+		<!-- End Footer -->
+		 
+    </div>
+	
+    <!-- End Wrapper -->
+	
+</body>
+</html>
