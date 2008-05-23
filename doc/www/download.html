@@ -59,13 +59,19 @@
             <ul id="panel">
               <li>data/: contains the FCFG grammar file (.fcfg), the lexicon (.lex), the spelling change rules (.yaml), and the RDF ontology file (.n3).
               <li>featureparse/: the Feature Parsing Library, written by Rob Speer and provided on the 6.863 website.
-              <li>PolicyInterpreter/: Contains the complete Python code for the Policy Interpreter.
+              <li>PolicyInterpreter/: Contains the complete Python
+              code for the Policy Interpreter. The
+              file <tt>policyParser.py</tt> contains the main
+              function for running our system on the command line,
+                and <tt>policyInterpreter.py</tt> contains the
+                algorithms for policy interpretation.
               <li>RDFGenerator/: Contains the complete Python code for
-              the RDF Generator
+              the RDF Generator. The file <tt>generate.py</tt>
+              contains the algorithms for generating the RDF from a policy.
            </ul>
               </p><br />
               <p>
-              Executing the Policy Parser on the command line:
+              <b>Executing the Policy Parser on the command line:</b>
               </p><br />
                 <p>
                   Even though the Policy Parser is available on the web for use, the user may wish you execute it on their own machine. The instructions for running the Policy Parser on the command line is as follows:
