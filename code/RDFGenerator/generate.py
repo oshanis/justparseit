@@ -14,7 +14,7 @@ sys.path.append("../rdflib")
 from policyParser import *
 
 from rdflib.Graph import Graph
-from rdflib import URIRef, Literal, BNode, Namespace
+from rdflib import Literal, BNode, Namespace
 from rdflib import RDF
 
 def parseNL(name, sentence):
@@ -32,21 +32,21 @@ def getVariable(dictVal):
 	"""
 	#Python doesn't support switch?
 	if dictVal == "ENTITY":
-		return "#A"
+		return "A"
 	elif dictVal == "ACTION":
-		return "#U" #Will make the assumption that all the actions are air:useEvent type
+		return "U" #Will make the assumption that all the actions are air:useEvent type
 	elif dictVal == "DATA":
-		return "#D"
+		return "D"
 	elif dictVal == "PURPOSE":
-		return "#P"
+		return "P"
 	elif dictVal == "TRANSFEREE":
-		return "#T"
+		return "T"
 	else:
 		return None
 
 	
 
-def getMatch(term, domain):
+def getMatch(term, domain, ns):
 	"""
 		This is a method for extracting the exact RDF term class for the string fragment from the Sentence parser
 	"""
@@ -57,7 +57,11 @@ def getMatch(term, domain):
 	for row in g.query('select ?a WHERE { ?a rdfs:label "'+ term +'"}',initNs=dict(rdfs=Namespace("http://www.w3.org/2000/01/rdf-schema#"))):
 		matches.append(row[0])
 	if len(matches)>0:	
-		return matches[0] #TODO: what is there are more than 1 match?
+		chopped = matches[0].split("/")
+		val = ns[chopped[len(chopped)-1].split("#")[1]]
+		return val
+		#return matches[0] #TODO: what is there are more than 1 match?
+	
 	else:
 		return None
 	
@@ -109,26 +113,34 @@ def constructPolicy(dict, domain):
 		store = Graph()
 		
 		# Bind a few prefix, namespace pairs.
-		store.bind("air", "http://dig.csail.mit.edu/TAMI/2007/amord/air#")
+		store.namespace_manager.bind("air", "http://dig.csail.mit.edu/TAMI/2007/amord/air#")
 		store.bind("owl", "http://www.w3.org/2002/07/owl#")
-		
+		store.bind("base", "http://dig.csail.mit.edu/2008/webdav/policy#")
+		domain_prefix = "temp"
+		domain_name = "http://example.com/temp#"
 		if domain[-3:] == ".n3": #remove the n3 part and add the #
 			domain_name = domain[:-3] 
 			domain_chopped = domain.split("/")
 			domain_prefix = domain_chopped[len(domain_chopped)-1]
+			domain_prefix = domain_prefix[:-3]
 			domain_name = domain_name + "#"
-			store.bind( domain_prefix , domain_name)
+		#else: what should I do?
+			
+		store.bind( domain_prefix , domain_name)
 		
 		# Create namespace objects
 		AIR = Namespace("http://dig.csail.mit.edu/TAMI/2007/amord/air#")
 		OWL = Namespace("http://www.w3.org/2002/07/owl#")
 		BASE = Namespace("http://dig.csail.mit.edu/2008/webdav/policy#")
+		DOMAIN = Namespace(domain_name)
+		
 		
 		# create the policy
 		p =  dict['POLICY'].replace(" ","_") 
 		#policy = URIRef(p)
 		policy = BASE[p]
 		
+		store.add((policy, AIR["refers-to-doamin"], DOMAIN["about"]))
 		store.add((policy, RDF.type, AIR["Policy"]))
 		store.add((policy, AIR["label"], Literal(dict['POLICY'])))
 		# add the variables
@@ -164,19 +176,19 @@ def constructPolicy(dict, domain):
 			pattern_1.add((BASE["U"], RDF.type, AIR["OtherEvent"]))
 		
 		if dict['ENTITY'] != None:
-			entity_match = getMatch(dict['ENTITY'],domain)
+			entity_match = getMatch(dict['ENTITY'],domain, DOMAIN)
 			pattern_1.add((BASE["U"], AIR["actor"], BASE["A"]))
 			if entity_match != None:
 				pattern_1.add((BASE["A"], RDF.type, entity_match))
 				
 		if dict['DATA'] != None:
-			data_match = getMatch(dict['DATA'], domain)
+			data_match = getMatch(dict['DATA'], domain, DOMAIN)
 			pattern_1.add((BASE["U"], AIR["data"], BASE["D"]))
 			if data_match != None:
 				pattern_1.add((BASE["D"], RDF.type, data_match))
 	
 		if dict['PURPOSE'] != None:
-			purpose_match = getMatch(dict['PURPOSE'], domain)
+			purpose_match = getMatch(dict['PURPOSE'], domain, DOMAIN)
 			pattern_1.add((BASE["U"], AIR["purpose"], BASE["P"]))
 			if purpose_match != None:
 				pattern_1.add((BASE["P"], RDF.type, purpose_match))
@@ -185,7 +197,7 @@ def constructPolicy(dict, domain):
 			if dict['PASSIVE_ENTITY'] != None:
 				""" I think this is not even in the AIR specification 
 				Therefore, @todo: Ask Lalana about this"""
-				transferee_match = getMatch(dict['PASSIVE_ENTITY'], domain)
+				transferee_match = getMatch(dict['PASSIVE_ENTITY'], domain, DOMAIN)
 				pattern_1.add((BASE["A"], AIR["transfer"], BASE["D"]))
 				pattern_1.add((BASE["D"], AIR["transferred-to"], BASE["R"]))
 				if transferee_match != None:
@@ -199,17 +211,17 @@ def constructPolicy(dict, domain):
 			while (conditionCount < totalConditions):
 				#Handle the conditions here
 				if (conditions[conditionCount].subject[0] != '$'):
-					matched_subject = getMatch(conditions[conditionCount].subject, domain)
+					matched_subject = getMatch(conditions[conditionCount].subject, domain, DOMAIN)
 				else:
 					matched_subject = BASE[getVariable(conditions[conditionCount].subject[1:])]
 				
 				if (conditions[conditionCount].predicate[0] != '$'):
-					matched_predicate = getMatch(conditions[conditionCount].predicate, domain)
+					matched_predicate = getMatch(conditions[conditionCount].predicate, domain, DOMAIN)
 				else:
 					matched_predicate = BASE[getVariable(conditions[conditionCount].predicate[1:])]
 				
 				if (conditions[conditionCount].object[0] != '$'):
-					matched_object = getMatch(conditions[conditionCount].object, domain)
+					matched_object = getMatch(conditions[conditionCount].object, domain, DOMAIN)
 				else:
 					matched_object = BASE[getVariable(conditions[conditionCount].object[1:])]
 	
