@@ -13,9 +13,9 @@ def main():
     #sentence = "a service provider may not use phone records to deny service to a customer"
     #sentence = "anyone can access data in the possession of the state of  massachusetts"
     
-    #domain = "../data/university.n3"
-    domain = "../data/federal.n3"
-    #domain = "../data/state.n3"
+    #domain = "http://people.csail.mit.edu/oshani/ontologies/university.n3"
+    domain = "http://people.csail.mit.edu/oshani/ontologies/federal.n3"
+    #domain = "http://people.csail.mit.edu/oshani/ontologies/state.n3"
     
     dict = parseNL(name, sentence)
     returnString = constructPolicy(dict, domain)

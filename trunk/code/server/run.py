@@ -1,5 +1,3 @@
-#!/usr/bin/env /mit/6.863/arch/i386_deb40/bin/python-nlp 
-
 import cgi
 from StringIO import StringIO
 import sys
