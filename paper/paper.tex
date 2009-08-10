@@ -1,0 +1,158 @@
+\documentclass{llncs}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{subfigure}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{floatflt,graphicx}
+\usepackage{epsfig}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{algorithmic}
+\usepackage{paralist}
+\usepackage{alltt} %Verbatim extended
+\usepackage{pifont}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ISWC SWUI Position Paper
+%% See http://swui.webscience.org/SWUI2009
+
+\definecolor{lightblue}{rgb}{.3,.5,1}
+\definecolor{orange}{rgb}{1,.7,0}
+\definecolor{darkorange}{rgb}{1,.4,0}
+\definecolor{darkgreen}{rgb}{0,.4,0}
+\definecolor{darkblue}{rgb}{0,0,.4}
+\definecolor{darkred}{rgb}{.56,0,0}
+\definecolor{gray}{rgb}{.2,.2,.2}
+\definecolor{shadecolor}{gray}{0.7}
+
+\lstset{
+      basicstyle = \scriptsize \ttfamily,%
+      keywordstyle = [1]\color{darkgreen},%
+      stringstyle  = \ttfamily\color{darkred},%
+      commentstyle = \itshape\color{darkblue},%
+      showstringspaces = false,%
+%     fancyvrb = true,%
+      firstnumber = auto, stepnumber=1, numbersep=5pt,%
+      numbers=left, numberstyle=\tiny \ttfamily,
+      frame = shadowbox, frameround = ffff, rulesepcolor = \color{shadecolor},
+      breaklines=true, breakatwhitespace=true,%
+%     prebreak=\textellipsis,postbreak=\textellipsis,%
+      emphstyle = \color{red}\underbar, emphstyle = {[2]\color{blue}\underbar},%
+      extendedchars = true, inputencoding = utf8,%
+%     backgroundcolor=\color{shadecolor},
+      xleftmargin=20pt, xrightmargin=10pt,
+      captionpos = b
+}
+
+
+%% define N3 look and feel
+\lstdefinelanguage{N3}{
+      morekeywords=[1]{@prefix, a },
+      morestring=[b]",
+      morecomment=[s]{<}{>}, % misusing comments for URIrefs
+      otherkeywords={^, [, ], (, )},%
+      %otherkeywords=[2]{<, >},% for URIrefs
+      sensitive=false%
+}[keywords,comments,strings]
+
+\lstset{
+      basicstyle = \scriptsize \ttfamily,%
+      keywordstyle = [1]\bfseries\color{darkgreen},%
+      stringstyle  = \ttfamily\color{darkred},%
+      commentstyle = \itshape\color{darkblue},%
+      showstringspaces = false,%
+%     fancyvrb = true,%
+      firstnumber = auto, stepnumber=1, numbersep=5pt,%
+      numbers=left, numberstyle=\tiny \ttfamily,
+      frame = shadowbox, frameround = ffff, rulesepcolor = \color{shadecolor},
+      breaklines=true, breakatwhitespace=true,%
+%      prebreak=\textellipsis,postbreak=\textellipsis,%
+      emphstyle = \color{red}\underbar, emphstyle = {[2]\color{blue}\underbar},%
+      extendedchars = true, inputencoding = utf8,%
+%     backgroundcolor=\color{shadecolor},
+      xleftmargin=5pt, xrightmargin=2pt,
+      captionpos = b
+}
+
+\begin{document}
+
+\title{Constrained Natural Language Parser for Semantic Web Based Policies}
+
+\author{Oshani Seneviratne \and Eunsuk Kang \and Harshad Kasture}
+
+\institute{MIT CSAIL, Cambridge\\
+Massachusetts, USA\\ 
+\email{( oshani | eskang | harshad )@csail.mit.edu }
+}
+
+\maketitle
+\begin{abstract}
+
+We propose a system which is capable of translating a constrained natural language sentence describing a policy or a rule into the equivalent RDF representation. In our proof of concept implementation we use a template to convert sentences describing a human-readable rule or a policy into a machine-readable policy expressed in the Accountability In RDF (AIR) policy language. The sentences are parsed using a feature-based context-free grammar which extracts semantic information contained in the policy given in natural language to build a parse tree. The information contained in the parse tree are then processed to build the AIR policy. AIR policies are represented as Turtle statements and can be used to express security and privacy constraints in terms of different ontologies.
+
+We present a Firefox sidebar extension as the user interface for this system, and we believe that it provides a natural interface for users for authoring policies in RDF.
+
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Introduction
+
+\section{Introduction}								
+\label{sec:intro}
+
+This paper is organized as follows:
+Section \ref{background} gives the overview of the technologies used and AIR policy language.  
+Section \ref{design} gives a comprehensive description of the overall design and implementation of the system.
+Section \ref{related} discusses the related work in this area.
+Finally, we conclude the paper with a summary of the contributions and some future work in section \ref{conclusion}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Background
+
+\section{Background} \label{background}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Design and Implementation
+
+\section{Design and Implementation} \label{design}
+
+%% NLTK Parser
+
+\subsection{NLTK Parser}
+
+%% Policy Interpreter
+
+\subsection{Policy Interpreter}
+
+%% RDF Generator
+
+\subsection{RDF Generator}
+
+%% Policy Editor (User Interface)
+
+\subsection{Policy Editor}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Related Work
+
+\section{Related Work}					\label{related}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Conclusion
+
+\section{Future Work and Conclusion} \label{conclusion}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Acknowledgements
+
+\section*{Acknowledgements}
+
+
+\bibliographystyle{abbrv}
+\bibliography{paper}
+
+\end{document}
