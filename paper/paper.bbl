@@ -1,5 +1,28 @@
 \newcommand{\noopsort}[1]{} \newcommand{\printfirst}[2]{#1}
   \newcommand{\singleletter}[1]{#1} \newcommand{\switchargs}[2]{#2#1}
-\begin{thebibliography}{}
+\begin{thebibliography}{1}
+
+\bibitem{nltk}
+S.~Bird and E.~Loper.
+\newblock Nltk: The natural language toolkit.
+\newblock In {\em Association for Computational Lingusitics}, July 2004.
+
+\bibitem{karat}
+C.~A. Brodie, C.-M.~N. Karat, J.~Karat, and J.~Feng.
+\newblock Usable security and privacy - a case study of developing privacy
+  management tools.
+\newblock In {\em SOUPS 2005 Symposium on Usable Privacy and Security . ACM},
+  April 2005.
+
+\bibitem{air}
+L.~Kagal, C.~Hanson, and D.~Weitzner.
+\newblock Using dependency tracking to provide explanations for policy
+  management.
+\newblock {\em IEEE Policy 2008}, 2008.
+
+\bibitem{sparcle}
+C.-M. Karat.
+\newblock Sparcle (server privacy architecture and capability enablement)
+  policy workbench.
 
 \end{thebibliography}
