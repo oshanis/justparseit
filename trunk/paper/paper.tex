@@ -90,9 +90,22 @@ Massachusetts, USA\\
 \maketitle
 \begin{abstract}
 
-We propose a system which is capable of translating a constrained natural language sentence describing a policy or a rule into the equivalent RDF representation. In our proof of concept implementation we use a template to convert sentences describing a human-readable rule or a policy into a machine-readable policy expressed in the Accountability In RDF (AIR) policy language. The sentences are parsed using a feature-based context-free grammar which extracts semantic information contained in the policy given in natural language to build a parse tree. The information contained in the parse tree are then processed to build the AIR policy. AIR policies are represented as Turtle statements and can be used to express security and privacy constraints in terms of different ontologies.
+In this paper, we propose the Policy Parser, a system for translating
+policies and rules in a natural language into an equivalent RDF
+representation. The Policy Parser uses
+templates to convert informal but structurally-constrained sentences into 
+machine-readable policies, which are expressed in the
+Accountability In RDF (AIR) policy language. A sentence is parsed
+using a feature-based context-free grammar, which extracts semantic
+information from the sentence to build a corresponding parse tree. The
+information contained in the parse tree is then processed to build
+an AIR policy. AIR policies are represented as Turtle statements and
+can be used to express security and privacy constraints in a variety
+of ontologies.
 
-We present a Firefox sidebar extension as the user interface for this system, and we believe that it provides a natural interface for users for authoring policies in RDF.
+We also present a Firefox sidebar extension as an user interface for this
+system. We believe that it provides a natural interface for authoring
+policies in RDF.
 
 \end{abstract}
 
