@@ -90,20 +90,20 @@ Massachusetts, USA\\
 \maketitle
 \begin{abstract}
 
-In this paper, we propose the Policy Parser, a system for translating
+We propose the Policy Parser, a system for translating
 policies and rules in a natural language into an equivalent RDF
-representation. The Policy Parser uses
-templates to convert informal but structurally-constrained sentences into 
-machine-readable policies, which are expressed in the
-Accountability In RDF (AIR) policy language. A sentence is parsed
-using a feature-based context-free grammar, which extracts semantic
-information from the sentence to build a corresponding parse tree. The
-information contained in the parse tree is then processed to build
-an AIR policy. AIR policies are represented as Turtle statements and
-can be used to express security and privacy constraints in a variety
-of ontologies. We present a Firefox sidebar extension as the user interface for this
-system, and we believe that it provides a natural interface for authoring
-policies in RDF.
+representation. The Policy Parser uses templates to convert informal
+but structurally-constrained sentences into machine-readable
+policies, which are expressed in the Accountability In RDF (AIR)
+policy language. A sentence is parsed using a feature-based
+context-free grammar, which extracts semantic information from the
+sentence to build a corresponding parse tree. The information
+contained in the parse tree is then processed to build an AIR
+policy. AIR policies are represented as Turtle statements and can be
+used to express security and privacy constraints in a variety of
+ontologies. We present a Firefox sidebar extension as the user
+interface for this system. We believe that it provides a natural
+interface for authoring policies in RDF.
 
 \end{abstract}
 
@@ -113,11 +113,47 @@ policies in RDF.
 \section{Introduction}								
 \label{sec:intro}
 
-Lawyers work with laws and policies all the time. They also determine given a scenario and a set of policies, whether a particular sequence of events in this scenario violates one or more of the given policies. Enforcing policies can be a challenging and error-prone process, as the number of policies gets larger or the scenario itself becomes more complex. In some cases, for example enforcing privacy policies governing access to data on the World Wide Web, manual enforcement of policies is particularly inefficient. Fortunately, some parts of the policy enforcement process are purely deductive reasoning, and therefore, can be automated by a computer. 
+The growth in the sheer volume and variety of information on the web
+shows no signs of slowing down, and electronic information systems are
+attracting a wider range of users than ever. Administrators of these
+systems face a challenging task: determining and enforcing policies
+for controlling the access of information. 
 
-The AIR reasoner\cite{air} takes input policies and scenarios expressed in RDF and determines whether or not the given scenario violates any of the given policies. One of the current barriers to wide spread use of AIR, or any other semantic web policy language is that it requires the user (person who specifies the policies; often a lawyer) of the system to write the AIR policies in RDF. Although RDF is a well-known within the Semantic Web community, it is likely that most lawyers will not be well versed in its use. Even for someone who is an expert in RDF, translating a natural language policy into RDF can be tedious and a time-consuming task. It thus becomes difficult to create and update policies that can be enforced automatically.
+Unfortunately, many of the existing systems do not posess the
+capacity to keep up with the rapid expansion of the data set and the
+user base. The functionality for policy enforcement is often built
+into a system during its initial development. As a result, access
+control in most of these systems is rather limited and inflexible to changes.
+As a need for new policies arises or usage scenarios grow
+more complex, the administrator may need to modify parts of the system
+that are responsible for maintaining and enforcing the policies. This
+can be a costly and error-prone process. 
 
-As a first step towards addressing these challenges, we have built the Policy Parser, which takes a policy, written in constrained natural language, and automatically translates it into its RDF representation.
+Furthermore, the creator and the maintainer of the policy may be
+different from the original developer of the system. Therefore, the
+system must also provide a mechanism for transforming policies, 
+which are often incepted as natural language sentences, into a precise
+form that can be understood by the enforcement module.
+
+We propose a potential solution to these challenges. Our prototype
+system, called the Policy Parser, consists of two major parts:
+(1) a graphical front-end, which translates an input natural language policy
+into a set of RDF tuples, and (2) the Accountability In RDF (AIR)
+reasoner, which automatically carries a series of logical
+deductions to check whether a policy is enforced by a particular usage
+scenario. The front-end uses templates to capture and extract
+essential components of a policy and translate them into RDF tuples;
+it can be easily extended with additional templates as the types of
+policies diversify. Many forms of policy enforcement are
+reducible to the logical reasoning that can be performed by the AIR
+reasoner. Thus, even when policies undergo changes, the
+underlying enforcement engine in our system need not be modified.
+
+%Lawyers work with laws and policies all the time. They also determine given a scenario and a set of policies, whether a particular sequence of events in this scenario violates one or more of the given policies. Enforcing policies can be a challenging and error-prone process, as the number of policies gets larger or the scenario itself becomes more complex. In some cases, for example enforcing privacy policies governing access to data on the World Wide Web, manual enforcement of policies is particularly inefficient. Fortunately, some parts of the policy enforcement process are purely deductive reasoning, and therefore, can be automated by a computer. 
+
+%The AIR reasoner\cite{air} takes input policies and scenarios expressed in RDF and determines whether or not the given scenario violates any of the given policies. One of the current barriers to wide spread use of AIR, or any other semantic web policy language is that it requires the user (person who specifies the policies; often a lawyer) of the system to write the AIR policies in RDF. Although RDF is a well-known within the Semantic Web community, it is likely that most lawyers will not be well versed in its use. Even for someone who is an expert in RDF, translating a natural language policy into RDF can be tedious and a time-consuming task. It thus becomes difficult to create and update policies that can be enforced automatically.
+
+%As a first step towards addressing these challenges, we have built the Policy Parser, which takes a policy, written in constrained natural language, and automatically translates it into its RDF representation.
 
 This paper is organized as follows:
 Section \ref{background} gives the overview of the technologies used and AIR policy language.  
