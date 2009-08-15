@@ -115,11 +115,10 @@ interface for authoring policies in RDF.
 
 The growth in the sheer volume and variety of information on the web
 shows no signs of slowing down, and electronic information systems are
-attracting a wider range of users than ever. Administrators of these
-systems face a challenging task: determining and enforcing policies
-for controlling the access of information. 
+attracting a wider range of users than ever. There are lots of laws and policies which would often be useful if represented in a machine readable format rather than a verbose natural language description that nobody ever cares to read nor is able to understand. From an archival perspective, this would enable one to keep a repository of laws and policies. 
 
-Unfortunately, many of the existing systems do not posess the
+In addition, administrators of these systems face a challenging task in determining and enforcing policies
+for controlling the access of information. Unfortunately, many of the existing systems do not posess the
 capacity to keep up with the rapid expansion of the data set and the
 user base. The functionality for policy enforcement is often built
 into a system during its initial development. As a result, access
@@ -138,11 +137,11 @@ form that can be understood by the enforcement module.
 We propose a potential solution to these challenges. Our prototype
 system, called the Policy Parser, consists of two major parts:
 (1) a graphical front-end, which translates an input natural language policy
-into a set of RDF tuples, and (2) the Accountability In RDF (AIR)
+into a set of RDF triples, and (2) the Accountability In RDF (AIR)
 reasoner, which automatically carries a series of logical
 deductions to check whether a policy is enforced by a particular usage
 scenario. The front-end uses templates to capture and extract
-essential components of a policy and translate them into RDF tuples;
+essential components of a policy and translate them into RDF triples;
 it can be easily extended with additional templates as the types of
 policies diversify. Many forms of policy enforcement are
 reducible to the logical reasoning that can be performed by the AIR
@@ -166,7 +165,6 @@ Finally, we conclude the paper with a summary of the contributions and some futu
 %% Background
 
 \section{Background} \label{background}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Design and Implementation
