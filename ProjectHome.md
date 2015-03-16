@@ -1,0 +1,1 @@
+This project is the class project for Natural Language and Computer Representation of knowledge.
